@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "gscheduler",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "When you need to track genome time quickly",
+    "description": "The description of the application"
+  }
+}
