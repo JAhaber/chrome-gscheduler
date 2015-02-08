@@ -4,8 +4,6 @@
 
 var Scheduler = React.createClass({displayName: "Scheduler",
     getInitialState: function() {
-    var Background = chrome.extension.getBackgroundPage();
-    console.log(Background);
     var timers = localStorage.getItem('genomeTimers') === null ? [] : JSON.parse(localStorage.getItem('genomeTimers'));
     return {
       recentProjects: [],
@@ -51,11 +49,13 @@ var Scheduler = React.createClass({displayName: "Scheduler",
     });
   },
   addTimer: function(timer) {
-    var timers = this.state.timers;
-    timers.push(timer);
+    //var timers = this.state.timers;
+    // timers.push(timer);
 
-    localStorage.setItem('genomeTimers', JSON.stringify(timers));
-    this.setState({timers: timers});
+
+    chrome.runtime.sendMessage({addTimer: 'blah'});
+    //localStorage.setItem('genomeTimers', JSON.stringify(timers));
+    //this.setState({timers: timers});
   },
   render: function() {
     return (

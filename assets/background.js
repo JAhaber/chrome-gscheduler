@@ -1,21 +1,23 @@
 var Q = require('q');
+var Stopwatch = require('./background/stopwatch');
 var windowManager = require('./background/window_manager')(chrome);
 
 var PADDING_TOP = 150;
 var PADDING_BOTTOM = 300;
 var SWITCHER_WIDTH = 315;
 
+var timers = [];
 
 
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
+  console.log('StartingTimers', timers);
 });
 
 chrome.commands.onCommand.addListener(function(command) {
   // Users can bind a key to this command in their Chrome
   // keyboard shortcuts, at the bottom of their extensions page.
   if (command == 'show-gscheduler') {
-    console.log('SHORTCUT!');
 
     var currentWindow = windowManager.getCurrentWindow();
     var switcherWindowId = windowManager.getSwitcherWindowId();
@@ -42,9 +44,19 @@ chrome.commands.onCommand.addListener(function(command) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, respond) {
 
+
   if (request.addTimer) {
+    
+    var stopwatch = new Stopwatch(true);
+    timers.push(stopwatch);
+
+    for (var i = timers.length - 1; i >= 0; i--) {
+      console.log(timers[i].read());
+    };
+
     
   }
 
 });
+
 

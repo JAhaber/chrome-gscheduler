@@ -1,22 +1,24 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Q = require('q');
+var Stopwatch = require('./background/stopwatch');
 var windowManager = require('./background/window_manager')(chrome);
 
 var PADDING_TOP = 150;
 var PADDING_BOTTOM = 300;
 var SWITCHER_WIDTH = 315;
 
+var timers = [];
 
 
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
+  console.log('StartingTimers', timers);
 });
 
 chrome.commands.onCommand.addListener(function(command) {
   // Users can bind a key to this command in their Chrome
   // keyboard shortcuts, at the bottom of their extensions page.
   if (command == 'show-gscheduler') {
-    console.log('SHORTCUT!');
 
     var currentWindow = windowManager.getCurrentWindow();
     var switcherWindowId = windowManager.getSwitcherWindowId();
@@ -43,14 +45,66 @@ chrome.commands.onCommand.addListener(function(command) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, respond) {
 
+
   if (request.addTimer) {
+    
+    var stopwatch = new Stopwatch(true);
+    timers.push(stopwatch);
+
+    for (var i = timers.length - 1; i >= 0; i--) {
+      console.log(timers[i].read());
+    };
+
     
   }
 
 });
 
 
-},{"./background/window_manager":2,"q":5}],2:[function(require,module,exports){
+
+},{"./background/stopwatch":2,"./background/window_manager":3,"q":6}],2:[function(require,module,exports){
+
+function Stopwatch(autostart) {
+    if (autostart) this.start();
+}
+
+Stopwatch.prototype.start = function() {
+    this.startTime = Date.now();
+};
+
+Stopwatch.prototype.stop = function() {
+    this.stopTime = Date.now();
+    return this.read();
+};
+
+Stopwatch.prototype.read = function() {
+    var self = this;
+    var startTime = self.startTime;
+    var nowTime;
+    var delta;
+
+    if (startTime) {
+        if (self.stopTime) {
+            nowTime = self.stopTime;
+        } else {
+            nowTime = Date.now();
+        }
+
+        delta = calculateDelta(startTime, nowTime);
+    } else {
+        nowTime = undefined;
+        delta = NaN;
+    }
+
+    return delta;
+
+    function calculateDelta(start, end) {
+        return end - start;
+    }
+};
+
+module.exports = Stopwatch;
+},{}],3:[function(require,module,exports){
 var Q = require('q');
 var util = require('../util');
 
@@ -127,7 +181,7 @@ module.exports = function(chrome) {
   };
 };
 
-},{"../util":3,"q":5}],3:[function(require,module,exports){
+},{"../util":4,"q":6}],4:[function(require,module,exports){
 var Q = require('q');
 
 module.exports = {
@@ -146,7 +200,7 @@ module.exports = {
   }
 };
 
-},{"q":5}],4:[function(require,module,exports){
+},{"q":6}],5:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -205,7 +259,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -2146,4 +2200,4 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":4}]},{},[1]);
+},{"_process":5}]},{},[1]);
