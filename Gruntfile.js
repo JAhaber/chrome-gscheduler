@@ -18,7 +18,8 @@ module.exports = function (grunt) {
   // Configurable paths
   var config = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    assets: 'assets'
   };
 
   grunt.initConfig({
@@ -28,26 +29,28 @@ module.exports = function (grunt) {
 
     // Watches files for changes and runs tasks based on the changed files
     watch: {
-      js: {
-        files: ['<%= config.app %>/scripts/{,*/}*.js'],
-        tasks: ['jshint'],
-        options: {
-          livereload: true
-        }
-      },
+      // js: {
+      //   files: ['<%= config.app %>/scripts/{,*/}*.js'],
+      //   tasks: ['jshint'],
+      //   options: {
+      //     livereload: true
+      //   }
+      // },
       gruntfile: {
         files: ['Gruntfile.js']
       },
-      styles: {
-        files: ['<%= config.app %>/styles/{,*/}*.css'],
-        tasks: [],
+      sass: {
+          files: ['<%= config.assets %>/styles/{,*/}*.{scss,sass}'],
+          tasks: ['sass:app']
+      },
+      browserify: {
+        files: [
+          '<%= config.assets %>/**/*.{jsx,js}'
+        ],
+        tasks: ['browserify:app'],
         options: {
           livereload: true
         }
-      },
-      react: {
-        files: ['src/client/**/*.jsx'],
-        tasks: ['react:dev']
       },
       livereload: {
         options: {
@@ -62,15 +65,32 @@ module.exports = function (grunt) {
       }
     },
 
-    react: {
-      dev: {
+    // Compiles Sass to CSS and generates necessary files if requested
+    sass: {
+      app: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.assets %>/styles',
+          src: ['**/*.scss'],
+          dest: '<%= config.app %>/styles',
+          ext: '.css'
+        }]
+      }
+    },
+
+    browserify:     {
+      options:      {
+        transform:  [ require('grunt-react').browserify ]
+      },
+      app:          {
         files: [
           {
-            expand: true,
-            cwd: 'src/client',
-            src: ['**/*.jsx'],
-            dest: 'app/scripts',
-            ext: '.js'
+            src: ['<%= config.assets %>/client.jsx'],
+            dest: '<%= config.app %>/scripts/client-bundle.js'
+          },
+          {
+            src: ['<%= config.assets %>/background.js'],
+            dest: '<%= config.app %>/scripts/background-bundle.js'
           }
         ]
       }
@@ -301,7 +321,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('debug', function () {
     grunt.task.run([
-      'react:dev',
+      'browserify:app',
+      'sass:app',
       //'jshint',
       'concurrent:chrome',
       'connect:chrome',
