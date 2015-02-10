@@ -38,7 +38,7 @@ module.exports = function(chrome) {
         height: height,
         left: left,
         top: top,
-        url: chrome.runtime.getURL('scheduler.html'),
+        url: chrome.runtime.getURL('gscheduler.html'),
         focused: true,
         type: 'panel'
       };

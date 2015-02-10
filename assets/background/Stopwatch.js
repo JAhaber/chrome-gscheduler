@@ -1,41 +1,20 @@
 
 function Stopwatch(autostart) {
-    if (autostart) this.start();
+  if (autostart) this.start();
 }
 
 Stopwatch.prototype.start = function() {
-    this.startTime = Date.now();
+  this.startTime = Date.now();
 };
 
 Stopwatch.prototype.stop = function() {
-    this.stopTime = Date.now();
-    return this.read();
+  this.stopTime = Date.now();
+  return this.elapsedMilliseconds();
 };
 
-Stopwatch.prototype.read = function() {
-    var self = this;
-    var startTime = self.startTime;
-    var nowTime;
-    var delta;
-
-    if (startTime) {
-        if (self.stopTime) {
-            nowTime = self.stopTime;
-        } else {
-            nowTime = Date.now();
-        }
-
-        delta = calculateDelta(startTime, nowTime);
-    } else {
-        nowTime = undefined;
-        delta = NaN;
-    }
-
-    return delta;
-
-    function calculateDelta(start, end) {
-        return end - start;
-    }
+Stopwatch.prototype.elapsedMilliseconds = function() {
+  if(!this.startTime) return 0;
+  return new Date().valueOf() - this.startTime.valueOf();
 };
 
 module.exports = Stopwatch;

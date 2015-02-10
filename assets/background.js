@@ -1,4 +1,5 @@
 var Q = require('q');
+var moment = require('moment');
 var Stopwatch = require('./background/stopwatch');
 var windowManager = require('./background/window_manager')(chrome);
 
@@ -8,10 +9,8 @@ var SWITCHER_WIDTH = 315;
 
 var timers = [];
 
-
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
-  console.log('StartingTimers', timers);
 });
 
 chrome.commands.onCommand.addListener(function(command) {
@@ -27,9 +26,6 @@ chrome.commands.onCommand.addListener(function(command) {
       // Don't activate the switcher from an existing switcher window.
       if (currentWindow.id == switcherWindowId) return;
 
-      // When the user activates the switcher and doesn't have "search
-      // in all windows" enabled, we need to know which was the last
-      // non-switcher window that was active.
       windowManager.setLastWindowId(currentWindow.id);
       var left = currentWindow.left + Math.round((currentWindow.width - SWITCHER_WIDTH) / 2);
       var top = currentWindow.top + PADDING_TOP;
@@ -44,19 +40,39 @@ chrome.commands.onCommand.addListener(function(command) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, respond) {
 
-
   if (request.addTimer) {
-    
+    var newTimer = JSON.parse(request.addTimer)
     var stopwatch = new Stopwatch(true);
+    stopwatch.shortDesc = newTimer.shortDesc;
     timers.push(stopwatch);
-
-    for (var i = timers.length - 1; i >= 0; i--) {
-      console.log(timers[i].read());
-    };
-
-    
+  }
+  
+  if (request.removeTimer) {
+    console.log('Remove Timer!');
   }
 
 });
+
+var updateTimers = function() { 
+ 
+  var newTimers = [];
+  for (var i = timers.length - 1; i >= 0; i--) {
+    var timer = timers[i];
+    var newTimer = {
+      shortDesc: timer.shortDesc, 
+      time: moment().hour(0).minute(0).second(timer.elapsedMilliseconds()/1000).format('HH : mm : ss')
+    }
+
+    newTimers.push(newTimer);
+  };
+
+  chrome.runtime.sendMessage({updateTimers: JSON.stringify(newTimers)});
+}
+
+var t;
+t = setInterval(updateTimers, 1000);
+
+
+// chrome.browserAction.setBadgeText({text:data.unreadItems});
 
 

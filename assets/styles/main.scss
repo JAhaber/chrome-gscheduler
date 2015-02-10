@@ -1,6 +1,7 @@
 
-@import "bourbon/bourbon";
-@import "base/base";
+@import "vendor/bourbon/bourbon";
+@import "vendor/base/base";
+@import "vendor/font-awesome/scss/font-awesome";
 
 
 body {
@@ -32,4 +33,12 @@ h2 {
     float: right;
     padding: 0.6em 1em;
   }
+}
+
+.timer i {
+  &:hover {
+    color:red;
+    cursor:pointer;
+  }
+  float:right;
 }
