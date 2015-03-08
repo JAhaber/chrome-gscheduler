@@ -1,5 +1,5 @@
 var Q = require('q');
-var util = require('../util');
+var util = require('../utils');
 
 module.exports = function(chrome) {
   var switcherWindowId = Q.when(null);
@@ -40,7 +40,7 @@ module.exports = function(chrome) {
         top: top,
         url: chrome.runtime.getURL('gscheduler.html'),
         focused: true,
-        type: 'panel'
+        type: 'panel' // 'normal', 'panel', 'app'
       };
 
       return util.pcall(chrome.windows.create.bind(chrome.windows), opts)

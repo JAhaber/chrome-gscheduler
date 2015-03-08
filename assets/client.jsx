@@ -1,14 +1,15 @@
 
+var React = require('react');
 var GSchedulerApp = require('./client/gschedulerApp.jsx');
-//var GSchedulerModel = require('./client/gschedulerModel.js');
-//var model = new GSchedulerModel('gscheduler-tasks');
+var TaskModel = require('./client/taskModel.js');
+var model = new TaskModel('gscheduler-tasks'); 
 
 function render() {
   React.render(
-    <GSchedulerApp />,
+    <GSchedulerApp model={model} />,
     document.getElementById('gschedulerapp')
   );
 }
 
-//model.subscribe(render);
+model.subscribe(render); 
 render();

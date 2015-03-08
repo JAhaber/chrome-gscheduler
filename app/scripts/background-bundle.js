@@ -1,7 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Q = require('q');
 var moment = require('moment');
-var Stopwatch = require('./background/stopwatch');
 var windowManager = require('./background/window_manager')(chrome);
 
 var PADDING_TOP = 150;
@@ -39,20 +38,20 @@ chrome.commands.onCommand.addListener(function(command) {
   }
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, respond) {
+// chrome.runtime.onMessage.addListener(function(request, sender, respond) {
 
-  if (request.addTimer) {
-    var newTimer = JSON.parse(request.addTimer)
-    var stopwatch = new Stopwatch(true);
-    stopwatch.shortDesc = newTimer.shortDesc;
-    timers.push(stopwatch);
-  }
+//   if (request.addTimer) {
+//     var newTimer = JSON.parse(request.addTimer)
+//     var stopwatch = new Stopwatch(true);
+//     stopwatch.shortDesc = newTimer.shortDesc;
+//     timers.push(stopwatch);
+//   }
   
-  if (request.removeTimer) {
-    console.log('Remove Timer!');
-  }
+//   if (request.removeTimer) {
+//     console.log('Remove Timer!');
+//   }
 
-});
+// });
 
 var updateTimers = function() { 
  
@@ -78,30 +77,9 @@ t = setInterval(updateTimers, 1000);
 
 
 
-},{"./background/stopwatch":2,"./background/window_manager":3,"moment":6,"q":7}],2:[function(require,module,exports){
-
-function Stopwatch(autostart) {
-  if (autostart) this.start();
-}
-
-Stopwatch.prototype.start = function() {
-  this.startTime = Date.now();
-};
-
-Stopwatch.prototype.stop = function() {
-  this.stopTime = Date.now();
-  return this.elapsedMilliseconds();
-};
-
-Stopwatch.prototype.elapsedMilliseconds = function() {
-  if(!this.startTime) return 0;
-  return new Date().valueOf() - this.startTime.valueOf();
-};
-
-module.exports = Stopwatch;
-},{}],3:[function(require,module,exports){
+},{"./background/window_manager":2,"moment":5,"q":6}],2:[function(require,module,exports){
 var Q = require('q');
-var util = require('../util');
+var util = require('../utils');
 
 module.exports = function(chrome) {
   var switcherWindowId = Q.when(null);
@@ -142,7 +120,7 @@ module.exports = function(chrome) {
         top: top,
         url: chrome.runtime.getURL('gscheduler.html'),
         focused: true,
-        type: 'panel'
+        type: 'panel' // 'normal', 'panel', 'app'
       };
 
       return util.pcall(chrome.windows.create.bind(chrome.windows), opts)
@@ -176,7 +154,7 @@ module.exports = function(chrome) {
   };
 };
 
-},{"../util":4,"q":7}],4:[function(require,module,exports){
+},{"../utils":3,"q":6}],3:[function(require,module,exports){
 var Q = require('q');
 
 var Utils = {
@@ -240,7 +218,7 @@ var Utils = {
 
 module.exports = Utils;
 
-},{"q":7}],5:[function(require,module,exports){
+},{"q":6}],4:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -299,7 +277,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.9.0
@@ -3346,7 +3324,7 @@ process.umask = function() { return 0; };
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -5287,4 +5265,4 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":5}]},{},[1]);
+},{"_process":4}]},{},[1]);

@@ -1,6 +1,7 @@
 
 @import "vendor/bourbon/bourbon";
 @import "vendor/base/base";
+@import "vendor/neat/neat";
 @import "vendor/font-awesome/scss/font-awesome";
 
 
@@ -12,33 +13,72 @@ h2 {
   margin: 14px 0 4px; 
 }
 
-.projectList, .timerList {
-  font-size: em(12);
-  background-color: #E4E4E4;
-
-  .project, .timer {
-    &:nth-of-type(even) {
-      background-color: #D8D8D8;
-    }
-    padding: 1px 6px;
-  }
+a.play, 
+a.stop,
+a.destroy {
+  display: inline-block;
+  margin-left: 1em;
+  padding: 0.1em;
+  width: 1.9em;
+  height: 1.8em;
+  font-size: 0.8em;
+  color: white;
+  background-color: #477dca;
+  text-align: center;
+  border-radius: 0.8em;
+}
+a.play {
+  padding: 0.1em 0.1em 0.1em 0.3em;
 }
 
-.timerCreator {
+header {
   input[type=text] {
     display: inline-block;
     width: 78%;
   }
-  input[type=button] {
-    float: right;
-    padding: 0.6em 1em;
+  a.play {
+    font-size: 1.1em;
   }
 }
 
-.timer i {
-  &:hover {
-    color:red;
-    cursor:pointer;
+#task-list {
+  font-size: em(12);
+  background-color: #E4E4E4;
+
+  li.task {
+    &:nth-of-type(even) {
+      background-color: #D8D8D8;
+    }
+    @include outer-container;
+    @include user-select(none);
+
+    label, .controls {
+      @include span-columns(6);
+    }
+
+    label {
+      font-size: 1.2em;
+      padding: 0.4em 1em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .timeElapsed {
+      font-family: "Lucida Console", Monaco, monospace;
+    }
+    .controls {
+      text-align: right;
+      padding: 0.7em 1em;
+
+      a.play {display: none}
+    }
+    &.stopped .controls {
+      a.stop {display: none}
+      a.play {display: inline-block}
+    }
+
   }
-  float:right;
 }
+
+
+

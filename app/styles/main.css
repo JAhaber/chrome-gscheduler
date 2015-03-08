@@ -186,6 +186,16 @@ picture {
   margin: 0;
   max-width: 100%; }
 
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit; }
+
 /*!
  *  Font Awesome 4.3.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -1982,25 +1992,69 @@ body {
 h2 {
   margin: 14px 0 4px; }
 
-.projectList, .timerList {
-  font-size: 0.75em;
-  background-color: #E4E4E4; }
-  .projectList .project, .projectList .timer, .timerList .project, .timerList .timer {
-    padding: 1px 6px; }
-    .projectList .project:nth-of-type(even), .projectList .timer:nth-of-type(even), .timerList .project:nth-of-type(even), .timerList .timer:nth-of-type(even) {
-      background-color: #D8D8D8; }
+a.play,
+a.stop,
+a.destroy {
+  display: inline-block;
+  margin-left: 1em;
+  padding: 0.1em;
+  width: 1.9em;
+  height: 1.8em;
+  font-size: 0.8em;
+  color: white;
+  background-color: #477dca;
+  text-align: center;
+  border-radius: 0.8em; }
 
-.timerCreator input[type=text] {
+a.play {
+  padding: 0.1em 0.1em 0.1em 0.3em; }
+
+header input[type=text] {
   display: inline-block;
   width: 78%; }
-.timerCreator input[type=button] {
-  float: right;
-  padding: 0.6em 1em; }
+header a.play {
+  font-size: 1.1em; }
 
-.timer i {
-  float: right; }
-  .timer i:hover {
-    color: red;
-    cursor: pointer; }
+#task-list {
+  font-size: 0.75em;
+  background-color: #E4E4E4; }
+  #task-list li.task {
+    max-width: 68em;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+    #task-list li.task:nth-of-type(even) {
+      background-color: #D8D8D8; }
+    #task-list li.task::after {
+      clear: both;
+      content: "";
+      display: table; }
+    #task-list li.task label, #task-list li.task .controls {
+      float: left;
+      display: block;
+      margin-right: 2.35765%;
+      width: 48.82117%; }
+      #task-list li.task label:last-child, #task-list li.task .controls:last-child {
+        margin-right: 0; }
+    #task-list li.task label {
+      font-size: 1.2em;
+      padding: 0.4em 1em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden; }
+    #task-list li.task .timeElapsed {
+      font-family: "Lucida Console", Monaco, monospace; }
+    #task-list li.task .controls {
+      text-align: right;
+      padding: 0.7em 1em; }
+      #task-list li.task .controls a.play {
+        display: none; }
+    #task-list li.task.stopped .controls a.stop {
+      display: none; }
+    #task-list li.task.stopped .controls a.play {
+      display: inline-block; }
 
 /*# sourceMappingURL=main.css.map */

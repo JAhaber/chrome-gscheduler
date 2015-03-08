@@ -1,22 +1,22 @@
 var Utils = require('../utils.js');
 
-var GSchedulerModel = function (key) {
+var TaskModel = function (key) {
 	this.key = key;
 	this.tasks = Utils.store(key);
 	this.onChanges = [];
 };
 
-GSchedulerModel.prototype.subscribe = function (onChange) {
+TaskModel.prototype.subscribe = function (onChange) {
 	this.onChanges.push(onChange);
 };
 
-GSchedulerModel.prototype.inform = function () {
+TaskModel.prototype.inform = function () {
 	Utils.store(this.key, this.tasks);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
-GSchedulerModel.prototype.addTask = function (title) {
-	this.tasks = this.tasks.concat({
+TaskModel.prototype.addTask = function (title) {
+	this.tasks.unshift({
 		id: Utils.uuid(),
 		title: title,
 		startTime: Date.now(),
@@ -26,17 +26,17 @@ GSchedulerModel.prototype.addTask = function (title) {
 	this.inform();
 };
 
-GSchedulerModel.prototype.togglePaused = function (taskToToggle) {
+TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
-		return task !== taskToToggle ?
+		return task !== taskToStop ?
 			task :
-			Utils.extend({}, task, {paused: !task.paused });
+			Utils.extend({}, task, {stopTime: Date.now() });
 	});
 
 	this.inform();
 };
 
-GSchedulerModel.prototype.destroy = function (task) {
+TaskModel.prototype.destroy = function (task) {
 	this.tasks = this.tasks.filter(function (candidate) {
 		return candidate !== task;
 	});
@@ -44,7 +44,7 @@ GSchedulerModel.prototype.destroy = function (task) {
 	this.inform();
 };
 
-GSchedulerModel.prototype.save = function (taskToSave, text) {
+TaskModel.prototype.save = function (taskToSave, text) {
 	this.tasks = this.tasks.map(function (task) {
 		return task !== taskToSave ? task : Utils.extend({}, task, {title: text});
 	});
@@ -52,5 +52,5 @@ GSchedulerModel.prototype.save = function (taskToSave, text) {
 	this.inform();
 };
 
-module.exports = GSchedulerModel;
+module.exports = TaskModel;
 

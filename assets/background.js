@@ -1,6 +1,5 @@
 var Q = require('q');
 var moment = require('moment');
-var Stopwatch = require('./background/stopwatch');
 var windowManager = require('./background/window_manager')(chrome);
 
 var PADDING_TOP = 150;
@@ -38,20 +37,20 @@ chrome.commands.onCommand.addListener(function(command) {
   }
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, respond) {
+// chrome.runtime.onMessage.addListener(function(request, sender, respond) {
 
-  if (request.addTimer) {
-    var newTimer = JSON.parse(request.addTimer)
-    var stopwatch = new Stopwatch(true);
-    stopwatch.shortDesc = newTimer.shortDesc;
-    timers.push(stopwatch);
-  }
+//   if (request.addTimer) {
+//     var newTimer = JSON.parse(request.addTimer)
+//     var stopwatch = new Stopwatch(true);
+//     stopwatch.shortDesc = newTimer.shortDesc;
+//     timers.push(stopwatch);
+//   }
   
-  if (request.removeTimer) {
-    console.log('Remove Timer!');
-  }
+//   if (request.removeTimer) {
+//     console.log('Remove Timer!');
+//   }
 
-});
+// });
 
 var updateTimers = function() { 
  
