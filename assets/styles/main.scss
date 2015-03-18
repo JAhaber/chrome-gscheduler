@@ -41,6 +41,20 @@ header {
   }
 }
 
+#main dl {
+  margin: 0;
+  @include outer-container;
+  dt, dd {
+    @include span-columns(6);
+    font-weight: bold;
+    margin-top: 0.75em;
+    margin: 0;
+  }
+  dd {
+    text-align: right;
+  }
+}
+
 #task-list {
   font-size: em(12);
   background-color: #E4E4E4;

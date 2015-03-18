@@ -33,7 +33,7 @@
   "permissions": [
     "tabs",
     "storage",
-    "http://genome.klick.com/"
+    "https://genome.klick.com/"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

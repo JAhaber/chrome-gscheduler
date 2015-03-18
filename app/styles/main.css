@@ -2015,6 +2015,28 @@ header input[type=text] {
 header a.play {
   font-size: 1.1em; }
 
+#main dl {
+  margin: 0;
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto; }
+  #main dl::after {
+    clear: both;
+    content: "";
+    display: table; }
+  #main dl dt, #main dl dd {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 48.82117%;
+    font-weight: bold;
+    margin-top: 0.75em;
+    margin: 0; }
+    #main dl dt:last-child, #main dl dd:last-child {
+      margin-right: 0; }
+  #main dl dd {
+    text-align: right; }
+
 #task-list {
   font-size: 0.75em;
   background-color: #E4E4E4; }

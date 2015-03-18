@@ -1,30 +1,28 @@
 
 var React = require('react');
 var TaskItem = require('./taskItem.jsx');
-var ENTER_KEY = 13;
-
+var SearchBox = require('./SearchBox.jsx');
+var Moment = require('moment');
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
     return {
-      tasks: []
+      tasks: [],
+      totalTaskTime: ''
     };
   },
   componentDidMount: function() {
-    // Router stuff
+    // Router stuff to go here
+
+    this.interval = setInterval(this.tick, 1000);
   },
-  handleNewTaskKeyDown: function(event) {
-    if (event.which !== ENTER_KEY) {
-      return;
-    }
-    event.preventDefault();
+  componentWillUnmount: function() {
+    clearInterval(this.interval);
+  },
 
-    var val = this.refs.newField.getDOMNode().value.trim();
-
-    if (val) {
-      this.addTask(val);
-      this.refs.newField.getDOMNode().value = '';
-    }
+  tick: function (val) {
+    var tasks = this.props.model.tasks;
+    this.getTotalTaskTime(tasks);
   },
 
   addTask: function (val) {
@@ -37,6 +35,21 @@ var GSchedulerApp = React.createClass({
 
   destroy: function (task) {
     this.props.model.destroy(task);
+  },
+
+  getTotalTaskTime: function(tasks) {
+    var totalTaskTime = 0;
+    var formatedTotalTaskTime = '';
+
+    for (var i = tasks.length - 1; i >= 0; i--) {
+      var task = tasks[i];
+      var endTime = !task.stopTime ? new Date().valueOf() : task.stopTime;
+      var elapsedMilliseconds = (endTime - task.startTime.valueOf());
+      totalTaskTime += elapsedMilliseconds;
+    };
+    formatedTotalTaskTime = Moment().hour(0).minute(0).second(totalTaskTime/1000).format('H[hrs] mm[mins]');
+
+    this.setState({totalTaskTime: formatedTotalTaskTime});
   },
 
   render: function() {
@@ -58,6 +71,10 @@ var GSchedulerApp = React.createClass({
     if (taskItems.length) {
       main = (
         <section id="main">
+          <dl>
+            <dt>Today</dt>
+            <dd>{this.state.totalTaskTime}</dd>
+          </dl>
           <ul id="task-list">
             {taskItems}
           </ul>
@@ -68,14 +85,7 @@ var GSchedulerApp = React.createClass({
     return (
       <div>
         <header id="header">
-          <input
-            type="text"
-            ref="newField"
-            id="new-task"
-            placeholder="Task Name/ID"
-            onKeyDown={this.handleNewTaskKeyDown}
-            autoFocus={true}
-          />
+          <SearchBox />
           <a className="play"><i className="fa fa-play"></i></a>
         </header>
         {main}
