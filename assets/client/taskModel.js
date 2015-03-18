@@ -15,7 +15,10 @@ TaskModel.prototype.inform = function () {
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
-TaskModel.prototype.addTask = function (title) {
+TaskModel.prototype.addTask = function (title, opts) {
+	
+	opts = opts || null;
+
 	this.tasks.unshift({
 		id: Utils.uuid(),
 		title: title,

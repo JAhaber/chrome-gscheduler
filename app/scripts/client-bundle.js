@@ -23,26 +23,25 @@ require('typeahead.js');
 
 
 var ENTER_KEY = 13;
-var apiEndpoint = 'https://genome.klick.com/api/Project.json?ForAutoCompleter=true&Keyword=%QUERY&Enabled=true&GroupResults=false&numRecords=10';
+var apiEndpoint = 'https://genome.klick.com/api/Ticket.json?Enabled=true&ForAutocompleter=true&Keyword=%QUERY&NumRecords=100';
+//var apiEndpoint = 'https://genome.klick.com/api/Project.json?ForAutoCompleter=true&Keyword=%QUERY&Enabled=true&GroupResults=false&numRecords=10';
 //var apiEndpoint = 'http://api.themoviedb.org/3/search/movie?query=%QUERY&api_key=470fd2ec8853e25d2f8d86f685d2270e';
 
 
 // Instantiate the Bloodhound suggestion engine
-var projects = new Bloodhound({
+var tickets = new Bloodhound({
     datumTokenizer: function (datum) {
         return Bloodhound.tokenizers.whitespace(datum.value);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
         url: apiEndpoint,
-        filter: function (projects) {
-
-        	console.log(projects);
+        filter: function (tickets) {
 
             // Map the remote source JSON array to a JavaScript object array
-            return $.map(projects.Entries, function (project) {
+            return $.map(tickets.Entries, function (ticket) {
                 return {
-                    value: project.Name
+                    value: ticket.TicketID +" - "+ ticket.Title
                 };
             });
         }
@@ -53,7 +52,7 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 	componentDidMount: function(){
 
 		// Initialize the Bloodhound suggestion engine
-		projects.initialize();
+		tickets.initialize();
 
 		var element = this.getDOMNode();
 
@@ -61,13 +60,13 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 		$('.typeahead').typeahead({
 		  hint: true,
 		  highlight: true,
-		  minLength: 1
+		  minLength: 3
 		},
 		{
-		  name: 'states',
+		  name: 'tickets',
 		  displayKey: 'value',
-		  source: projects.ttAdapter()
-		});
+		  source: tickets.ttAdapter(),
+		}).focus();
 	},
 	
 	componentWillUnmount: function(){
@@ -81,11 +80,12 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 		}
 		event.preventDefault();
 
-		var val = this.refs.newField.getDOMNode().value.trim();
+		var $searchBox = $(this.refs.newField.getDOMNode());
+		var title = $searchBox.typeahead('val').trim();
 
-		if (val) {
-		  //this.addTask(val);
-		  this.refs.newField.getDOMNode().value = '';
+		if (title) {
+		  this.props.onSelect(title);
+		  $searchBox.typeahead('val', '');
 		}
 	},
 
@@ -98,7 +98,6 @@ var SearchBox = React.createClass({displayName: "SearchBox",
             ref: "newField", 
 			className: "form-control typeahead structuremap-search", 
 			placeholder: "Task Name/ID", 
-			autoFocus: true, 
 			onKeyDown: this.handleNewTaskKeyDown}
 			)
 		);
@@ -135,8 +134,8 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     this.getTotalTaskTime(tasks);
   },
 
-  addTask: function (val) {
-    this.props.model.addTask(val);
+  addTask: function (taskTitle, taskID) {
+    this.props.model.addTask(taskTitle, taskID);
   },
 
   stop: function (task) {
@@ -195,7 +194,9 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     return (
       React.createElement("div", null, 
         React.createElement("header", {id: "header"}, 
-          React.createElement(SearchBox, null), 
+          React.createElement(SearchBox, {
+            onSelect: this.addTask}
+          ), 
           React.createElement("a", {className: "play"}, React.createElement("i", {className: "fa fa-play"}))
         ), 
         main
@@ -269,7 +270,10 @@ TaskModel.prototype.inform = function () {
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
-TaskModel.prototype.addTask = function (title) {
+TaskModel.prototype.addTask = function (title, opts) {
+	
+	opts = opts || null;
+
 	this.tasks.unshift({
 		id: Utils.uuid(),
 		title: title,

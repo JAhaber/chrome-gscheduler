@@ -1986,8 +1986,63 @@ html {
 .fa-medium:before {
   content: ""; }
 
-body {
-  width: 300px; }
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 396px;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 24px;
+  line-height: 30px;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  outline: none; }
+
+.typeahead {
+  background-color: #fff; }
+
+.typeahead:focus {
+  border: 2px solid #0097cf; }
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+
+.tt-hint {
+  color: #999; }
+
+.tt-dropdown-menu {
+  width: 422px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); }
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 12px;
+  line-height: 24px; }
+  .tt-suggestion p {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; }
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf; }
+
+.tt-suggestion p {
+  margin: 0; }
 
 h2 {
   margin: 14px 0 4px; }
@@ -2016,10 +2071,7 @@ header a.play {
   font-size: 1.1em; }
 
 #main dl {
-  margin: 0;
-  max-width: 68em;
-  margin-left: auto;
-  margin-right: auto; }
+  margin: 0; }
   #main dl::after {
     clear: both;
     content: "";
@@ -2041,25 +2093,29 @@ header a.play {
   font-size: 0.75em;
   background-color: #E4E4E4; }
   #task-list li.task {
-    max-width: 68em;
-    margin-left: auto;
-    margin-right: auto;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; }
-    #task-list li.task:nth-of-type(even) {
-      background-color: #D8D8D8; }
     #task-list li.task::after {
       clear: both;
       content: "";
       display: table; }
-    #task-list li.task label, #task-list li.task .controls {
+    #task-list li.task:nth-of-type(even) {
+      background-color: #D8D8D8; }
+    #task-list li.task label {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 48.82117%; }
-      #task-list li.task label:last-child, #task-list li.task .controls:last-child {
+      width: 65.88078%; }
+      #task-list li.task label:last-child {
+        margin-right: 0; }
+    #task-list li.task .controls {
+      float: left;
+      display: block;
+      margin-right: 2.35765%;
+      width: 31.76157%; }
+      #task-list li.task .controls:last-child {
         margin-right: 0; }
     #task-list li.task label {
       font-size: 1.2em;

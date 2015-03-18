@@ -25,8 +25,8 @@ var GSchedulerApp = React.createClass({
     this.getTotalTaskTime(tasks);
   },
 
-  addTask: function (val) {
-    this.props.model.addTask(val);
+  addTask: function (taskTitle, taskID) {
+    this.props.model.addTask(taskTitle, taskID);
   },
 
   stop: function (task) {
@@ -85,7 +85,9 @@ var GSchedulerApp = React.createClass({
     return (
       <div>
         <header id="header">
-          <SearchBox />
+          <SearchBox 
+            onSelect={this.addTask}
+          />
           <a className="play"><i className="fa fa-play"></i></a>
         </header>
         {main}

@@ -4,10 +4,8 @@
 @import "vendor/neat/neat";
 @import "vendor/font-awesome/scss/font-awesome";
 
+@import "modules/searchBox";
 
-body {
-  width: 300px;
-}
 
 h2 {
   margin: 14px 0 4px; 
@@ -42,10 +40,10 @@ header {
 }
 
 #main dl {
+  @include clearfix;
   margin: 0;
-  @include outer-container;
   dt, dd {
-    @include span-columns(6);
+    @include span-columns(6 of 12);
     font-weight: bold;
     margin-top: 0.75em;
     margin: 0;
@@ -59,15 +57,19 @@ header {
   font-size: em(12);
   background-color: #E4E4E4;
 
-  li.task {
+  li.task {    
+    @include user-select(none);
+    @include clearfix;
     &:nth-of-type(even) {
       background-color: #D8D8D8;
     }
-    @include outer-container;
-    @include user-select(none);
 
-    label, .controls {
-      @include span-columns(6);
+
+    label {
+      @include span-columns(8 of 12);
+    }
+    .controls {
+      @include span-columns(4 of 12);
     }
 
     label {
@@ -90,9 +92,11 @@ header {
       a.stop {display: none}
       a.play {display: inline-block}
     }
-
   }
 }
+
+
+
 
 
 
