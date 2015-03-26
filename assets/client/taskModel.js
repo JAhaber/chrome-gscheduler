@@ -15,17 +15,19 @@ TaskModel.prototype.inform = function () {
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
-TaskModel.prototype.addTask = function (title, opts) {
-	
-	opts = opts || null;
+TaskModel.prototype.addTask = function (task) {
 
-	this.tasks.unshift({
+	var newTask = {
 		id: Utils.uuid(),
-		title: title,
+		title: task.title,
 		startTime: Date.now(),
-		paused: false
-	});
+		ticketID: task.ticketID || null,
+		projectID: task.projectID || null,
+		isClientBillable: task.isClientBillable || null,
+		type: task.type || null
+	};
 
+	this.tasks.unshift(newTask);
 	this.inform();
 };
 

@@ -20,11 +20,11 @@ var TaskItem = React.createClass({
   },
 
   render: function() {
-  	var title = this.props.task.title;
+  	var task = this.props.task;
     return (
       <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
 				<label>
-					{title}
+					{task.title}
 				</label>
 				<div className="controls">
 					<span className="timeElapsed">{this.state.timeElapsed}</span>

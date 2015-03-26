@@ -1,5 +1,6 @@
 
 var React = require('react');
+var GenomeAPI = require('./GenomeAPI.js');
 var TaskItem = require('./taskItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var Moment = require('moment');
@@ -25,12 +26,24 @@ var GSchedulerApp = React.createClass({
     this.getTotalTaskTime(tasks);
   },
 
-  addTask: function (taskTitle, taskID) {
-    this.props.model.addTask(taskTitle, taskID);
+  createTask: function(title) {
+    var task = {title: title};
+    this.addTask(task);
+  },
+
+  addTask: function (task) {
+    this.props.model.addTask(task);
   },
 
   stop: function (task) {
     this.props.model.stop(task);
+  },
+
+  save: function () {
+    var tasks = this.props.model.tasks;
+    if (tasks.length > 0) {
+      GenomeAPI.postTimeEntries(tasks).done();
+    }
   },
 
   destroy: function (task) {
@@ -86,11 +99,13 @@ var GSchedulerApp = React.createClass({
       <div>
         <header id="header">
           <SearchBox 
-            onSelect={this.addTask}
+            onSelect={this.addTask} onCreate={this.createTask}
           />
-          <a className="play"><i className="fa fa-play"></i></a>
         </header>
         {main}
+        <footer>
+          <button type="button" onClick={this.save}>Save</button>
+        </footer>
       </div>
     );
   }

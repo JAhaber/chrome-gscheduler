@@ -5,7 +5,7 @@ var windowManager = require('./background/window_manager')(chrome);
 
 var PADDING_TOP = 150;
 var PADDING_BOTTOM = 300;
-var SWITCHER_WIDTH = 315;
+var SWITCHER_WIDTH = 455;
 
 var timers = [];
 
