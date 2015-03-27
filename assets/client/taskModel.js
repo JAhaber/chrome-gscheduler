@@ -1,4 +1,5 @@
 var Utils = require('../utils.js');
+var Moment = require('moment');
 
 var TaskModel = function (key) {
 	this.key = key;
@@ -20,12 +21,14 @@ TaskModel.prototype.addTask = function (task) {
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
-		startTime: Date.now(),
+		startTime: Moment().format(),
 		ticketID: task.ticketID || null,
 		projectID: task.projectID || null,
 		isClientBillable: task.isClientBillable || null,
 		type: task.type || null
 	};
+
+	console.log('addTask:', newTask)
 
 	this.tasks.unshift(newTask);
 	this.inform();
@@ -35,7 +38,7 @@ TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
 		return task !== taskToStop ?
 			task :
-			Utils.extend({}, task, {stopTime: Date.now() });
+			Utils.extend({}, task, {stopTime: Moment().format() });
 	});
 
 	this.inform();

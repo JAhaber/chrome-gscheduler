@@ -1,5 +1,6 @@
 
 var React = require('react');
+var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var TaskItem = require('./taskItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
@@ -51,18 +52,13 @@ var GSchedulerApp = React.createClass({
   },
 
   getTotalTaskTime: function(tasks) {
-    var totalTaskTime = 0;
-    var formatedTotalTaskTime = '';
+    var totalElapsedMilliseconds = _.reduce(tasks, function(totalElapsedMilliseconds, task){
+      var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
+      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
+      return totalElapsedMilliseconds + elapsedMilliseconds;
+    }, 0);
 
-    for (var i = tasks.length - 1; i >= 0; i--) {
-      var task = tasks[i];
-      var endTime = !task.stopTime ? new Date().valueOf() : task.stopTime;
-      var elapsedMilliseconds = (endTime - task.startTime.valueOf());
-      totalTaskTime += elapsedMilliseconds;
-    };
-    formatedTotalTaskTime = Moment().hour(0).minute(0).second(totalTaskTime/1000).format('H[hrs] mm[mins]');
-
-    this.setState({totalTaskTime: formatedTotalTaskTime});
+    this.setState({totalTaskTime: Moment().hour(0).minute(0).second(totalElapsedMilliseconds/1000).format('H[hrs] mm[mins]')});
   },
 
   render: function() {

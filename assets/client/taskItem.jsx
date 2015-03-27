@@ -7,9 +7,11 @@ var TaskItem = React.createClass({
 		return {timeElapsed: ''};
 	},
   tick: function() {
-  	var endTime = !this.props.task.stopTime ? new Date().valueOf() : this.props.task.stopTime;
-		var elapsedMilliseconds = (endTime - this.props.task.startTime.valueOf());
-		var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
+    var task = this.props.task;
+    var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
+    var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
+    var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
+
   	this.setState({timeElapsed: timeElapsed});
   },
   componentDidMount: function() {
