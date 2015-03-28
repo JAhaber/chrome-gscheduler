@@ -72,7 +72,7 @@ var GenomeAPI = {
 		options = options || {};
 		options.data = {
 			Date: task.startTime,
-			Duration: 30,
+			Duration: this.getDuration(task, 30),
 			Note: task.title,
 			Type: 'Schedule-Note'
 		};
@@ -87,8 +87,6 @@ var GenomeAPI = {
 
 		task.projectID ? $.extend(options.data, projectData) : false;
 
-		console.log('postTimeEntry:', options.data);
-
 		return GenomeAPI.getUser()
 						.then(function(user){
 							options.data.UserID = user.UserID
@@ -101,39 +99,43 @@ var GenomeAPI = {
 			isSequenced: true
 		});
 
+		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
 		var previousTaskEndTime = Moment().startOf('day').hour(9).minute(0).format();
 
 		var promises = sortedList.map(function (task, index) {
-			var newTask = _.extend({}, task);
-
-			console.log('previousTaskEndTime', previousTaskEndTime);
-			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
-			previousTaskEndTime = Moment(previousTaskEndTime).add(30, 'minutes').format();
-			console.log('nextTaskEndTime', previousTaskEndTime);
-
-
 			var deferred = Q.defer();
-			deferred.resolve(GenomeAPI.postTimeEntry(newTask).then(function(res){
+			var newTask = _.extend({}, task);
+			var duration = self.getDuration(task, 30);
 
-				//console.log('duration', duration);
-				console.log('previousTaskEndTime', previousTaskEndTime);
+			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
+			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
+			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
 
-			}).done());
-
+			deferred.resolve(GenomeAPI.postTimeEntry(newTask));
 			return deferred.promise;
 		});
 
 		// Run in Sequence or in an async batch
-  	return promises.reduce(Q.when) //options.isSequenced ? promises.reduce(Q.when) : Q.all(promises);
+  	return options.isSequenced ? promises.reduce(Q.when) : Q.all(promises);
 	},
 
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
-		var stopTime = task.stopTime || Moment();
-		var duration = stopTime - task.startTime;
+		//task.stopTime = task.stopTime || Moment().format();
+		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
 
-		return Moment().seconds(duration/1000).format();
+		console.log('task.startTime:',task.startTime);
+		console.log('task.stopTime:',task.stopTime);
+		console.log('durationAsMinutes:',durationAsMinutes);
+
+		if (roundTo) {
+			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
+			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
+		}
+
+		console.log('roundedMinutes:',durationAsMinutes);
+		return durationAsMinutes;
 	}
 
 }
