@@ -49,6 +49,14 @@ module.exports = function(chrome) {
       }.bind(this));
     },
 
+    hideSwitcher: function() {
+      var switcherWindowId = this.getSwitcherWindowId();
+
+      return switcherWindowId.then(function(id){
+        return util.pcall(chrome.windows.remove(id)).bind(this);
+      });;
+    },
+
     queryTabs: function(senderTabId, searchAllWindows, recentTabs, lastWindowId) {
       var options = searchAllWindows ? {} : {windowId: lastWindowId};
       return util.pcall(chrome.tabs.query, options)

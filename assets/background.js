@@ -6,8 +6,6 @@ var PADDING_TOP = 150;
 var PADDING_BOTTOM = 300;
 var SWITCHER_WIDTH = 455;
 
-var timers = [];
-
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
 });
@@ -23,7 +21,10 @@ chrome.commands.onCommand.addListener(function(command) {
     Q.all([currentWindow, switcherWindowId])
     .spread(function(currentWindow, switcherWindowId) {
       // Don't activate the switcher from an existing switcher window.
-      if (currentWindow.id == switcherWindowId) return;
+      if (currentWindow.id == switcherWindowId) {
+        windowManager.hideSwitcher();
+        return;
+      };
 
       windowManager.setLastWindowId(currentWindow.id);
       var left = currentWindow.left + Math.round((currentWindow.width - SWITCHER_WIDTH) / 2);
@@ -36,41 +37,6 @@ chrome.commands.onCommand.addListener(function(command) {
 
   }
 });
-
-// chrome.runtime.onMessage.addListener(function(request, sender, respond) {
-
-//   if (request.addTimer) {
-//     var newTimer = JSON.parse(request.addTimer)
-//     var stopwatch = new Stopwatch(true);
-//     stopwatch.shortDesc = newTimer.shortDesc;
-//     timers.push(stopwatch);
-//   }
-  
-//   if (request.removeTimer) {
-//     console.log('Remove Timer!');
-//   }
-
-// });
-
-var updateTimers = function() { 
- 
-  var newTimers = [];
-  for (var i = timers.length - 1; i >= 0; i--) {
-    var timer = timers[i];
-    var newTimer = {
-      shortDesc: timer.shortDesc, 
-      time: moment().hour(0).minute(0).second(timer.elapsedMilliseconds()/1000).format('HH : mm : ss')
-    }
-
-    newTimers.push(newTimer);
-  };
-
-  chrome.runtime.sendMessage({updateTimers: JSON.stringify(newTimers)});
-}
-
-var t;
-t = setInterval(updateTimers, 1000);
-
 
 // chrome.browserAction.setBadgeText({text:data.unreadItems});
 

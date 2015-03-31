@@ -14,8 +14,7 @@ var GSchedulerApp = React.createClass({
     };
   },
   componentDidMount: function() {
-    // Router stuff to go here
-
+    window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
   },
   componentWillUnmount: function() {
@@ -28,11 +27,13 @@ var GSchedulerApp = React.createClass({
   },
 
   createTask: function(title) {
+    this.stopAll();
     var task = {title: title};
     this.addTask(task);
   },
 
   addTask: function (task) {
+    this.stopAll();
     this.props.model.addTask(task);
   },
 
@@ -40,7 +41,12 @@ var GSchedulerApp = React.createClass({
     this.props.model.stop(task);
   },
 
+  stopAll: function() {
+    _.each(this.props.model.tasks, this.stop);
+  },
+
   save: function () {
+    this.stopAll();
     var tasks = this.props.model.tasks;
     if (tasks.length > 0) {
       GenomeAPI.postTimeEntries(tasks).done();
@@ -49,6 +55,10 @@ var GSchedulerApp = React.createClass({
 
   destroy: function (task) {
     this.props.model.destroy(task);
+  },
+
+  closeScheduler: function() {
+    window.close();
   },
 
   getTotalTaskTime: function(tasks) {
@@ -70,7 +80,7 @@ var GSchedulerApp = React.createClass({
         <TaskItem
           key={task.id}
           task={task}
-          onPlay={this.addTask.bind(this, task.title)}
+          onPlay={this.createTask.bind(this, task.title)}
           onStop={this.stop.bind(this, task)}
           onDestroy={this.destroy.bind(this, task)}
         />
@@ -106,7 +116,6 @@ var GSchedulerApp = React.createClass({
     );
   }
 });
-
 
 module.exports = GSchedulerApp;
 

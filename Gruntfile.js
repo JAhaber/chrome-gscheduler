@@ -168,7 +168,7 @@ module.exports = function (grunt) {
         dest: '<%= config.dist %>'
       },
       html: [
-        '<%= config.app %>/popup.html',
+        '<%= config.app %>/gscheduler.html',
         '<%= config.app %>/options.html'
       ]
     },
@@ -253,6 +253,17 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
+      app: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= config.assets %>',
+          dest: '<%= config.app %>',
+          src: [
+            'styles/vendor/**/*.{eot,svg,ttf,woff,woff2,otf}',
+          ]
+        }]
+      },
       dist: {
         files: [{
           expand: true,
@@ -265,6 +276,7 @@ module.exports = function (grunt) {
             '{,*/}*.html',
             'styles/{,*/}*.css',
             'styles/fonts/{,*/}*.*',
+            'styles/vendor/**/*.{eot,svg,ttf,woff,woff2,otf}',
             '_locales/{,*/}*.json',
           ]
         }]
@@ -324,6 +336,7 @@ module.exports = function (grunt) {
       'browserify:app',
       'sass:app',
       //'jshint',
+      'copy:app',
       'concurrent:chrome',
       'connect:chrome',
       'watch'
@@ -343,7 +356,7 @@ module.exports = function (grunt) {
     'cssmin',
     'concat',
     'uglify',
-    'copy',
+    'copy:dist',
     'usemin',
     'compress'
   ]);

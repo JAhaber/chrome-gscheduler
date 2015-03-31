@@ -1,39 +1,39 @@
 {
-  "name": "__MSG_appName__",
-  "version": "0.0.1",
-  "manifest_version": 2,
-  "description": "__MSG_appDescription__",
-  "icons": {
-    "16": "images/icon-16.png",
-    "128": "images/icon-128.png"
-  },
-  "default_locale": "en",
-  "browser_action": {
-    "default_icon": {
-      "19": "images/icon-19.png",
-      "38": "images/icon-38.png"
+    "name": "GScheduler",
+    "version": "0.0.9",
+    "manifest_version": 2,
+    "description": "Forgot to log your time...again? Genome locking you out...again? Perhaps you just need a faster, easier way to log it.",
+    "icons": {
+        "16": "images/icon-16.png",
+        "128": "images/icon-128.png"
     },
-    "default_title": "gscheduler"
-  },
-  "commands": {
-    "show-gscheduler": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Comma"
-      },
-      "description": "Show the gScheduler"
-    }
-  },
-  "background": {
-    "scripts": [
-      "scripts/chromereload.js",
-      "scripts/background-bundle.js"
+    "default_locale": "en",
+    "browser_action": {
+        "default_icon": {
+            "19": "images/icon-19.png",
+            "38": "images/icon-38.png"
+        },
+        "default_title": "gscheduler"
+    },
+    "commands": {
+        "show-gscheduler": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Comma"
+            },
+            "description": "Show the gScheduler"
+        }
+    },
+    "background": {
+        "scripts": [
+            "scripts/chromereload.js",
+            "scripts/background-bundle.js"
+        ],
+        "persistent": true
+    },
+    "permissions": [
+        "tabs",
+        "storage",
+        "https://genome.klick.com/"
     ],
-    "persistent": true
-  },
-  "permissions": [
-    "tabs",
-    "storage",
-    "https://genome.klick.com/"
-  ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

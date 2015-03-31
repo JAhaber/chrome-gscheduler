@@ -24,6 +24,7 @@ var Moment = require('moment');
 
 var GenomeAPI = {
 
+	ROUND_TO: 15,
 	CURRENT_USER: null,
 	GENOME_ENDPOINT: 'https://genome.klick.com/api',
 
@@ -72,7 +73,7 @@ var GenomeAPI = {
 		options = options || {};
 		options.data = {
 			Date: task.startTime,
-			Duration: this.getDuration(task, 30),
+			Duration: this.getDuration(task, GenomeAPI.ROUND_TO),
 			Note: task.title,
 			Type: 'Schedule-Note'
 		};
@@ -106,13 +107,14 @@ var GenomeAPI = {
 		var promises = sortedList.map(function (task, index) {
 			var deferred = Q.defer();
 			var newTask = _.extend({}, task);
-			var duration = self.getDuration(task, 30);
+			var duration = self.getDuration(task, GenomeAPI.ROUND_TO);
 
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
 
 			deferred.resolve(GenomeAPI.postTimeEntry(newTask));
+
 			return deferred.promise;
 		});
 
@@ -122,7 +124,6 @@ var GenomeAPI = {
 
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
-		//task.stopTime = task.stopTime || Moment().format();
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
 
 		if (roundTo) {
@@ -130,7 +131,6 @@ var GenomeAPI = {
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
 		}
 
-		console.log('roundedMinutes:',durationAsMinutes);
 		return durationAsMinutes;
 	}
 
@@ -219,7 +219,7 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 		$('.typeahead').typeahead({
 		  hint: true,
 		  highlight: true,
-		  minLength: 3
+		  minLength: 2
 		},
 		{
 		  name: 'tickets',
@@ -294,8 +294,7 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     };
   },
   componentDidMount: function() {
-    // Router stuff to go here
-
+    window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
   },
   componentWillUnmount: function() {
@@ -308,11 +307,13 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   },
 
   createTask: function(title) {
+    this.stopAll();
     var task = {title: title};
     this.addTask(task);
   },
 
   addTask: function (task) {
+    this.stopAll();
     this.props.model.addTask(task);
   },
 
@@ -320,7 +321,12 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     this.props.model.stop(task);
   },
 
+  stopAll: function() {
+    _.each(this.props.model.tasks, this.stop);
+  },
+
   save: function () {
+    this.stopAll();
     var tasks = this.props.model.tasks;
     if (tasks.length > 0) {
       GenomeAPI.postTimeEntries(tasks).done();
@@ -329,6 +335,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
 
   destroy: function (task) {
     this.props.model.destroy(task);
+  },
+
+  closeScheduler: function() {
+    window.close();
   },
 
   getTotalTaskTime: function(tasks) {
@@ -350,7 +360,7 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         React.createElement(TaskItem, {
           key: task.id, 
           task: task, 
-          onPlay: this.addTask.bind(this, task.title), 
+          onPlay: this.createTask.bind(this, task.title), 
           onStop: this.stop.bind(this, task), 
           onDestroy: this.destroy.bind(this, task)}
         )
@@ -386,7 +396,6 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     );
   }
 });
-
 
 module.exports = GSchedulerApp;
 
