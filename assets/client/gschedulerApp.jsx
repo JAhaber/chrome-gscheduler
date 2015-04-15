@@ -95,10 +95,7 @@ var GSchedulerApp = React.createClass({
     if (taskItems.length) {
       main = (
         <section id="main">
-          <dl>
-            <dt>Today</dt>
-            <dd>{this.state.totalTaskTime}</dd>
-          </dl>
+         
           <ul id="task-list">
             {taskItems}
           </ul>
@@ -112,7 +109,12 @@ var GSchedulerApp = React.createClass({
           <SearchBox 
             onSelect={this.addTask} onCreate={this.createTask}
           />
+           <dl>
+            <dt>Today</dt>
+            <dd>{this.state.totalTaskTime}</dd>
+          </dl>
         </header>
+
         {main}
         <footer>
           <button type="button" onClick={this.save}>Save</button>

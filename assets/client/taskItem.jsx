@@ -24,17 +24,19 @@ var TaskItem = React.createClass({
   render: function() {
   	var task = this.props.task;
     return (
+      <div className="border-left">
       <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
-				<label>
+        <label>
 					{task.title}
 				</label>
 				<div className="controls">
 					<span className="timeElapsed">{this.state.timeElapsed}</span>
 					<a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
 					<a className="stop" onClick={this.props.onStop}><i className="fa fa-stop"></i></a>
-					<a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-times"></i></a>
+					<a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
 				</div>
       </li>
+      </div>
     );
   }
 });
