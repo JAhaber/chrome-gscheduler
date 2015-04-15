@@ -82,16 +82,20 @@ var GenomeAPI = {
 		options = $.extend({}, options, {
 			isSequenced: true
 		});
-
+		var count=18;
 		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
-		var previousTaskEndTime = Moment().startOf('day').hour(9).minute(0).format();
-
+		var previousTaskEndTime = Moment("2015-04-13T09:00:00-04:00").hour(9).minute(0).format();
 		var promises = sortedList.map(function (task, index) {
 			var deferred = Q.defer();
 			var newTask = _.extend({}, task);
+			newTask.startTime = "2015-04-18T09:00:00-04:00"
 			var duration = self.getDuration(task, GenomeAPI.ROUND_TO);
-
+			
+			if (!(Moment(previousTaskEndTime).date() === Moment(newTask.startTime).date())){
+				previousTaskEndTime = Moment(newTask.startTime).hour(9).minute(0).format();
+			}
+				
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
