@@ -2123,7 +2123,7 @@ header {
     background-color: #b6e5ff;
     padding-left: 10px;
     border-bottom: 1px solid #000; }
-    #task-list .border-left:nth-of-type(even) {
+    #task-list .border-left:nth-of-type(odd) {
       background-color: #ffdd57; }
   #task-list li.task {
     background-color: #fff;

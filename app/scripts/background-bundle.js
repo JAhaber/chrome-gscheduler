@@ -6,6 +6,7 @@ var windowManager = require('./background/window_manager')(chrome);
 var PADDING_TOP = 150;
 var PADDING_BOTTOM = 300;
 var SWITCHER_WIDTH = 455;
+var click_count = 0;
 
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
@@ -16,6 +17,35 @@ chrome.commands.onCommand.addListener(function(command) {
   // keyboard shortcuts, at the bottom of their extensions page.
   if (command == 'show-gscheduler') {
 
+    runGScheduler();
+    
+
+  }
+});
+
+chrome.browserAction.onClicked.addListener(function(command) {
+  // Users can bind a key to this command in their Chrome
+  // keyboard shortcuts, at the bottom of their extensions page.
+  click_count = click_count + 1;
+
+  if (click_count === 1){
+    setTimeout(function(){
+      if (click_count === 1){
+        runGScheduler(); 
+      }
+      click_count = 0;
+    }, 500);
+    
+  }
+  else if (click_count === 2){
+    chrome.tabs.create({ url : 'https://genome.klick.com/scheduler/#/day/now/'});
+  }
+     
+});
+
+
+
+var runGScheduler = function(){
     var currentWindow = windowManager.getCurrentWindow();
     var switcherWindowId = windowManager.getSwitcherWindowId();
 
@@ -35,10 +65,7 @@ chrome.commands.onCommand.addListener(function(command) {
       
       windowManager.showSwitcher(width, height, left, top);
     });
-
-  }
-});
-
+};
 // chrome.browserAction.setBadgeText({text:data.unreadItems});
 
 

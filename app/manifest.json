@@ -13,7 +13,7 @@
             "19": "images/icon-19.png",
             "38": "images/icon-38.png"
         },
-        "default_title": "gscheduler"
+        "default_title": "gScheduler"
     },
     "commands": {
         "show-gscheduler": {
@@ -33,7 +33,9 @@
     "permissions": [
         "tabs",
         "storage",
-        "https://genome.klick.com/"
+        "https://genome.klick.com/",
+        "https://genome.klick.com/scheduler/#/day/now/"
+    
     ],
     "web_accessible_resources": ["images/genome.png"],
 
