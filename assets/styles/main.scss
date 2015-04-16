@@ -41,28 +41,40 @@ i{
 }
 
 header {
-  padding:15px 0 15px 0;
-  background-color:#469fc7;
+  padding:70px 20px 0 20px;
+  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat top 10px right 20px,
+    linear-gradient(#3f9dc7, #2585b0);
 
-  input[type=text] {
-    display: inline-block;
-    width: 78%;
+
+  .typeahead {
+    width: 185px;
+    height: 48px;
+    font-size: 18px;
+    line-height: 18px;
+    border: 2px solid #ccc;
+    outline: none;
+    padding: 15px;
+    margin-bottom:30px;
   }
+
   a.play {
     font-size: 1.1em;
   }
   dl {
-  @include clearfix;
-  margin: 0;
-  dt, dd {
-    @include span-columns(6 of 12);
-    font-weight: bold;
-    margin-top: 0.75em;
+
+    @include clearfix;
     margin: 0;
-  }
-  dd {
-    text-align: right;
-  }
+    dt, dd {
+      color:#fff;
+      font: normal 25px Helvetica, Arial, sans-serif;
+      @include span-columns(6 of 12);
+      margin-top: 0.75em;
+      margin: 0;
+      padding-bottom:5px;
+    }
+    dd {
+      text-align: right;
+    }
   }
 }
 
@@ -138,6 +150,14 @@ header {
 footer {
   margin:15px;
   text-align:right;
+  button{
+    background-color: #459ec5;
+    border: 1px solid #459ec5;
+    border-radius: 30px;
+    padding: 6px 25px 6px 25px;
+    font: normal 20px Helvetica, Arial, sans-serif;
+
+  }
 }
 
 

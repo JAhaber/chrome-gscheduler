@@ -96,7 +96,7 @@ var SearchBox = React.createClass({
 			name="search" 
       ref="newField"
 			className="form-control typeahead structuremap-search" 
-			placeholder="Task Name/ID"
+			placeholder="Task name/ID"
 			onKeyDown={this.handleNewTaskKeyDown}
 			/>
 		);
