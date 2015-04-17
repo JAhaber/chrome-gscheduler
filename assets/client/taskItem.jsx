@@ -25,17 +25,64 @@ var TaskItem = React.createClass({
   	var task = this.props.task;
     return (
       <div className="border-left">
-      <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
-        <label>
-					{task.title}
-				</label>
-				<div className="controls">
-					<span className="timeElapsed">{this.state.timeElapsed}</span>
-					<a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-					<a className="stop" onClick={this.props.onStop}><i className="fa fa-stop"></i></a>
-					<a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
-				</div>
-      </li>
+        <li className={this.props.task.stopTime ? 'task stopped' : 'task'} onClick={this.props.expandItems}>
+          <label>
+            {task.title}
+          </label>
+          <div className="controls">
+            <span className="timeElapsed">{this.state.timeElapsed}</span>
+            <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
+            <a className="stop" onClick={this.props.onStop}><i className="fa fa-stop"></i></a>
+            <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
+          </div>
+        </li>
+        <div className="details on">
+            <label>
+             Title:
+            </label>
+            <input 
+              id="title-edit"
+              type="text" 
+              name="title-edit" 
+              className="form-control" 
+              placeholder="Enter Title"
+              defaultValue={task.title}
+              />
+            
+          <label>
+            Ticket ID:
+            </label>
+            <input 
+              id="ticketid-edit"
+              type="text" 
+              name="ticketid-edit" 
+              className="form-control" 
+              placeholder="Enter Ticket ID"
+              defaultValue={task.ticketID}
+              />
+            <label>
+             Start:
+            </label>
+            <input 
+              id="start-time-edit"
+              type="text" 
+              name="start-time-edit" 
+              className="form-control" 
+              placeholder="Enter Start Time"
+              defaultValue={task.startTime}
+              />
+            <label>
+             Stop:
+            </label>
+            <input 
+              id="stop-time-edit"
+              type="text" 
+              name="stop-time-edit" 
+              className="form-control" 
+              placeholder="Enter Stop Time"
+              defaultValue={task.stopTime}
+              />
+        </div>
       </div>
     );
   }

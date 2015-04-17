@@ -2011,7 +2011,7 @@ html {
   color: #999; }
 
 .tt-dropdown-menu {
-  width: 422px;
+  width: 400px;
   margin-top: 12px;
   padding: 8px 0;
   background-color: #fff;
@@ -2050,7 +2050,7 @@ a.destroy {
   display: inline-block;
   width: 1.9em;
   height: 1.8em;
-  font-size: 1.4em;
+  font-size: 1.2em;
   color: white;
   text-align: center; }
 
@@ -2064,19 +2064,33 @@ i {
     color: #084b68; }
 
 header {
-  padding: 70px 20px 0 20px;
+  padding: 50px 20px 0 20px;
   background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat top 10px right 20px, linear-gradient(#3f9dc7, #2585b0); }
+  header .input-wrap {
+    position: relative;
+    margin-bottom: 30px; }
   header .typeahead {
     width: 185px;
-    height: 48px;
+    height: 38px;
     font-size: 18px;
     line-height: 18px;
     border: 2px solid #ccc;
     outline: none;
-    padding: 15px;
-    margin-bottom: 30px; }
-  header a.play {
-    font-size: 1.1em; }
+    padding: 10px;
+    display: inline-block;
+    margin: 0; }
+  header .note {
+    width: 185px;
+    height: 38px;
+    font-size: 18px;
+    line-height: 18px;
+    border: 2px solid #ccc;
+    outline: none;
+    padding: 10px;
+    margin: 0;
+    display: inline-block;
+    position: absolute;
+    right: 0; }
   header dl {
     margin: 0; }
     header dl::after {
@@ -2085,7 +2099,7 @@ header {
       display: table; }
     header dl dt, header dl dd {
       color: #fff;
-      font: normal 25px Helvetica, Arial, sans-serif;
+      font: normal 20px Helvetica, Arial, sans-serif;
       float: left;
       display: block;
       margin-right: 2.35765%;
@@ -2127,7 +2141,7 @@ header {
       background-color: #ffdd57; }
   #task-list li.task {
     background-color: #fff;
-    padding: 20px 5px 20px;
+    padding: 10px 5px 10px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -2152,7 +2166,7 @@ header {
         margin-right: 0; }
     #task-list li.task label {
       color: #084b68;
-      font-size: 20px;
+      font-size: 15px;
       padding-left: 10px;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -2160,7 +2174,7 @@ header {
       font-weight: normal; }
     #task-list li.task .timeElapsed {
       color: #084b68;
-      font-size: 15px;
+      font-size: 12px;
       font-family: "Lucida Console", Monaco, monospace;
       margin-right: 15px; }
     #task-list li.task .controls {
@@ -2170,6 +2184,25 @@ header {
     #task-list li.task.stopped .controls a.stop {
       display: none; }
     #task-list li.task.stopped .controls a.play {
+      display: inline-block; }
+  #task-list .details {
+    display: none;
+    height: 100%;
+    margin: 0;
+    padding: 15px 0 5px 0;
+    background-color: #f8f8f8; }
+    #task-list .details.on {
+      display: block; }
+    #task-list .details label {
+      font-size: 12px;
+      color: #084b68;
+      display: inline-block;
+      width: 60px;
+      text-align: right; }
+    #task-list .details input[type="text"] {
+      margin-left: 10px;
+      margin-right: 10px;
+      width: 30%;
       display: inline-block; }
 
 footer {

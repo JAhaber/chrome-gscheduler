@@ -48,6 +48,10 @@ var GSchedulerApp = React.createClass({
   destroy: function (task) {
     this.props.model.destroy(task);
   },
+  
+  expand: function(task){
+    
+  },
 
   save: function () {
     var scope = this;
@@ -88,6 +92,7 @@ var GSchedulerApp = React.createClass({
           onPlay={this.createTask.bind(this, task.title)}
           onStop={this.stop.bind(this, task)}
           onDestroy={this.destroy.bind(this, task)}
+          expandItems={this.expand.bind(this,task)}
         />
       );
     }, this);
@@ -106,9 +111,19 @@ var GSchedulerApp = React.createClass({
     return (
       <div>
         <header id="header">
+        <div className="input-wrap">
           <SearchBox 
             onSelect={this.addTask} onCreate={this.createTask}
           />
+          <input 
+            id="new-note"
+            type="text" 
+            name="note" 
+            className="form-control note" 
+            placeholder="Note"
+            
+            />
+        </div>
            <dl>
             <dt>Today</dt>
             <dd>{this.state.totalTaskTime}</dd>

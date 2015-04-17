@@ -331,6 +331,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   destroy: function (task) {
     this.props.model.destroy(task);
   },
+  
+  expand: function(task){
+    
+  },
 
   save: function () {
     var scope = this;
@@ -370,7 +374,8 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
           task: task, 
           onPlay: this.createTask.bind(this, task.title), 
           onStop: this.stop.bind(this, task), 
-          onDestroy: this.destroy.bind(this, task)}
+          onDestroy: this.destroy.bind(this, task), 
+          expandItems: this.expand.bind(this,task)}
         )
       );
     }, this);
@@ -389,9 +394,19 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     return (
       React.createElement("div", null, 
         React.createElement("header", {id: "header"}, 
+        React.createElement("div", {className: "input-wrap"}, 
           React.createElement(SearchBox, {
             onSelect: this.addTask, onCreate: this.createTask}
           ), 
+          React.createElement("input", {
+            id: "new-note", 
+            type: "text", 
+            name: "note", 
+            className: "form-control note", 
+            placeholder: "Note"}
+            
+            )
+        ), 
            React.createElement("dl", null, 
             React.createElement("dt", null, "Today"), 
             React.createElement("dd", null, this.state.totalTaskTime)
@@ -440,17 +455,64 @@ var TaskItem = React.createClass({displayName: "TaskItem",
   	var task = this.props.task;
     return (
       React.createElement("div", {className: "border-left"}, 
-      React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
-        React.createElement("label", null, 
-					task.title
-				), 
-				React.createElement("div", {className: "controls"}, 
-					React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
-					React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
-					React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
-					React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
-				)
-      )
+        React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task', onClick: this.props.expandItems}, 
+          React.createElement("label", null, 
+            task.title
+          ), 
+          React.createElement("div", {className: "controls"}, 
+            React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
+            React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
+            React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
+            React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
+          )
+        ), 
+        React.createElement("div", {className: "details on"}, 
+            React.createElement("label", null, 
+             "Title:"
+            ), 
+            React.createElement("input", {
+              id: "title-edit", 
+              type: "text", 
+              name: "title-edit", 
+              className: "form-control", 
+              placeholder: "Enter Title", 
+              defaultValue: task.title}
+              ), 
+            
+          React.createElement("label", null, 
+            "Ticket ID:"
+            ), 
+            React.createElement("input", {
+              id: "ticketid-edit", 
+              type: "text", 
+              name: "ticketid-edit", 
+              className: "form-control", 
+              placeholder: "Enter Ticket ID", 
+              defaultValue: task.ticketID}
+              ), 
+            React.createElement("label", null, 
+             "Start:"
+            ), 
+            React.createElement("input", {
+              id: "start-time-edit", 
+              type: "text", 
+              name: "start-time-edit", 
+              className: "form-control", 
+              placeholder: "Enter Start Time", 
+              defaultValue: task.startTime}
+              ), 
+            React.createElement("label", null, 
+             "Stop:"
+            ), 
+            React.createElement("input", {
+              id: "stop-time-edit", 
+              type: "text", 
+              name: "stop-time-edit", 
+              className: "form-control", 
+              placeholder: "Enter Stop Time", 
+              defaultValue: task.stopTime}
+              )
+        )
       )
     );
   }
