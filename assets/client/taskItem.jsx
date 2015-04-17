@@ -25,10 +25,13 @@ var TaskItem = React.createClass({
   	var task = this.props.task;
     return (
       <div className="border-left">
-        <li className={this.props.task.stopTime ? 'task stopped' : 'task'} onClick={this.props.expandItems}>
-          <label>
-            {task.title}
-          </label>
+        <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
+          
+            <label className={this.props.task.expanded ? 'open' : 'closed'}>
+              <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
+              <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}
+            </label>
+         
           <div className="controls">
             <span className="timeElapsed">{this.state.timeElapsed}</span>
             <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
@@ -36,7 +39,7 @@ var TaskItem = React.createClass({
             <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
           </div>
         </li>
-        <div className="details on">
+        <div className={this.props.task.expanded ? 'details on' : 'details'}>
             <label>
              Title:
             </label>

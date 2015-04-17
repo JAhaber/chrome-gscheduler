@@ -50,7 +50,11 @@ var GSchedulerApp = React.createClass({
   },
   
   expand: function(task){
-    
+    this.props.model.expand(task);
+  },
+
+  contract: function(task){
+    this.props.model.contract(task);
   },
 
   save: function () {
@@ -93,6 +97,7 @@ var GSchedulerApp = React.createClass({
           onStop={this.stop.bind(this, task)}
           onDestroy={this.destroy.bind(this, task)}
           expandItems={this.expand.bind(this,task)}
+          contractItems={this.contract.bind(this,task)}
         />
       );
     }, this);

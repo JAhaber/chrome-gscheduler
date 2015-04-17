@@ -39,6 +39,12 @@ i{
     color:#084b68;
   }
 }
+ .open .expand {
+      display: none;
+    }
+  .closed .contract {
+      display: none;
+    }
 
 header {
   padding:50px 20px 0 20px;

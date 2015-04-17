@@ -2063,6 +2063,12 @@ i {
   .destroy i {
     color: #084b68; }
 
+.open .expand {
+  display: none; }
+
+.closed .contract {
+  display: none; }
+
 header {
   padding: 50px 20px 0 20px;
   background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat top 10px right 20px, linear-gradient(#3f9dc7, #2585b0); }

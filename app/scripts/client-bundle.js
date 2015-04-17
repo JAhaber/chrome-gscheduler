@@ -333,7 +333,11 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   },
   
   expand: function(task){
-    
+    this.props.model.expand(task);
+  },
+
+  contract: function(task){
+    this.props.model.contract(task);
   },
 
   save: function () {
@@ -375,7 +379,8 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
           onPlay: this.createTask.bind(this, task.title), 
           onStop: this.stop.bind(this, task), 
           onDestroy: this.destroy.bind(this, task), 
-          expandItems: this.expand.bind(this,task)}
+          expandItems: this.expand.bind(this,task), 
+          contractItems: this.contract.bind(this,task)}
         )
       );
     }, this);
@@ -455,10 +460,13 @@ var TaskItem = React.createClass({displayName: "TaskItem",
   	var task = this.props.task;
     return (
       React.createElement("div", {className: "border-left"}, 
-        React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task', onClick: this.props.expandItems}, 
-          React.createElement("label", null, 
-            task.title
-          ), 
+        React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
+          
+            React.createElement("label", {className: this.props.task.expanded ? 'open' : 'closed'}, 
+              React.createElement("a", {className: "expand", onClick: this.props.expandItems}, React.createElement("i", {className: "fa fa-plus"})), 
+              React.createElement("a", {className: "contract", onClick: this.props.contractItems}, React.createElement("i", {className: "fa fa-minus"})), " ", task.title
+            ), 
+         
           React.createElement("div", {className: "controls"}, 
             React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
             React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
@@ -466,7 +474,7 @@ var TaskItem = React.createClass({displayName: "TaskItem",
             React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
           )
         ), 
-        React.createElement("div", {className: "details on"}, 
+        React.createElement("div", {className: this.props.task.expanded ? 'details on' : 'details'}, 
             React.createElement("label", null, 
              "Title:"
             ), 
@@ -561,6 +569,25 @@ TaskModel.prototype.stop = function (taskToStop) {
 		return task !== taskToStop ?
 			task :
 			Utils.extend({}, task, {stopTime: Moment().format() });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.expand = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: true });
+	});
+
+	this.inform();
+};
+TaskModel.prototype.contract = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: false });
 	});
 
 	this.inform();

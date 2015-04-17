@@ -44,6 +44,25 @@ TaskModel.prototype.stop = function (taskToStop) {
 	this.inform();
 };
 
+TaskModel.prototype.expand = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: true });
+	});
+
+	this.inform();
+};
+TaskModel.prototype.contract = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: false });
+	});
+
+	this.inform();
+};
+
 TaskModel.prototype.destroy = function (task) {
 	this.tasks = this.tasks.filter(function (candidate) {
 		return candidate !== task;
