@@ -69,6 +69,10 @@ var GSchedulerApp = React.createClass({
       });
     }
   },
+  
+  handleChange: function(task, field){
+      this.props.model.handleChange(task, field);  
+  },
 
   closeScheduler: function() {
     window.close();
@@ -98,6 +102,10 @@ var GSchedulerApp = React.createClass({
           onDestroy={this.destroy.bind(this, task)}
           expandItems={this.expand.bind(this,task)}
           contractItems={this.contract.bind(this,task)}
+          titleChange={this.handleChange.bind(this,task,"title")}
+          idChange={this.handleChange.bind(this,task,"id")}
+          startChange={this.handleChange.bind(this,task,"start")}
+          stopChange={this.handleChange.bind(this,task,"stop")}
         />
       );
     }, this);

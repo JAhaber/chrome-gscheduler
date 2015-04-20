@@ -352,6 +352,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
       });
     }
   },
+  
+  handleChange: function(task, field){
+      this.props.model.handleChange(task, field);  
+  },
 
   closeScheduler: function() {
     window.close();
@@ -380,7 +384,11 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
           onStop: this.stop.bind(this, task), 
           onDestroy: this.destroy.bind(this, task), 
           expandItems: this.expand.bind(this,task), 
-          contractItems: this.contract.bind(this,task)}
+          contractItems: this.contract.bind(this,task), 
+          titleChange: this.handleChange.bind(this,task,"title"), 
+          idChange: this.handleChange.bind(this,task,"id"), 
+          startChange: this.handleChange.bind(this,task,"start"), 
+          stopChange: this.handleChange.bind(this,task,"stop")}
         )
       );
     }, this);
@@ -458,6 +466,7 @@ var TaskItem = React.createClass({displayName: "TaskItem",
 
   render: function() {
   	var task = this.props.task;
+
     return (
       React.createElement("div", {className: "border-left"}, 
         React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
@@ -479,46 +488,50 @@ var TaskItem = React.createClass({displayName: "TaskItem",
              "Title:"
             ), 
             React.createElement("input", {
-              id: "title-edit", 
+              id: task.id + "-title-edit", 
               type: "text", 
               name: "title-edit", 
               className: "form-control", 
               placeholder: "Enter Title", 
-              defaultValue: task.title}
+              defaultValue: task.title, 
+              onChange: this.props.titleChange}
               ), 
             
           React.createElement("label", null, 
             "Ticket ID:"
             ), 
             React.createElement("input", {
-              id: "ticketid-edit", 
+              id: task.id +"-ticketid-edit", 
               type: "text", 
               name: "ticketid-edit", 
               className: "form-control", 
               placeholder: "Enter Ticket ID", 
-              defaultValue: task.ticketID}
+              defaultValue: task.ticketID, 
+              onChange: this.props.idChange}
               ), 
             React.createElement("label", null, 
              "Start:"
             ), 
             React.createElement("input", {
-              id: "start-time-edit", 
+              id: task.id +"-start-time-edit", 
               type: "text", 
               name: "start-time-edit", 
               className: "form-control", 
-              placeholder: "Enter Start Time", 
-              defaultValue: task.startTime}
+              placeholder: "hh:mm:ss dd/mm/yy", 
+              defaultValue: Moment(task.startTime).format('HH:mm:ss DD/MM/YY'), 
+              onChange: this.props.startChange}
               ), 
             React.createElement("label", null, 
              "Stop:"
             ), 
             React.createElement("input", {
-              id: "stop-time-edit", 
+              id: task.id +"-stop-time-edit", 
               type: "text", 
               name: "stop-time-edit", 
               className: "form-control", 
-              placeholder: "Enter Stop Time", 
-              defaultValue: task.stopTime}
+              placeholder: "hh:mm:ss dd/mm/yy", 
+              defaultValue: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : "", 
+              onChange: this.props.stopChange}
               )
         )
       )
@@ -583,11 +596,40 @@ TaskModel.prototype.expand = function (taskToExpand) {
 
 	this.inform();
 };
+
 TaskModel.prototype.contract = function (taskToExpand) {
 	this.tasks = this.tasks.map(function (task) {
 		return task !== taskToExpand ?
 			task :
 			Utils.extend({}, task, { expanded: false });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.handleChange = function (taskToChange, field) {
+
+	this.tasks = this.tasks.map(function (task) {
+		if (task === taskToChange){
+			if (field === "title"){
+		    	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
+		    }
+	      	else if (field === "id")
+       			return Utils.extend({}, task, {ticketID: document.getElementById(task.id + "-ticketid-edit").value});
+		        
+		    else if (field === "start"){
+		     	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid())
+			        return Utils.extend({}, task, {startTime: start});
+			}
+			  
+		    else if (field === "stop"){
+			    var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			    if (Moment(stop).isValid())
+		        	return Utils.extend({}, task, {stopTime: stop});
+		    }
+		}
+		return task;
 	});
 
 	this.inform();

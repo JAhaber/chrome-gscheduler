@@ -23,6 +23,7 @@ var TaskItem = React.createClass({
 
   render: function() {
   	var task = this.props.task;
+
     return (
       <div className="border-left">
         <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
@@ -44,46 +45,50 @@ var TaskItem = React.createClass({
              Title:
             </label>
             <input 
-              id="title-edit"
+              id={task.id + "-title-edit"}
               type="text" 
               name="title-edit" 
               className="form-control" 
               placeholder="Enter Title"
               defaultValue={task.title}
+              onChange={this.props.titleChange}
               />
             
           <label>
             Ticket ID:
             </label>
             <input 
-              id="ticketid-edit"
+              id={task.id +"-ticketid-edit"}
               type="text" 
               name="ticketid-edit" 
               className="form-control" 
               placeholder="Enter Ticket ID"
               defaultValue={task.ticketID}
+              onChange={this.props.idChange}
               />
             <label>
              Start:
             </label>
             <input 
-              id="start-time-edit"
+              id={task.id +"-start-time-edit"}
               type="text" 
               name="start-time-edit" 
               className="form-control" 
-              placeholder="Enter Start Time"
-              defaultValue={task.startTime}
+              placeholder="hh:mm:ss dd/mm/yy"
+              defaultValue={Moment(task.startTime).format('HH:mm:ss DD/MM/YY')}
+              onChange={this.props.startChange}
               />
             <label>
              Stop:
             </label>
             <input 
-              id="stop-time-edit"
+              id={task.id +"-stop-time-edit"}
               type="text" 
               name="stop-time-edit" 
               className="form-control" 
-              placeholder="Enter Stop Time"
-              defaultValue={task.stopTime}
+              placeholder="hh:mm:ss dd/mm/yy"
+              defaultValue={task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : ""}
+              onChange={this.props.stopChange}
               />
         </div>
       </div>
