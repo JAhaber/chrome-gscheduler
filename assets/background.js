@@ -22,6 +22,16 @@ chrome.commands.onCommand.addListener(function(command) {
   }
 });
 
+chrome.windows.onRemoved.addListener(function(windowID){
+
+  var switcherWindowId = windowManager.getSwitcherWindowId();
+  switcherWindowId.then(function(id){
+    if (windowID === id){
+      windowManager.setSwitcherWindowId(null);
+    }
+  });
+});
+
 chrome.browserAction.onClicked.addListener(function(command) {
   // Triggers when the icon in the browser window is clicked
 
@@ -55,14 +65,15 @@ var runGScheduler = function(){
         windowManager.hideSwitcher();
         return;
       };
-
-      windowManager.setLastWindowId(currentWindow.id);
-      var left = currentWindow.left + Math.round((currentWindow.width - SWITCHER_WIDTH) / 2);
-      var top = currentWindow.top + PADDING_TOP;
-      var height = Math.max(currentWindow.height - PADDING_TOP - PADDING_BOTTOM, 600);
-      var width = SWITCHER_WIDTH;
-      
-      windowManager.showSwitcher(width, height, left, top);
+      if (switcherWindowId === null){
+        windowManager.setLastWindowId(currentWindow.id);
+        var left = currentWindow.left + Math.round((currentWindow.width - SWITCHER_WIDTH) / 2);
+        var top = currentWindow.top + PADDING_TOP;
+        var height = Math.max(currentWindow.height - PADDING_TOP - PADDING_BOTTOM, 600);
+        var width = SWITCHER_WIDTH;
+        
+        windowManager.showSwitcher(width, height, left, top);
+      }
     });
 
 

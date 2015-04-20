@@ -14,7 +14,7 @@ var GSchedulerApp = React.createClass({
     };
   },
   componentDidMount: function() {
-    window.onblur = this.closeScheduler;
+    //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
   },
   componentWillUnmount: function() {

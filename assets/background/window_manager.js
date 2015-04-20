@@ -42,11 +42,13 @@ module.exports = function(chrome) {
         focused: true,
         type: 'panel' // 'normal', 'panel', 'app'
       };
+          return util.pcall(chrome.windows.create.bind(chrome.windows), opts)
+            .then(function(switcherWindow) {
+              this.setSwitcherWindowId(switcherWindow.id);
+            }.bind(this));
 
-      return util.pcall(chrome.windows.create.bind(chrome.windows), opts)
-      .then(function(switcherWindow) {
-        this.setSwitcherWindowId(switcherWindow.id);
-      }.bind(this));
+
+      
     },
 
     hideSwitcher: function() {
@@ -54,6 +56,7 @@ module.exports = function(chrome) {
 
       return switcherWindowId.then(function(id){
         return util.pcall(chrome.windows.remove(id)).bind(this);
+
       });;
     },
 
@@ -77,6 +80,7 @@ module.exports = function(chrome) {
     },
 
     closeTab: function(tabId) {
+      
       return util.pcall(chrome.tabs.remove, tabId);
     }
   };
