@@ -36,9 +36,14 @@ TaskModel.prototype.addTask = function (task) {
 
 TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
-		return task !== taskToStop ?
-			task :
-			Utils.extend({}, task, {stopTime: Moment().format() });
+		if(task === taskToStop)
+		{	
+			if (!task.stopTime){
+				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss DD/MM/YY');
+				return Utils.extend({}, task, {stopTime: Moment().format() });
+			}
+		}
+		return task;
 	});
 
 	this.inform();
