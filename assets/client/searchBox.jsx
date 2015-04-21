@@ -91,12 +91,13 @@ var SearchBox = React.createClass({
 	render: function(){
 		return (
 			<input 
-			id="new-task"
+			id={this.props.id}
 			type="search" 
-			name="search" 
-      ref="newField"
+			name={this.props.name} 
+      		ref="newField"
 			className="form-control typeahead structuremap-search" 
-			placeholder="Task name/ID"
+			placeholder={this.props.placeholder}
+			defaultValue={this.props.defaultValue}
 			onKeyDown={this.handleNewTaskKeyDown}
 			/>
 		);

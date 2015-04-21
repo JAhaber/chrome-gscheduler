@@ -23,9 +23,9 @@ var TaskItem = React.createClass({
 
   render: function() {
   	var task = this.props.task;
-
+    var SearchBox = require('./SearchBox.jsx');
     return (
-      <div className="border-left">
+      <div className={this.props.task.projectID ? "border-left hasID" : "border-left"}>
         <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
           
             <label className={this.props.task.expanded ? 'open' : 'closed'}>
@@ -57,12 +57,11 @@ var TaskItem = React.createClass({
           <label>
             Ticket ID:
             </label>
-            <input 
+            <input type="text"
               id={task.id +"-ticketid-edit"}
-              type="text" 
-              name="ticketid-edit" 
-              className="form-control" 
               placeholder="Enter Ticket ID"
+              name="ticketid-edit"
+              className="form-control" 
               defaultValue={task.ticketID}
               onChange={this.props.idChange}
               />
@@ -95,5 +94,6 @@ var TaskItem = React.createClass({
     );
   }
 });
+
 
 module.exports = TaskItem;

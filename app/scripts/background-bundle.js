@@ -45,7 +45,7 @@ chrome.browserAction.onClicked.addListener(function(command) {
           if (id === null)
             runGScheduler();
           else
-            windowManager.hideSwitcher();
+            chrome.windows.update(id, {focused: true});
         });
       }
       click_count = 0;
@@ -80,6 +80,8 @@ var runGScheduler = function(){
         
         windowManager.showSwitcher(width, height, left, top);
       }
+      else
+        chrome.windows.update(switcherWindowId, {focused: true});
     });
 
 

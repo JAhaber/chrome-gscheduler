@@ -2038,7 +2038,6 @@ html {
 
 body {
   margin: 0;
-  margin-top: 20px;
   padding: 0; }
 
 h2 {
@@ -2140,11 +2139,11 @@ header {
 #task-list {
   font-size: 0.75em; }
   #task-list .border-left {
-    background-color: #b6e5ff;
+    background-color: #ffdd57;
     padding-left: 10px;
     border-bottom: 1px solid #000; }
-    #task-list .border-left:nth-of-type(odd) {
-      background-color: #ffdd57; }
+    #task-list .border-left.hasID {
+      background-color: #b6e5ff; }
   #task-list li.task {
     background-color: #fff;
     padding: 10px 5px 10px;
@@ -2205,7 +2204,7 @@ header {
       display: inline-block;
       width: 60px;
       text-align: right; }
-    #task-list .details input[type="text"] {
+    #task-list .details input[type="text"], #task-list .details .twitter-typeahead {
       margin-left: 10px;
       margin-right: 10px;
       width: 30%;

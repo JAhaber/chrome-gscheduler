@@ -39,5 +39,5 @@
     ],
     "web_accessible_resources": ["images/genome.png"],
 
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    "content_security_policy": "script-src 'self' https://genome.klick.com; object-src 'self'"
 }

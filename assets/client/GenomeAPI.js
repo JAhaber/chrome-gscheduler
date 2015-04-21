@@ -18,6 +18,9 @@ var GenomeAPI = {
   	$.ajax(url, options)
   	.done(function(res) {
         deferred.resolve(res);
+    })
+    .fail(function(err){
+    	deferred.resolve(err);
     });
 
     return deferred.promise;
@@ -51,7 +54,10 @@ var GenomeAPI = {
 
 		return deferred.promise;
 	},
-
+	getProjectInfo: function(ticketid) {
+		var options = {};
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);
+	},
 	postTimeEntry: function(task, options) {
 		options = options || {};
 		options.data = {
@@ -82,7 +88,6 @@ var GenomeAPI = {
 		options = $.extend({}, options, {
 			isSequenced: true
 		});
-		var count=18;
 		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
 		var previousTaskEndTime = Moment().startOf('day').hour(9).minute(0).format();

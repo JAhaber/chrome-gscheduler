@@ -1,11 +1,15 @@
 var Utils = require('../utils.js');
 var Moment = require('moment');
+var GenomeAPI = require('./GenomeAPI.js');
+var $ = require('jquery');
+var Q = require('q');
 
 var TaskModel = function (key) {
 	this.key = key;
 	this.tasks = Utils.store(key);
 	this.onChanges = [];
 };
+
 
 TaskModel.prototype.subscribe = function (onChange) {
 	this.onChanges.push(onChange);
@@ -71,30 +75,80 @@ TaskModel.prototype.contract = function (taskToExpand) {
 
 TaskModel.prototype.handleChange = function (taskToChange, field) {
 
-	this.tasks = this.tasks.map(function (task) {
-		if (task === taskToChange){
-			if (field === "title"){
-		    	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
-		    }
-	      	else if (field === "id")
-       			return Utils.extend({}, task, {ticketID: document.getElementById(task.id + "-ticketid-edit").value});
-		        
-		    else if (field === "start"){
-		     	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-		      	if (Moment(start).isValid())
-			        return Utils.extend({}, task, {startTime: start});
-			}
-			  
-		    else if (field === "stop"){
-			    var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-			    if (Moment(stop).isValid())
-		        	return Utils.extend({}, task, {stopTime: stop});
-		    }
-		}
-		return task;
-	});
+	if (field === "id"){
+		var scope = this;
+		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
+		//		return Utils.extend({}, task, {ticketID: ticketid});
 
-	this.inform();
+  		GenomeAPI.getProjectInfo(ticketid).then(function(ticketData){
+  						console.log("pass");
+			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange){
+			
+		  			if (ticketData.Entries[0])
+		  			{	
+		  	
+		  				document.getElementById(task.id + "-title-edit").value = ticketData.Entries[0].Title;
+		  				return Utils.extend({}, task,
+								{ticketID: ticketid,
+								projectID: ticketData.Entries[0].ProjectID,
+						      	title: ticketData.Entries[0].Title});
+		  			}
+		  			else
+		  				return Utils.extend({}, task, {ticketID: ticketid});	
+		  		
+  				}
+  				else
+  					return task;
+  			});
+  			scope.inform();
+  		}).fail(function(error){
+			console.log("fail");
+			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange)
+					return Utils.extend({}, task, {ticketID: ticketid, projectID: null});
+				else
+  					return task;
+  			});
+  			scope.inform();
+  		});
+		
+  		
+  			
+
+		
+  		
+  	}
+  	else{
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+				if (field === "title"){
+			    	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
+			    }
+			    else if (field === "start"){
+			     	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			      	if (Moment(start).isValid())
+				        return Utils.extend({}, task, {startTime: start});
+				    else
+				    	return task;
+				}
+				  
+			    else if (field === "stop"){
+				    var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+				    if (Moment(stop).isValid())
+			        	return Utils.extend({}, task, {stopTime: stop});
+			        else
+				    	return task;
+			    }
+			    else
+			    	return task;
+			}
+			else
+				return task;
+		});
+
+		this.inform();
+	}
 };
 
 TaskModel.prototype.destroy = function (task) {

@@ -8,7 +8,6 @@
 
 body{
   margin:0;
-  margin-top:20px;
   padding:0;
 }
 
@@ -118,11 +117,11 @@ header {
   
 
   .border-left{
-    background-color:#b6e5ff;
+    background-color: #ffdd57;
     padding-left:10px;
 
-    &:nth-of-type(odd) {
-      background-color: #ffdd57;
+    &.hasID {
+      background-color:#b6e5ff;  
     }
     border-bottom:1px solid #000;
   }
@@ -183,7 +182,7 @@ header {
         text-align:right;
 
       }
-      input[type="text"]{
+      input[type="text"], .twitter-typeahead{
         margin-left:10px;
         margin-right:10px;
         width:30%;

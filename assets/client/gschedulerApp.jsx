@@ -125,7 +125,10 @@ var GSchedulerApp = React.createClass({
       <div>
         <header id="header">
         <div className="input-wrap">
-          <SearchBox 
+          <SearchBox
+            id="new-task"
+            name="search"
+            placeholder="Task name/ID"
             onSelect={this.addTask} onCreate={this.createTask}
           />
           <input 
