@@ -45,16 +45,21 @@ var GSchedulerApp = React.createClass({
     _.each(this.props.model.tasks, this.stop);
   },
 
-  save: function () {
-    this.stopAll();
-    var tasks = this.props.model.tasks;
-    if (tasks.length > 0) {
-      GenomeAPI.postTimeEntries(tasks).done();
-    }
-  },
-
   destroy: function (task) {
     this.props.model.destroy(task);
+  },
+
+  save: function () {
+    var scope = this;
+    scope.stopAll();
+
+    var tasks = scope.props.model.tasks;
+    if (tasks.length > 0) {
+      GenomeAPI.postTimeEntries(tasks)
+      .then(function(data){
+        _.each(tasks, scope.destroy);
+      });
+    }
   },
 
   closeScheduler: function() {
