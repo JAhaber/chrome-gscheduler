@@ -102,11 +102,10 @@ var GenomeAPI = {
 		var count=18;
 		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
-		var previousTaskEndTime = Moment("2015-04-13T09:00:00-04:00").hour(9).minute(0).format();
+		var previousTaskEndTime = Moment().startOf('day').hour(9).minute(0).format();
 		var promises = sortedList.map(function (task, index) {
 			var deferred = Q.defer();
 			var newTask = _.extend({}, task);
-			newTask.startTime = "2015-04-18T09:00:00-04:00"
 			var duration = self.getDuration(task, GenomeAPI.ROUND_TO);
 			
 			if (!(Moment(previousTaskEndTime).date() === Moment(newTask.startTime).date())){
@@ -272,7 +271,7 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 			name: "search", 
       ref: "newField", 
 			className: "form-control typeahead structuremap-search", 
-			placeholder: "Task Name/ID", 
+			placeholder: "Task name/ID", 
 			onKeyDown: this.handleNewTaskKeyDown}
 			)
 		);
@@ -379,10 +378,7 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     if (taskItems.length) {
       main = (
         React.createElement("section", {id: "main"}, 
-          React.createElement("dl", null, 
-            React.createElement("dt", null, "Today"), 
-            React.createElement("dd", null, this.state.totalTaskTime)
-          ), 
+         
           React.createElement("ul", {id: "task-list"}, 
             taskItems
           )
@@ -395,8 +391,13 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         React.createElement("header", {id: "header"}, 
           React.createElement(SearchBox, {
             onSelect: this.addTask, onCreate: this.createTask}
+          ), 
+           React.createElement("dl", null, 
+            React.createElement("dt", null, "Today"), 
+            React.createElement("dd", null, this.state.totalTaskTime)
           )
         ), 
+
         main, 
         React.createElement("footer", null, 
           React.createElement("button", {type: "button", onClick: this.save}, "Save")
@@ -438,16 +439,18 @@ var TaskItem = React.createClass({displayName: "TaskItem",
   render: function() {
   	var task = this.props.task;
     return (
+      React.createElement("div", {className: "border-left"}, 
       React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
-				React.createElement("label", null, 
+        React.createElement("label", null, 
 					task.title
 				), 
 				React.createElement("div", {className: "controls"}, 
 					React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
 					React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
 					React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
-					React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-times"}))
+					React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
 				)
+      )
       )
     );
   }

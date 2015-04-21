@@ -6,6 +6,11 @@
 
 @import "modules/searchbox";
 
+body{
+  margin:0;
+  margin-top:20px;
+  padding:0;
+}
 
 h2 {
   margin: 14px 0 4px; 
@@ -15,27 +20,61 @@ a.play,
 a.stop,
 a.destroy {
   display: inline-block;
-  margin-left: 1em;
-  padding: 0.1em;
   width: 1.9em;
   height: 1.8em;
-  font-size: 0.8em;
+  font-size: 1.4em;
   color: white;
-  background-color: #477dca;
   text-align: center;
-  border-radius: 0.8em;
 }
-a.play {
-  padding: 0.1em 0.1em 0.1em 0.3em;
+
+i{
+  cursor:pointer;
+  .play &{
+    color:#084b68;
+  }
+  .stop &{
+    color:#d21245;
+  }
+  .destroy &{
+    color:#084b68;
+  }
 }
 
 header {
-  input[type=text] {
-    display: inline-block;
-    width: 78%;
+  padding:70px 20px 0 20px;
+  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat top 10px right 20px,
+    linear-gradient(#3f9dc7, #2585b0);
+
+
+  .typeahead {
+    width: 185px;
+    height: 48px;
+    font-size: 18px;
+    line-height: 18px;
+    border: 2px solid #ccc;
+    outline: none;
+    padding: 15px;
+    margin-bottom:30px;
   }
+
   a.play {
     font-size: 1.1em;
+  }
+  dl {
+
+    @include clearfix;
+    margin: 0;
+    dt, dd {
+      color:#fff;
+      font: normal 25px Helvetica, Arial, sans-serif;
+      @include span-columns(6 of 12);
+      margin-top: 0.75em;
+      margin: 0;
+      padding-bottom:5px;
+    }
+    dd {
+      text-align: right;
+    }
   }
 }
 
@@ -55,37 +94,49 @@ header {
 
 #task-list {
   font-size: em(12);
-  background-color: #E4E4E4;
+  
 
-  li.task {    
+  .border-left{
+    background-color:#b6e5ff;
+    padding-left:10px;
+
+    &:nth-of-type(even) {
+      background-color: #ffdd57;
+    }
+    border-bottom:1px solid #000;
+  }
+
+  li.task {
+
+    background-color: #fff;
+    padding: 20px 5px 20px;
     @include user-select(none);
     @include clearfix;
-    &:nth-of-type(even) {
-      background-color: #D8D8D8;
-    }
-
-
+    
     label {
-      @include span-columns(8 of 12);
+      @include span-columns(6 of 12);
     }
     .controls {
-      @include span-columns(4 of 12);
+      @include span-columns(6 of 12);
     }
 
     label {
-      font-size: 1.2em;
-      padding: 0.4em 1em;
+      color:#084b68;
+      font-size: 20px;
+      padding-left:10px;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      font-weight:normal;
     }
     .timeElapsed {
+      color:#084b68;
+      font-size: 15px;
       font-family: "Lucida Console", Monaco, monospace;
+      margin-right:15px;
     }
     .controls {
       text-align: right;
-      padding: 0.7em 1em;
-
       a.play {display: none}
     }
     &.stopped .controls {
@@ -99,6 +150,14 @@ header {
 footer {
   margin:15px;
   text-align:right;
+  button{
+    background-color: #459ec5;
+    border: 1px solid #459ec5;
+    border-radius: 30px;
+    padding: 6px 25px 6px 25px;
+    font: normal 20px Helvetica, Arial, sans-serif;
+
+  }
 }
 
 

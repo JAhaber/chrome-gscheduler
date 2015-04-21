@@ -2036,6 +2036,11 @@ html {
 .tt-suggestion p {
   margin: 0; }
 
+body {
+  margin: 0;
+  margin-top: 20px;
+  padding: 0; }
+
 h2 {
   margin: 14px 0 4px; }
 
@@ -2043,24 +2048,55 @@ a.play,
 a.stop,
 a.destroy {
   display: inline-block;
-  margin-left: 1em;
-  padding: 0.1em;
   width: 1.9em;
   height: 1.8em;
-  font-size: 0.8em;
+  font-size: 1.4em;
   color: white;
-  background-color: #477dca;
-  text-align: center;
-  border-radius: 0.8em; }
+  text-align: center; }
 
-a.play {
-  padding: 0.1em 0.1em 0.1em 0.3em; }
+i {
+  cursor: pointer; }
+  .play i {
+    color: #084b68; }
+  .stop i {
+    color: #d21245; }
+  .destroy i {
+    color: #084b68; }
 
-header input[type=text] {
-  display: inline-block;
-  width: 78%; }
-header a.play {
-  font-size: 1.1em; }
+header {
+  padding: 70px 20px 0 20px;
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat top 10px right 20px, linear-gradient(#3f9dc7, #2585b0); }
+  header .typeahead {
+    width: 185px;
+    height: 48px;
+    font-size: 18px;
+    line-height: 18px;
+    border: 2px solid #ccc;
+    outline: none;
+    padding: 15px;
+    margin-bottom: 30px; }
+  header a.play {
+    font-size: 1.1em; }
+  header dl {
+    margin: 0; }
+    header dl::after {
+      clear: both;
+      content: "";
+      display: table; }
+    header dl dt, header dl dd {
+      color: #fff;
+      font: normal 25px Helvetica, Arial, sans-serif;
+      float: left;
+      display: block;
+      margin-right: 2.35765%;
+      width: 48.82117%;
+      margin-top: 0.75em;
+      margin: 0;
+      padding-bottom: 5px; }
+      header dl dt:last-child, header dl dd:last-child {
+        margin-right: 0; }
+    header dl dd {
+      text-align: right; }
 
 #main dl {
   margin: 0; }
@@ -2082,9 +2118,16 @@ header a.play {
     text-align: right; }
 
 #task-list {
-  font-size: 0.75em;
-  background-color: #E4E4E4; }
+  font-size: 0.75em; }
+  #task-list .border-left {
+    background-color: #b6e5ff;
+    padding-left: 10px;
+    border-bottom: 1px solid #000; }
+    #task-list .border-left:nth-of-type(even) {
+      background-color: #ffdd57; }
   #task-list li.task {
+    background-color: #fff;
+    padding: 20px 5px 20px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -2093,33 +2136,35 @@ header a.play {
       clear: both;
       content: "";
       display: table; }
-    #task-list li.task:nth-of-type(even) {
-      background-color: #D8D8D8; }
     #task-list li.task label {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 65.88078%; }
+      width: 48.82117%; }
       #task-list li.task label:last-child {
         margin-right: 0; }
     #task-list li.task .controls {
       float: left;
       display: block;
       margin-right: 2.35765%;
-      width: 31.76157%; }
+      width: 48.82117%; }
       #task-list li.task .controls:last-child {
         margin-right: 0; }
     #task-list li.task label {
-      font-size: 1.2em;
-      padding: 0.4em 1em;
+      color: #084b68;
+      font-size: 20px;
+      padding-left: 10px;
       text-overflow: ellipsis;
       white-space: nowrap;
-      overflow: hidden; }
+      overflow: hidden;
+      font-weight: normal; }
     #task-list li.task .timeElapsed {
-      font-family: "Lucida Console", Monaco, monospace; }
+      color: #084b68;
+      font-size: 15px;
+      font-family: "Lucida Console", Monaco, monospace;
+      margin-right: 15px; }
     #task-list li.task .controls {
-      text-align: right;
-      padding: 0.7em 1em; }
+      text-align: right; }
       #task-list li.task .controls a.play {
         display: none; }
     #task-list li.task.stopped .controls a.stop {
@@ -2130,5 +2175,11 @@ header a.play {
 footer {
   margin: 15px;
   text-align: right; }
+  footer button {
+    background-color: #459ec5;
+    border: 1px solid #459ec5;
+    border-radius: 30px;
+    padding: 6px 25px 6px 25px;
+    font: normal 20px Helvetica, Arial, sans-serif; }
 
 /*# sourceMappingURL=main.css.map */
