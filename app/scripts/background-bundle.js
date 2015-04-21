@@ -35,13 +35,18 @@ chrome.windows.onRemoved.addListener(function(windowID){
 
 chrome.browserAction.onClicked.addListener(function(command) {
   // Triggers when the icon in the browser window is clicked
-
+  var switcherWindowId = windowManager.getSwitcherWindowId();
   click_count = click_count + 1;
 
   if (click_count === 1){
     setTimeout(function(){
       if (click_count === 1){
-        runGScheduler(); 
+        switcherWindowId.then(function(id){
+          if (id === null)
+            runGScheduler();
+          else
+            windowManager.hideSwitcher();
+        });
       }
       click_count = 0;
     }, 500);
