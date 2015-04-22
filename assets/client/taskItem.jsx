@@ -41,6 +41,7 @@ var TaskItem = React.createClass({
           </div>
         </li>
         <div className={this.props.task.expanded ? 'details on' : 'details'}>
+        <div>
             <label>
              Title:
             </label>
@@ -65,6 +66,8 @@ var TaskItem = React.createClass({
               defaultValue={task.ticketID}
               onChange={this.props.idChange}
               />
+              </div>
+              <div>
             <label>
              Start:
             </label>
@@ -89,6 +92,20 @@ var TaskItem = React.createClass({
               defaultValue={task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : ""}
               onChange={this.props.stopChange}
               />
+              </div>
+            <div>
+            <label>
+             Note:
+            </label>
+            <textarea 
+              id={task.id +"-note-edit"}
+              name="note-edit" 
+              className="form-control" 
+              placeholder=""
+              defaultValue={task.note}
+              onChange={this.props.noteChange}
+              />
+              </div>
         </div>
       </div>
     );

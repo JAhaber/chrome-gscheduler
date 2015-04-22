@@ -2198,17 +2198,21 @@ header {
     background-color: #f8f8f8; }
     #task-list .details.on {
       display: block; }
-    #task-list .details label {
+    #task-list .details div label {
       font-size: 12px;
       color: #084b68;
       display: inline-block;
-      width: 60px;
-      text-align: right; }
-    #task-list .details input[type="text"], #task-list .details .twitter-typeahead {
+      width: 13%;
+      text-align: right;
+      vertical-align: top;
+      padding-top: 2px; }
+    #task-list .details div input[type="text"], #task-list .details div textarea {
       margin-left: 10px;
       margin-right: 10px;
       width: 30%;
       display: inline-block; }
+    #task-list .details div textarea {
+      width: calc(73% + 20px); }
 
 footer {
   margin: 15px;

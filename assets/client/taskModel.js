@@ -29,7 +29,8 @@ TaskModel.prototype.addTask = function (task) {
 		ticketID: task.ticketID || null,
 		projectID: task.projectID || null,
 		isClientBillable: task.isClientBillable || null,
-		type: task.type || null
+		type: task.type || null,
+		note: task.note || null
 	};
 
 	console.log('addTask:', newTask)
@@ -123,6 +124,17 @@ TaskModel.prototype.handleTitleChange = function (taskToChange) {
 		this.inform();
 };
 
+TaskModel.prototype.handleNoteChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange)
+			   	return Utils.extend({}, task, {note: document.getElementById(task.id + "-note-edit").value});
+			
+			return task;
+		});
+
+		this.inform();
+};
+
 TaskModel.prototype.handleStartChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
@@ -137,7 +149,7 @@ TaskModel.prototype.handleStartChange = function (taskToChange) {
 		this.inform();
 };
 
-TaskModel.prototype.handleTitleChange = function (taskToChange) {
+TaskModel.prototype.handleStopChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();

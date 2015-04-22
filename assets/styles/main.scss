@@ -174,20 +174,27 @@ header {
       &.on{
         display:block;
       }
-      label{
-      font-size:12px;
-        color:#084b68;
-        display:inline-block;
-        width:60px;
-        text-align:right;
-
+      div{
+        label{
+          font-size:12px;
+          color:#084b68;
+          display:inline-block;
+          width:13%;
+          text-align:right;
+          vertical-align:top;
+          padding-top:2px;
+        }
+        input[type="text"], textarea{
+          margin-left:10px;
+          margin-right:10px;
+          width:30%;
+          display:inline-block;
+        }
+        textarea{
+          width:calc(73% + 20px);
+        }
       }
-      input[type="text"], .twitter-typeahead{
-        margin-left:10px;
-        margin-right:10px;
-        width:30%;
-        display:inline-block;
-      }
+      
     }
 }
 
