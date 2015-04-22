@@ -1,7 +1,6 @@
 
 var React = require('react');
 var Moment = require('moment');
-
 var TaskItem = React.createClass({
 	getInitialState: function () {
 		return {timeElapsed: ''};
@@ -23,8 +22,9 @@ var TaskItem = React.createClass({
 
   render: function() {
   	var task = this.props.task;
-    var SearchBox = require('./SearchBox.jsx');
+    
     return (
+      
       <div className={this.props.task.projectID ? "border-left hasID" : "border-left"}>
         <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
           
