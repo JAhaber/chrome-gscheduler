@@ -73,9 +73,7 @@ TaskModel.prototype.contract = function (taskToExpand) {
 	this.inform();
 };
 
-TaskModel.prototype.handleChange = function (taskToChange, field) {
-
-	if (field === "id"){
+TaskModel.prototype.handleIdChange = function (taskToChange) {
 		var scope = this;
 		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
@@ -85,7 +83,7 @@ TaskModel.prototype.handleChange = function (taskToChange, field) {
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
 			
-		  			if (ticketData.Entries[0])
+		  			if (!(ticketData.Entries[0].TicketStatusName === "closed"))
 		  			{	
 		  	
 		  				document.getElementById(task.id + "-title-edit").value = ticketData.Entries[0].Title;
@@ -112,44 +110,46 @@ TaskModel.prototype.handleChange = function (taskToChange, field) {
   			});
   			scope.inform();
   		});
-		
-  		
-  			
+};
 
-		
-  		
-  	}
-  	else{
+TaskModel.prototype.handleTitleChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
-			if (task === taskToChange){
-				if (field === "title"){
-			    	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
-			    }
-			    else if (field === "start"){
-			     	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-			      	if (Moment(start).isValid())
-				        return Utils.extend({}, task, {startTime: start});
-				    else
-				    	return task;
-				}
-				  
-			    else if (field === "stop"){
-				    var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-				    if (Moment(stop).isValid())
-			        	return Utils.extend({}, task, {stopTime: stop});
-			        else
-				    	return task;
-			    }
-			    else
-			    	return task;
-			}
-			else
-				return task;
+			if (task === taskToChange)
+			   	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
+			
+			return task;
 		});
 
 		this.inform();
-	}
 };
+
+TaskModel.prototype.handleStartChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid())
+			        return Utils.extend({}, task, {startTime: start});
+				    
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
+TaskModel.prototype.handleTitleChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			    if (Moment(stop).isValid())
+		        	return Utils.extend({}, task, {stopTime: stop});
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
 
 TaskModel.prototype.destroy = function (task) {
 	this.tasks = this.tasks.filter(function (candidate) {

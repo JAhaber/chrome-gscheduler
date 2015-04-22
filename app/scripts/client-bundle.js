@@ -359,8 +359,17 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     }
   },
   
-  handleChange: function(task, field){
-      this.props.model.handleChange(task, field);  
+  handleTitleChange: function(task){
+      this.props.model.handleTitleChange(task);  
+  },
+  handleIdChange: function(task){
+      this.props.model.handleIdChange(task);  
+  },
+  handleStartChange: function(task){
+      this.props.model.handleStartChange(task);  
+  },
+  handleStopChange: function(task){
+      this.props.model.handleStopChange(task);  
   },
 
   closeScheduler: function() {
@@ -391,10 +400,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
           onDestroy: this.destroy.bind(this, task), 
           expandItems: this.expand.bind(this,task), 
           contractItems: this.contract.bind(this,task), 
-          titleChange: this.handleChange.bind(this,task,"title"), 
-          idChange: this.handleChange.bind(this,task,"id"), 
-          startChange: this.handleChange.bind(this,task,"start"), 
-          stopChange: this.handleChange.bind(this,task,"stop")}
+          titleChange: this.handleTitleChange.bind(this,task), 
+          idChange: this.handleIdChange.bind(this,task), 
+          startChange: this.handleStartChange.bind(this,task), 
+          stopChange: this.handleStopChange.bind(this,task)}
         )
       );
     }, this);
@@ -625,9 +634,7 @@ TaskModel.prototype.contract = function (taskToExpand) {
 	this.inform();
 };
 
-TaskModel.prototype.handleChange = function (taskToChange, field) {
-
-	if (field === "id"){
+TaskModel.prototype.handleIdChange = function (taskToChange) {
 		var scope = this;
 		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
@@ -637,7 +644,7 @@ TaskModel.prototype.handleChange = function (taskToChange, field) {
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
 			
-		  			if (ticketData.Entries[0])
+		  			if (!(ticketData.Entries[0].TicketStatusName === "closed"))
 		  			{	
 		  	
 		  				document.getElementById(task.id + "-title-edit").value = ticketData.Entries[0].Title;
@@ -664,44 +671,46 @@ TaskModel.prototype.handleChange = function (taskToChange, field) {
   			});
   			scope.inform();
   		});
-		
-  		
-  			
+};
 
-		
-  		
-  	}
-  	else{
+TaskModel.prototype.handleTitleChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
-			if (task === taskToChange){
-				if (field === "title"){
-			    	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
-			    }
-			    else if (field === "start"){
-			     	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-			      	if (Moment(start).isValid())
-				        return Utils.extend({}, task, {startTime: start});
-				    else
-				    	return task;
-				}
-				  
-			    else if (field === "stop"){
-				    var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-				    if (Moment(stop).isValid())
-			        	return Utils.extend({}, task, {stopTime: stop});
-			        else
-				    	return task;
-			    }
-			    else
-			    	return task;
-			}
-			else
-				return task;
+			if (task === taskToChange)
+			   	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
+			
+			return task;
 		});
 
 		this.inform();
-	}
 };
+
+TaskModel.prototype.handleStartChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid())
+			        return Utils.extend({}, task, {startTime: start});
+				    
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
+TaskModel.prototype.handleTitleChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			    if (Moment(stop).isValid())
+		        	return Utils.extend({}, task, {stopTime: stop});
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
 
 TaskModel.prototype.destroy = function (task) {
 	this.tasks = this.tasks.filter(function (candidate) {
