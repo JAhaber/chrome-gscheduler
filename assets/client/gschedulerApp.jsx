@@ -151,7 +151,7 @@ var GSchedulerApp = React.createClass({
         curDate = Moment(task.startTime);
         return (
           <span>
-          <label>
+          <label className="date-label">
           {Moment(curDate).format('MMMM D, YYYY')}
           </label>
           <TaskItem

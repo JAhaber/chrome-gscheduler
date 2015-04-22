@@ -97,7 +97,6 @@ header {
     }
   }
 }
-
 #main dl {
   @include clearfix;
   margin: 0;
@@ -114,6 +113,14 @@ header {
 
 #task-list {
   font-size: em(12);
+
+  .date-label{
+    font: normal 20px Helvetica, Arial, sans-serif;
+    color: #585858;
+    margin:25px 0 0 0;
+    padding:0 0 10px 20px;
+    border-bottom:1px solid #000;
+  }
   
 
   .border-left{
@@ -198,15 +205,15 @@ header {
     }
 }
 
-
 footer {
   margin:15px;
   text-align:right;
   button{
+ 
     background-color: #459ec5;
     border: 1px solid #459ec5;
     border-radius: 30px;
-    padding: 6px 25px 6px 25px;
+    padding: 3px 20px 3px 20px;
     font: normal 20px Helvetica, Arial, sans-serif;
 
   }
