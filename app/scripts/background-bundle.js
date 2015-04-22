@@ -24,8 +24,8 @@ chrome.commands.onCommand.addListener(function(command) {
 });
 
 chrome.browserAction.onClicked.addListener(function(command) {
-  // Users can bind a key to this command in their Chrome
-  // keyboard shortcuts, at the bottom of their extensions page.
+  // Triggers when the icon in the browser window is clicked
+
   click_count = click_count + 1;
 
   if (click_count === 1){
@@ -65,6 +65,8 @@ var runGScheduler = function(){
       
       windowManager.showSwitcher(width, height, left, top);
     });
+
+
 };
 // chrome.browserAction.setBadgeText({text:data.unreadItems});
 

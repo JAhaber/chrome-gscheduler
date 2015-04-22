@@ -48,6 +48,14 @@ var GSchedulerApp = React.createClass({
   destroy: function (task) {
     this.props.model.destroy(task);
   },
+  
+  expand: function(task){
+    this.props.model.expand(task);
+  },
+
+  contract: function(task){
+    this.props.model.contract(task);
+  },
 
   save: function () {
     var scope = this;
@@ -60,6 +68,10 @@ var GSchedulerApp = React.createClass({
         _.each(tasks, scope.destroy);
       });
     }
+  },
+  
+  handleChange: function(task, field){
+      this.props.model.handleChange(task, field);  
   },
 
   closeScheduler: function() {
@@ -88,6 +100,12 @@ var GSchedulerApp = React.createClass({
           onPlay={this.createTask.bind(this, task.title)}
           onStop={this.stop.bind(this, task)}
           onDestroy={this.destroy.bind(this, task)}
+          expandItems={this.expand.bind(this,task)}
+          contractItems={this.contract.bind(this,task)}
+          titleChange={this.handleChange.bind(this,task,"title")}
+          idChange={this.handleChange.bind(this,task,"id")}
+          startChange={this.handleChange.bind(this,task,"start")}
+          stopChange={this.handleChange.bind(this,task,"stop")}
         />
       );
     }, this);
@@ -106,9 +124,19 @@ var GSchedulerApp = React.createClass({
     return (
       <div>
         <header id="header">
+        <div className="input-wrap">
           <SearchBox 
             onSelect={this.addTask} onCreate={this.createTask}
           />
+          <input 
+            id="new-note"
+            type="text" 
+            name="note" 
+            className="form-control note" 
+            placeholder="Note"
+            
+            />
+        </div>
            <dl>
             <dt>Today</dt>
             <dd>{this.state.totalTaskTime}</dd>

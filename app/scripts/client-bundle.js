@@ -331,6 +331,14 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   destroy: function (task) {
     this.props.model.destroy(task);
   },
+  
+  expand: function(task){
+    this.props.model.expand(task);
+  },
+
+  contract: function(task){
+    this.props.model.contract(task);
+  },
 
   save: function () {
     var scope = this;
@@ -343,6 +351,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         _.each(tasks, scope.destroy);
       });
     }
+  },
+  
+  handleChange: function(task, field){
+      this.props.model.handleChange(task, field);  
   },
 
   closeScheduler: function() {
@@ -370,7 +382,13 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
           task: task, 
           onPlay: this.createTask.bind(this, task.title), 
           onStop: this.stop.bind(this, task), 
-          onDestroy: this.destroy.bind(this, task)}
+          onDestroy: this.destroy.bind(this, task), 
+          expandItems: this.expand.bind(this,task), 
+          contractItems: this.contract.bind(this,task), 
+          titleChange: this.handleChange.bind(this,task,"title"), 
+          idChange: this.handleChange.bind(this,task,"id"), 
+          startChange: this.handleChange.bind(this,task,"start"), 
+          stopChange: this.handleChange.bind(this,task,"stop")}
         )
       );
     }, this);
@@ -389,9 +407,19 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     return (
       React.createElement("div", null, 
         React.createElement("header", {id: "header"}, 
+        React.createElement("div", {className: "input-wrap"}, 
           React.createElement(SearchBox, {
             onSelect: this.addTask, onCreate: this.createTask}
           ), 
+          React.createElement("input", {
+            id: "new-note", 
+            type: "text", 
+            name: "note", 
+            className: "form-control note", 
+            placeholder: "Note"}
+            
+            )
+        ), 
            React.createElement("dl", null, 
             React.createElement("dt", null, "Today"), 
             React.createElement("dd", null, this.state.totalTaskTime)
@@ -438,19 +466,74 @@ var TaskItem = React.createClass({displayName: "TaskItem",
 
   render: function() {
   	var task = this.props.task;
+
     return (
       React.createElement("div", {className: "border-left"}, 
-      React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
-        React.createElement("label", null, 
-					task.title
-				), 
-				React.createElement("div", {className: "controls"}, 
-					React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
-					React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
-					React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
-					React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
-				)
-      )
+        React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
+          
+            React.createElement("label", {className: this.props.task.expanded ? 'open' : 'closed'}, 
+              React.createElement("a", {className: "expand", onClick: this.props.expandItems}, React.createElement("i", {className: "fa fa-plus"})), 
+              React.createElement("a", {className: "contract", onClick: this.props.contractItems}, React.createElement("i", {className: "fa fa-minus"})), " ", task.title
+            ), 
+         
+          React.createElement("div", {className: "controls"}, 
+            React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
+            React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
+            React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
+            React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
+          )
+        ), 
+        React.createElement("div", {className: this.props.task.expanded ? 'details on' : 'details'}, 
+            React.createElement("label", null, 
+             "Title:"
+            ), 
+            React.createElement("input", {
+              id: task.id + "-title-edit", 
+              type: "text", 
+              name: "title-edit", 
+              className: "form-control", 
+              placeholder: "Enter Title", 
+              defaultValue: task.title, 
+              onChange: this.props.titleChange}
+              ), 
+            
+          React.createElement("label", null, 
+            "Ticket ID:"
+            ), 
+            React.createElement("input", {
+              id: task.id +"-ticketid-edit", 
+              type: "text", 
+              name: "ticketid-edit", 
+              className: "form-control", 
+              placeholder: "Enter Ticket ID", 
+              defaultValue: task.ticketID, 
+              onChange: this.props.idChange}
+              ), 
+            React.createElement("label", null, 
+             "Start:"
+            ), 
+            React.createElement("input", {
+              id: task.id +"-start-time-edit", 
+              type: "text", 
+              name: "start-time-edit", 
+              className: "form-control", 
+              placeholder: "hh:mm:ss dd/mm/yy", 
+              defaultValue: Moment(task.startTime).format('HH:mm:ss DD/MM/YY'), 
+              onChange: this.props.startChange}
+              ), 
+            React.createElement("label", null, 
+             "Stop:"
+            ), 
+            React.createElement("input", {
+              id: task.id +"-stop-time-edit", 
+              type: "text", 
+              name: "stop-time-edit", 
+              className: "form-control", 
+              placeholder: "hh:mm:ss dd/mm/yy", 
+              defaultValue: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : "", 
+              onChange: this.props.stopChange}
+              )
+        )
       )
     );
   }
@@ -499,6 +582,54 @@ TaskModel.prototype.stop = function (taskToStop) {
 		return task !== taskToStop ?
 			task :
 			Utils.extend({}, task, {stopTime: Moment().format() });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.expand = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: true });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.contract = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: false });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.handleChange = function (taskToChange, field) {
+
+	this.tasks = this.tasks.map(function (task) {
+		if (task === taskToChange){
+			if (field === "title"){
+		    	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
+		    }
+	      	else if (field === "id")
+       			return Utils.extend({}, task, {ticketID: document.getElementById(task.id + "-ticketid-edit").value});
+		        
+		    else if (field === "start"){
+		     	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid())
+			        return Utils.extend({}, task, {startTime: start});
+			}
+			  
+		    else if (field === "stop"){
+			    var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			    if (Moment(stop).isValid())
+		        	return Utils.extend({}, task, {stopTime: stop});
+		    }
+		}
+		return task;
 	});
 
 	this.inform();
