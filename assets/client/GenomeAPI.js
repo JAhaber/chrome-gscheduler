@@ -63,7 +63,7 @@ var GenomeAPI = {
 		options.data = {
 			Date: task.startTime,
 			Duration: this.getDuration(task, GenomeAPI.ROUND_TO),
-			Note: task.title,
+			Note: task.title + "\n" + task.note,
 			Type: 'Schedule-Note'
 		};
 
@@ -71,7 +71,7 @@ var GenomeAPI = {
 			TicketID: task.ticketID || null,
 			ProjectID: task.projectID || null,
 			Type: 'Project',
-			Note: '',
+			Note: task.note,
 			IsClientBillable: task.isClientBillable || false
 		};
 
