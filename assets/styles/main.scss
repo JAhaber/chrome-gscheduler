@@ -220,6 +220,9 @@ dl {
 }
 
 footer {
+  position:fixed;
+  width:100%;
+  bottom:0;
   padding:0;
   text-align:right;
   background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat bottom 17px left 20px,
