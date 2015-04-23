@@ -78,7 +78,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
 		var scope = this;
 		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
-
+		
   		GenomeAPI.getProjectInfo(ticketid).then(function(ticketData){
   						console.log("pass");
 			scope.tasks = scope.tasks.map(function (task) {
@@ -111,6 +111,18 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
   			});
   			scope.inform();
   		});
+
+  		if (ticketid === "") {
+  			console.log("query");
+  			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange)
+					return Utils.extend({}, task, {ticketID: ticketid, projectID: null});
+				else
+  					return task;
+  			});
+  			scope.inform();
+  		}
+  		
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange) {

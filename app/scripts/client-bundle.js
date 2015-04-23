@@ -409,24 +409,45 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   render: function() {
     var main;
     var tasks = this.props.model.tasks;
+    var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
+    sortedList.reverse();
+    var curDate = Moment();
+    var newDate = null;
+    var isOld = false;
+    var taskItems = sortedList.map(function (task) {
 
-    var taskItems = tasks.map(function (task) {
+      if(Moment(task.startTime).date() === curDate.date())
+        newDate = null;
+      else{
+        isOld = true;
+        curDate = Moment(task.startTime);
+        newDate = (
+          React.createElement("label", {className: "date-label"}, 
+          Moment(curDate).format('MMMM D, YYYY')
+          )
+          );
+      }
       return (
-        React.createElement(TaskItem, {
-          key: task.id, 
-          task: task, 
-          onPlay: this.createTask.bind(this, task), 
-          onStop: this.stop.bind(this, task), 
-          onDestroy: this.destroy.bind(this, task), 
-          expandItems: this.expand.bind(this,task), 
-          contractItems: this.contract.bind(this,task), 
-          titleChange: this.handleTitleChange.bind(this,task), 
-          idChange: this.handleIdChange.bind(this,task), 
-          startChange: this.handleStartChange.bind(this,task), 
-          stopChange: this.handleStopChange.bind(this,task), 
-          noteChange: this.handleNoteChange.bind(this,task)}
-        )
-      );
+          React.createElement("span", {className: isOld ? "old" : ""}, 
+          newDate, 
+          React.createElement(TaskItem, {
+            key: task.id, 
+            task: task, 
+            onPlay: this.createTask.bind(this, task), 
+            onStop: this.stop.bind(this, task), 
+            onDestroy: this.destroy.bind(this, task), 
+            expandItems: this.expand.bind(this,task), 
+            contractItems: this.contract.bind(this,task), 
+            titleChange: this.handleTitleChange.bind(this,task), 
+            idChange: this.handleIdChange.bind(this,task), 
+            startChange: this.handleStartChange.bind(this,task), 
+            stopChange: this.handleStopChange.bind(this,task), 
+            noteChange: this.handleNoteChange.bind(this,task)}
+          )
+          )
+        );
+      
+      
     }, this);
 
     if (taskItems.length) {
@@ -439,6 +460,7 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         )
       );
     }
+    
 
     return (
       React.createElement("div", null, 
@@ -466,9 +488,11 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         ), 
 
         main, 
+
         React.createElement("footer", null, 
           React.createElement("button", {type: "button", onClick: this.save}, "Save")
         )
+
       )
     );
   }
@@ -483,7 +507,6 @@ module.exports = GSchedulerApp;
 
 var React = require('react');
 var Moment = require('moment');
-
 var TaskItem = React.createClass({displayName: "TaskItem",
 	getInitialState: function () {
 		return {timeElapsed: ''};
@@ -505,8 +528,9 @@ var TaskItem = React.createClass({displayName: "TaskItem",
 
   render: function() {
   	var task = this.props.task;
-    var SearchBox = require('./SearchBox.jsx');
+    
     return (
+      
       React.createElement("div", {className: this.props.task.projectID ? "border-left hasID" : "border-left"}, 
         React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
           
@@ -596,7 +620,7 @@ var TaskItem = React.createClass({displayName: "TaskItem",
 
 
 module.exports = TaskItem;
-},{"./SearchBox.jsx":3,"moment":11,"react":158}],6:[function(require,module,exports){
+},{"moment":11,"react":158}],6:[function(require,module,exports){
 var Utils = require('../utils.js');
 var Moment = require('moment');
 var GenomeAPI = require('./GenomeAPI.js');
@@ -677,7 +701,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
 		var scope = this;
 		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
-
+		
   		GenomeAPI.getProjectInfo(ticketid).then(function(ticketData){
   						console.log("pass");
 			scope.tasks = scope.tasks.map(function (task) {
@@ -710,6 +734,18 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
   			});
   			scope.inform();
   		});
+
+  		if (ticketid === "") {
+  			console.log("query");
+  			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange)
+					return Utils.extend({}, task, {ticketID: ticketid, projectID: null});
+				else
+  					return task;
+  			});
+  			scope.inform();
+  		}
+  		
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange) {

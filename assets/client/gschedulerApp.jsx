@@ -126,34 +126,24 @@ var GSchedulerApp = React.createClass({
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
     sortedList.reverse();
     var curDate = Moment();
-
+    var newDate = null;
+    var isOld = false;
     var taskItems = sortedList.map(function (task) {
 
-      if(Moment(task.startTime).date() === curDate.date()){
-        return (
-          <TaskItem
-            key={task.id}
-            task={task}
-            onPlay={this.createTask.bind(this, task)}
-            onStop={this.stop.bind(this, task)}
-            onDestroy={this.destroy.bind(this, task)}
-            expandItems={this.expand.bind(this,task)}
-            contractItems={this.contract.bind(this,task)}
-            titleChange={this.handleTitleChange.bind(this,task)}
-            idChange={this.handleIdChange.bind(this,task)}
-            startChange={this.handleStartChange.bind(this,task)}
-            stopChange={this.handleStopChange.bind(this,task)}
-            noteChange={this.handleNoteChange.bind(this,task)}
-          />
-        );
-      }
+      if(Moment(task.startTime).date() === curDate.date())
+        newDate = null;
       else{
+        isOld = true;
         curDate = Moment(task.startTime);
-        return (
-          <span>
+        newDate = (
           <label className="date-label">
           {Moment(curDate).format('MMMM D, YYYY')}
           </label>
+          );
+      }
+      return (
+          <span className= {isOld ? "old" : ""}>
+          {newDate}
           <TaskItem
             key={task.id}
             task={task}
@@ -170,7 +160,7 @@ var GSchedulerApp = React.createClass({
           />
           </span>
         );
-      }
+      
       
     }, this);
 

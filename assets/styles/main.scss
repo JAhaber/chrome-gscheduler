@@ -122,8 +122,8 @@ header {
     border-bottom:1px solid #000;
   }
   
-
   .border-left{
+
     background-color: #ffdd57;
     padding-left:10px;
 
@@ -132,6 +132,13 @@ header {
     }
     border-bottom:1px solid #000;
   }
+
+  /*.old {
+      .border-left, .border-left.hasID {
+        background-color:#b3b3b3;
+        border-bottom:1px solid #000;
+      }
+  }*/
 
   li.task {
 
