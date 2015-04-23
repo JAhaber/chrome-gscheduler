@@ -122,18 +122,28 @@ var GSchedulerApp = React.createClass({
 
   render: function() {
     var main;
+    var curDate = Moment();
+    var newDate = null;
+
     var tasks = this.props.model.tasks;
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
     sortedList.reverse();
-    var curDate = Moment();
-    var newDate = null;
-    var isOld = false;
-    var taskItems = sortedList.map(function (task) {
+    var TodayFirst = [];
+
+     _.each(sortedList, function(l){
+      if(Moment(l.startTime).date() === curDate.date())
+        TodayFirst.push(l);
+    });
+    _.each(sortedList, function(l){
+      if(!(Moment(l.startTime).date() === curDate.date()))
+        TodayFirst.push(l);
+    });
+    
+    var taskItems = TodayFirst.map(function (task) {
 
       if(Moment(task.startTime).date() === curDate.date())
         newDate = null;
       else{
-        isOld = true;
         curDate = Moment(task.startTime);
         newDate = (
           <label className="date-label">
@@ -142,7 +152,7 @@ var GSchedulerApp = React.createClass({
           );
       }
       return (
-          <span className= {isOld ? "old" : ""}>
+          <span>
           {newDate}
           <TaskItem
             key={task.id}
@@ -167,7 +177,10 @@ var GSchedulerApp = React.createClass({
     if (taskItems.length) {
       main = (
         <section id="main">
-         
+          <dl>
+            <dt>Today</dt>
+            <dd>{this.state.totalTaskTime}</dd>
+          </dl>
           <ul id="task-list">
             {taskItems}
           </ul>
@@ -195,12 +208,9 @@ var GSchedulerApp = React.createClass({
             onKeyDown={this.handleNoteKeyDown}
             />
         </div>
-           <dl>
-            <dt>Today</dt>
-            <dd>{this.state.totalTaskTime}</dd>
-          </dl>
+           
         </header>
-
+          
         {main}
 
         <footer>
