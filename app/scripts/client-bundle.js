@@ -408,18 +408,28 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
 
   render: function() {
     var main;
+    var curDate = Moment();
+    var newDate = null;
+
     var tasks = this.props.model.tasks;
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
     sortedList.reverse();
-    var curDate = Moment();
-    var newDate = null;
-    var isOld = false;
-    var taskItems = sortedList.map(function (task) {
+    var TodayFirst = [];
+
+     _.each(sortedList, function(l){
+      if(Moment(l.startTime).date() === curDate.date())
+        TodayFirst.push(l);
+    });
+    _.each(sortedList, function(l){
+      if(!(Moment(l.startTime).date() === curDate.date()))
+        TodayFirst.push(l);
+    });
+    
+    var taskItems = TodayFirst.map(function (task) {
 
       if(Moment(task.startTime).date() === curDate.date())
         newDate = null;
       else{
-        isOld = true;
         curDate = Moment(task.startTime);
         newDate = (
           React.createElement("label", {className: "date-label"}, 
@@ -428,7 +438,7 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
           );
       }
       return (
-          React.createElement("span", {className: isOld ? "old" : ""}, 
+          React.createElement("span", null, 
           newDate, 
           React.createElement(TaskItem, {
             key: task.id, 
@@ -453,7 +463,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     if (taskItems.length) {
       main = (
         React.createElement("section", {id: "main"}, 
-         
+          React.createElement("dl", null, 
+            React.createElement("dt", null, "Today"), 
+            React.createElement("dd", null, this.state.totalTaskTime)
+          ), 
           React.createElement("ul", {id: "task-list"}, 
             taskItems
           )
@@ -480,13 +493,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
             placeholder: "Note", 
             onKeyDown: this.handleNoteKeyDown}
             )
+        )
+           
         ), 
-           React.createElement("dl", null, 
-            React.createElement("dt", null, "Today"), 
-            React.createElement("dd", null, this.state.totalTaskTime)
-          )
-        ), 
-
+          
         main, 
 
         React.createElement("footer", null, 
@@ -562,11 +572,11 @@ var TaskItem = React.createClass({displayName: "TaskItem",
               ), 
             
           React.createElement("label", null, 
-            "Ticket ID:"
+            "Task ID:"
             ), 
             React.createElement("input", {type: "text", 
               id: task.id +"-ticketid-edit", 
-              placeholder: "Enter Ticket ID", 
+              placeholder: "Enter Task ID", 
               name: "ticketid-edit", 
               className: "form-control", 
               defaultValue: task.ticketID, 
@@ -774,8 +784,18 @@ TaskModel.prototype.handleStartChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-		      	if (Moment(start).isValid())
-			        return Utils.extend({}, task, {startTime: start});
+			 	var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid()){
+		      		if (Moment(start).isAfter(stop))
+		      		{
+		      			stop = Moment(start).hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format('HH:mm:ss DD/MM/YY');
+		      			document.getElementById(task.id + "-stop-time-edit").value = stop;
+						return Utils.extend({}, task, {startTime: start, stopTime: stop});
+		      		}
+		      		else
+		      			return Utils.extend({}, task, {startTime: start});
+		      	}
+			        
 				    
 			}
 			return task;

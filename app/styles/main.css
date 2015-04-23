@@ -2036,9 +2036,15 @@ html {
 .tt-suggestion p {
   margin: 0; }
 
+html {
+  height: 100%; }
+
 body {
+  height: 100%;
   margin: 0;
   padding: 0; }
+  body div {
+    height: 100%; }
 
 h2 {
   margin: 14px 0 4px; }
@@ -2048,7 +2054,6 @@ a.stop,
 a.destroy {
   display: inline-block;
   width: 1.9em;
-  height: 1.8em;
   font-size: 1.2em;
   color: white;
   text-align: center; }
@@ -2069,11 +2074,11 @@ i {
   display: none; }
 
 header {
-  padding: 50px 20px 0 20px;
-  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat top 10px right 20px, linear-gradient(#3f9dc7, #2585b0); }
+  padding: 20px 20px 0 20px;
+  background: linear-gradient(#3f9dc7, #2585b0); }
   header .input-wrap {
     position: relative;
-    margin-bottom: 30px; }
+    padding-bottom: 20px; }
   header .typeahead {
     width: 185px;
     height: 38px;
@@ -2096,54 +2101,48 @@ header {
     display: inline-block;
     position: absolute;
     right: 0; }
-  header dl {
-    margin: 0; }
-    header dl::after {
-      clear: both;
-      content: "";
-      display: table; }
-    header dl dt, header dl dd {
-      color: #fff;
-      font: normal 20px Helvetica, Arial, sans-serif;
-      float: left;
-      display: block;
-      margin-right: 2.35765%;
-      width: 48.82117%;
-      margin-top: 0.75em;
-      margin: 0;
-      padding-bottom: 5px; }
-      header dl dt:last-child, header dl dd:last-child {
-        margin-right: 0; }
-    header dl dd {
-      text-align: right; }
 
-#main dl {
+#main {
+  height: calc(100% - 129px);
+  overflow-y: auto;
+  /* the new scrollbar will have a flat appearance with the set background color */
+  /* this will style the thumb, ignoring the track */
+  /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */ }
+  #main::-webkit-scrollbar {
+    width: 10px; }
+  #main::-webkit-scrollbar-track {
+    background-color: #3f9dc7; }
+  #main::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4); }
+  #main::-webkit-scrollbar-button {
+    background-color: #2585b0;
+    height: 28px; }
+
+dl {
+  background-color: #2585b0;
+  padding: 0px 20px 0 20px;
   margin: 0; }
-  #main dl::after {
+  dl::after {
     clear: both;
     content: "";
     display: table; }
-  #main dl dt, #main dl dd {
+  dl dt, dl dd {
+    color: #fff;
+    font: normal 20px Helvetica, Arial, sans-serif;
     float: left;
     display: block;
     margin-right: 2.35765%;
     width: 48.82117%;
-    font-weight: bold;
     margin-top: 0.75em;
-    margin: 0; }
-    #main dl dt:last-child, #main dl dd:last-child {
+    margin: 0;
+    padding-bottom: 5px; }
+    dl dt:last-child, dl dd:last-child {
       margin-right: 0; }
-  #main dl dd {
+  dl dd {
     text-align: right; }
 
 #task-list {
-  font-size: 0.75em;
-  /*.old {
-      .border-left, .border-left.hasID {
-        background-color:#b3b3b3;
-        border-bottom:1px solid #000;
-      }
-  }*/ }
+  font-size: 0.75em; }
   #task-list .date-label {
     font: normal 20px Helvetica, Arial, sans-serif;
     color: #585858;
@@ -2188,7 +2187,8 @@ header {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      font-weight: normal; }
+      font-weight: normal;
+      margin-bottom: 0em; }
     #task-list li.task .timeElapsed {
       color: #084b68;
       font-size: 12px;
@@ -2227,9 +2227,12 @@ header {
       width: calc(73% + 20px); }
 
 footer {
-  margin: 15px;
-  text-align: right; }
+  padding: 0;
+  text-align: right;
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 17px left 20px, linear-gradient(#3f9dc7, #2585b0); }
   footer button {
+    margin: 10px;
+    margin-right: 20px;
     background-color: #459ec5;
     border: 1px solid #459ec5;
     border-radius: 30px;
