@@ -56,11 +56,11 @@ var TaskItem = React.createClass({
               />
             
           <label>
-            Ticket ID:
+            Task ID:
             </label>
             <input type="text"
               id={task.id +"-ticketid-edit"}
-              placeholder="Enter Ticket ID"
+              placeholder="Enter Task ID"
               name="ticketid-edit"
               className="form-control" 
               defaultValue={task.ticketID}
