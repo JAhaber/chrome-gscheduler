@@ -105,6 +105,10 @@ var GSchedulerApp = React.createClass({
   handleNoteChange: function(task){
       this.props.model.handleNoteChange(task);  
   },
+  handleDateChange: function(task){
+      this.props.model.handleDateChange(task);  
+  },
+
 
   closeScheduler: function() {
     window.close();
@@ -124,24 +128,25 @@ var GSchedulerApp = React.createClass({
     var main;
     var curDate = Moment();
     var newDate = null;
-
+    var model = this.props.model;
     var tasks = this.props.model.tasks;
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
     sortedList.reverse();
     var TodayFirst = [];
 
      _.each(sortedList, function(l){
-      if(Moment(l.startTime).date() === curDate.date())
+
+      if(Moment(l.startTime).isSame(curDate, 'day' ))
         TodayFirst.push(l);
     });
     _.each(sortedList, function(l){
-      if(!(Moment(l.startTime).date() === curDate.date()))
+      if(!(Moment(l.startTime).isSame(curDate, 'day' )))
         TodayFirst.push(l);
     });
     
     var taskItems = TodayFirst.map(function (task) {
 
-      if(Moment(task.startTime).date() === curDate.date())
+      if(Moment(task.startTime).isSame(curDate, 'day' ))
         newDate = null;
       else{
         curDate = Moment(task.startTime);
@@ -157,6 +162,7 @@ var GSchedulerApp = React.createClass({
           <TaskItem
             key={task.id}
             task={task}
+            model={model}
             onPlay={this.createTask.bind(this, task)}
             onStop={this.stop.bind(this, task)}
             onDestroy={this.destroy.bind(this, task)}
@@ -167,6 +173,7 @@ var GSchedulerApp = React.createClass({
             startChange={this.handleStartChange.bind(this,task)}
             stopChange={this.handleStopChange.bind(this,task)}
             noteChange={this.handleNoteChange.bind(this,task)}
+            dateChange={this.handleDateChange.bind(this, task)}
           />
           </span>
         );

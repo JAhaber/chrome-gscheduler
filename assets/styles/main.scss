@@ -89,7 +89,7 @@ header {
   height: calc(100% - 129px);
   overflow-y: auto;
   &::-webkit-scrollbar {
-      width: 10px;
+      width: 8px;
 } 
   &::-webkit-scrollbar-track {
       background-color: #3f9dc7;
@@ -205,7 +205,7 @@ dl {
           vertical-align:top;
           padding-top:2px;
         }
-        input[type="text"], textarea{
+        input[type="text"], input[type="date"], textarea{
           margin-left:10px;
           margin-right:10px;
           width:30%;

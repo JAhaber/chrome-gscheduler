@@ -2109,7 +2109,7 @@ header {
   /* this will style the thumb, ignoring the track */
   /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */ }
   #main::-webkit-scrollbar {
-    width: 10px; }
+    width: 8px; }
   #main::-webkit-scrollbar-track {
     background-color: #3f9dc7; }
   #main::-webkit-scrollbar-thumb {
@@ -2218,7 +2218,7 @@ dl {
       text-align: right;
       vertical-align: top;
       padding-top: 2px; }
-    #task-list .details div input[type="text"], #task-list .details div textarea {
+    #task-list .details div input[type="text"], #task-list .details div input[type="date"], #task-list .details div textarea {
       margin-left: 10px;
       margin-right: 10px;
       width: 30%;

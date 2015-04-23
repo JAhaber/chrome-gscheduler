@@ -3,7 +3,8 @@ var React = require('react');
 var Moment = require('moment');
 var TaskItem = React.createClass({
 	getInitialState: function () {
-		return {timeElapsed: ''};
+    var task = this.props.task;
+		return {timeElapsed: '', date: Moment(task.startTime).format('YYYY-MM-DD')};
 	},
   tick: function() {
     var task = this.props.task;
@@ -19,10 +20,15 @@ var TaskItem = React.createClass({
   componentWillUnmount: function() {
     clearInterval(this.interval);
   },
+  dateChange: function(event) {
+    this.setState({date: event.target.value});
+    this.props.model.handleDateChange(this.props.task, event.target.value);
+
+  },
 
   render: function() {
   	var task = this.props.task;
-    
+
     return (
       
       <div className={this.props.task.projectID ? "border-left hasID" : "border-left"}>
@@ -58,7 +64,8 @@ var TaskItem = React.createClass({
           <label>
             Task ID:
             </label>
-            <input type="text"
+            <input
+              type="text"
               id={task.id +"-ticketid-edit"}
               placeholder="Enter Task ID"
               name="ticketid-edit"
@@ -69,6 +76,20 @@ var TaskItem = React.createClass({
               </div>
               <div>
             <label>
+             Date:
+            </label>
+            <input 
+              id={task.id +"-date-edit"}
+              type="date" 
+              name="date-edit" 
+              className="form-control"
+              value={this.state.date}
+              onChange={this.dateChange}
+              />
+            </div>
+            <div>
+            <label>
+            
              Start:
             </label>
             <input 
@@ -76,8 +97,8 @@ var TaskItem = React.createClass({
               type="text" 
               name="start-time-edit" 
               className="form-control" 
-              placeholder="hh:mm:ss dd/mm/yy"
-              defaultValue={Moment(task.startTime).format('HH:mm:ss DD/MM/YY')}
+              placeholder="hh:mm:ss"
+              defaultValue={Moment(task.startTime).format('HH:mm:ss')}
               onChange={this.props.startChange}
               />
             <label>
@@ -88,8 +109,8 @@ var TaskItem = React.createClass({
               type="text" 
               name="stop-time-edit" 
               className="form-control" 
-              placeholder="hh:mm:ss dd/mm/yy"
-              defaultValue={task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : ""}
+              placeholder="hh:mm:ss"
+              defaultValue={task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""}
               onChange={this.props.stopChange}
               />
               </div>
