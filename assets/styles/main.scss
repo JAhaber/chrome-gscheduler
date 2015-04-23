@@ -8,7 +8,6 @@
 
 body{
   margin:0;
-  margin-top:20px;
   padding:0;
 }
 
@@ -22,7 +21,7 @@ a.destroy {
   display: inline-block;
   width: 1.9em;
   height: 1.8em;
-  font-size: 1.4em;
+  font-size: 1.2em;
   color: white;
   text-align: center;
 }
@@ -39,34 +38,55 @@ i{
     color:#084b68;
   }
 }
+ .open .expand {
+      display: none;
+    }
+  .closed .contract {
+      display: none;
+    }
 
 header {
-  padding:70px 20px 0 20px;
+  padding:50px 20px 0 20px;
   background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat top 10px right 20px,
     linear-gradient(#3f9dc7, #2585b0);
-
+.input-wrap{
+  position:relative;
+  margin-bottom:30px;
+}
 
   .typeahead {
     width: 185px;
-    height: 48px;
+    height: 38px;
     font-size: 18px;
     line-height: 18px;
     border: 2px solid #ccc;
     outline: none;
-    padding: 15px;
-    margin-bottom:30px;
+    padding: 10px;
+    display:inline-block;
+    margin:0;
   }
+    .note{
+      width: 185px;
+      height: 38px;
+      font-size: 18px;
+      line-height: 18px;
+      border: 2px solid #ccc;
+      outline: none;
+      padding: 10px;
+      margin: 0;
+      display:inline-block;
+      position:absolute;
+      right:0;
+    }
+  
 
-  a.play {
-    font-size: 1.1em;
-  }
   dl {
 
     @include clearfix;
     margin: 0;
     dt, dd {
       color:#fff;
-      font: normal 25px Helvetica, Arial, sans-serif;
+      font: normal 20px Helvetica, Arial, sans-serif;
       @include span-columns(6 of 12);
       margin-top: 0.75em;
       margin: 0;
@@ -97,11 +117,11 @@ header {
   
 
   .border-left{
-    background-color:#b6e5ff;
+    background-color: #ffdd57;
     padding-left:10px;
 
-    &:nth-of-type(odd) {
-      background-color: #ffdd57;
+    &.hasID {
+      background-color:#b6e5ff;  
     }
     border-bottom:1px solid #000;
   }
@@ -109,7 +129,7 @@ header {
   li.task {
 
     background-color: #fff;
-    padding: 20px 5px 20px;
+    padding: 10px 5px 10px;
     @include user-select(none);
     @include clearfix;
     
@@ -122,7 +142,7 @@ header {
 
     label {
       color:#084b68;
-      font-size: 20px;
+      font-size: 15px;
       padding-left:10px;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -131,7 +151,7 @@ header {
     }
     .timeElapsed {
       color:#084b68;
-      font-size: 15px;
+      font-size: 12px;
       font-family: "Lucida Console", Monaco, monospace;
       margin-right:15px;
     }
@@ -143,7 +163,39 @@ header {
       a.stop {display: none}
       a.play {display: inline-block}
     }
+    
   }
+  .details{
+      display:none;
+      height:100%;
+      margin:0;
+      padding:15px 0 5px 0;
+      background-color:#f8f8f8;
+      &.on{
+        display:block;
+      }
+      div{
+        label{
+          font-size:12px;
+          color:#084b68;
+          display:inline-block;
+          width:13%;
+          text-align:right;
+          vertical-align:top;
+          padding-top:2px;
+        }
+        input[type="text"], textarea{
+          margin-left:10px;
+          margin-right:10px;
+          width:30%;
+          display:inline-block;
+        }
+        textarea{
+          width:calc(73% + 20px);
+        }
+      }
+      
+    }
 }
 
 

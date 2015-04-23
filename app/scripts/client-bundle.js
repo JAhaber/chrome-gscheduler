@@ -35,6 +35,9 @@ var GenomeAPI = {
   	$.ajax(url, options)
   	.done(function(res) {
         deferred.resolve(res);
+    })
+    .fail(function(err){
+    	deferred.resolve(err);
     });
 
     return deferred.promise;
@@ -68,13 +71,16 @@ var GenomeAPI = {
 
 		return deferred.promise;
 	},
-
+	getProjectInfo: function(ticketid) {
+		var options = {};
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);
+	},
 	postTimeEntry: function(task, options) {
 		options = options || {};
 		options.data = {
 			Date: task.startTime,
 			Duration: this.getDuration(task, GenomeAPI.ROUND_TO),
-			Note: task.title,
+			Note: task.title + "\n" + task.note,
 			Type: 'Schedule-Note'
 		};
 
@@ -82,7 +88,7 @@ var GenomeAPI = {
 			TicketID: task.ticketID || null,
 			ProjectID: task.projectID || null,
 			Type: 'Project',
-			Note: '',
+			Note: task.note,
 			IsClientBillable: task.isClientBillable || false
 		};
 
@@ -99,7 +105,6 @@ var GenomeAPI = {
 		options = $.extend({}, options, {
 			isSequenced: true
 		});
-		var count=18;
 		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
 		var previousTaskEndTime = Moment().startOf('day').hour(9).minute(0).format();
@@ -239,7 +244,7 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 				isClientBillable: task.isClientBillable,
 				type: task.type
 			});
-			el.typeahead('val', '');
+			$("#new-note").focus();
 		});
 	},
 	
@@ -249,29 +254,27 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 	},
 
 	handleNewTaskKeyDown: function(event) {
-		if (event.which !== ENTER_KEY) {
-		  return;
-		}
-		event.preventDefault();
-
 		var $element = $(this.refs.newField.getDOMNode());
 		var title = $element.typeahead('val').trim();
 
 		if (title) {
 		  this.props.onCreate(title);
-		  $element.typeahead('val', '');
+		  if (event.which === ENTER_KEY) {
+	    	$("#new-note").focus();
+		  }	  
 		}
 	},
 
 	render: function(){
 		return (
 			React.createElement("input", {
-			id: "new-task", 
+			id: this.props.id, 
 			type: "search", 
-			name: "search", 
-      ref: "newField", 
+			name: this.props.name, 
+      		ref: "newField", 
 			className: "form-control typeahead structuremap-search", 
-			placeholder: "Task name/ID", 
+			placeholder: this.props.placeholder, 
+			defaultValue: this.props.defaultValue, 
 			onKeyDown: this.handleNewTaskKeyDown}
 			)
 		);
@@ -287,7 +290,11 @@ var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var TaskItem = require('./taskItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
+var $ = require('jquery');
+window.jQuery = $;
 var Moment = require('moment');
+var saveTask;
+var ENTER_KEY = 13;
 
 var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   getInitialState: function() {
@@ -297,7 +304,7 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     };
   },
   componentDidMount: function() {
-    window.onblur = this.closeScheduler;
+    //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
   },
   componentWillUnmount: function() {
@@ -309,15 +316,31 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     this.getTotalTaskTime(tasks);
   },
 
-  createTask: function(title) {
+  createTask: function(task) {
     this.stopAll();
-    var task = {title: title};
-    this.addTask(task);
+    this.props.model.addTask(task);
+  },
+
+  saveTaskTitle: function(title) {
+    saveTask = {title: title};
   },
 
   addTask: function (task) {
+    //this.stopAll();
+    //this.props.model.addTask(task);
+    saveTask = task;
+  },
+
+  handleNoteKeyDown: function(event){
+    if (event.which !== ENTER_KEY) {
+      return;
+    }
     this.stopAll();
-    this.props.model.addTask(task);
+    saveTask.note = $('#new-note').val();
+    this.props.model.addTask(saveTask);
+    $('.typeahead').val('');
+    $('#new-note').val('');
+    saveTask = null;
   },
 
   stop: function (task) {
@@ -331,6 +354,14 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   destroy: function (task) {
     this.props.model.destroy(task);
   },
+  
+  expand: function(task){
+    this.props.model.expand(task);
+  },
+
+  contract: function(task){
+    this.props.model.contract(task);
+  },
 
   save: function () {
     var scope = this;
@@ -343,6 +374,22 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         _.each(tasks, scope.destroy);
       });
     }
+  },
+  
+  handleTitleChange: function(task){
+      this.props.model.handleTitleChange(task);  
+  },
+  handleIdChange: function(task){
+      this.props.model.handleIdChange(task);  
+  },
+  handleStartChange: function(task){
+      this.props.model.handleStartChange(task);  
+  },
+  handleStopChange: function(task){
+      this.props.model.handleStopChange(task);  
+  },
+  handleNoteChange: function(task){
+      this.props.model.handleNoteChange(task);  
   },
 
   closeScheduler: function() {
@@ -368,9 +415,16 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
         React.createElement(TaskItem, {
           key: task.id, 
           task: task, 
-          onPlay: this.createTask.bind(this, task.title), 
+          onPlay: this.createTask.bind(this, task), 
           onStop: this.stop.bind(this, task), 
-          onDestroy: this.destroy.bind(this, task)}
+          onDestroy: this.destroy.bind(this, task), 
+          expandItems: this.expand.bind(this,task), 
+          contractItems: this.contract.bind(this,task), 
+          titleChange: this.handleTitleChange.bind(this,task), 
+          idChange: this.handleIdChange.bind(this,task), 
+          startChange: this.handleStartChange.bind(this,task), 
+          stopChange: this.handleStopChange.bind(this,task), 
+          noteChange: this.handleNoteChange.bind(this,task)}
         )
       );
     }, this);
@@ -389,9 +443,22 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
     return (
       React.createElement("div", null, 
         React.createElement("header", {id: "header"}, 
+        React.createElement("div", {className: "input-wrap"}, 
           React.createElement(SearchBox, {
-            onSelect: this.addTask, onCreate: this.createTask}
+            id: "new-task", 
+            name: "search", 
+            placeholder: "Task name/ID", 
+            onSelect: this.addTask, onCreate: this.saveTaskTitle}
           ), 
+          React.createElement("input", {
+            id: "new-note", 
+            type: "text", 
+            name: "note", 
+            className: "form-control note", 
+            placeholder: "Note", 
+            onKeyDown: this.handleNoteKeyDown}
+            )
+        ), 
            React.createElement("dl", null, 
             React.createElement("dt", null, "Today"), 
             React.createElement("dd", null, this.state.totalTaskTime)
@@ -412,7 +479,7 @@ module.exports = GSchedulerApp;
 
 
 
-},{"./GenomeAPI.js":2,"./SearchBox.jsx":3,"./taskItem.jsx":5,"moment":11,"react":158,"underscore":160}],5:[function(require,module,exports){
+},{"./GenomeAPI.js":2,"./SearchBox.jsx":3,"./taskItem.jsx":5,"jquery":10,"moment":11,"react":158,"underscore":160}],5:[function(require,module,exports){
 
 var React = require('react');
 var Moment = require('moment');
@@ -438,34 +505,110 @@ var TaskItem = React.createClass({displayName: "TaskItem",
 
   render: function() {
   	var task = this.props.task;
+    var SearchBox = require('./SearchBox.jsx');
     return (
-      React.createElement("div", {className: "border-left"}, 
-      React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
-        React.createElement("label", null, 
-					task.title
-				), 
-				React.createElement("div", {className: "controls"}, 
-					React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
-					React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
-					React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
-					React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
-				)
-      )
+      React.createElement("div", {className: this.props.task.projectID ? "border-left hasID" : "border-left"}, 
+        React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
+          
+            React.createElement("label", {className: this.props.task.expanded ? 'open' : 'closed'}, 
+              React.createElement("a", {className: "expand", onClick: this.props.expandItems}, React.createElement("i", {className: "fa fa-plus"})), 
+              React.createElement("a", {className: "contract", onClick: this.props.contractItems}, React.createElement("i", {className: "fa fa-minus"})), " ", task.title
+            ), 
+         
+          React.createElement("div", {className: "controls"}, 
+            React.createElement("span", {className: "timeElapsed"}, this.state.timeElapsed), 
+            React.createElement("a", {className: "play", onClick: this.props.onPlay}, React.createElement("i", {className: "fa fa-play"})), 
+            React.createElement("a", {className: "stop", onClick: this.props.onStop}, React.createElement("i", {className: "fa fa-stop"})), 
+            React.createElement("a", {className: "destroy", onClick: this.props.onDestroy}, React.createElement("i", {className: "fa fa-remove"}))
+          )
+        ), 
+        React.createElement("div", {className: this.props.task.expanded ? 'details on' : 'details'}, 
+        React.createElement("div", null, 
+            React.createElement("label", null, 
+             "Title:"
+            ), 
+            React.createElement("input", {
+              id: task.id + "-title-edit", 
+              type: "text", 
+              name: "title-edit", 
+              className: "form-control", 
+              placeholder: "Enter Title", 
+              defaultValue: task.title, 
+              onChange: this.props.titleChange}
+              ), 
+            
+          React.createElement("label", null, 
+            "Ticket ID:"
+            ), 
+            React.createElement("input", {type: "text", 
+              id: task.id +"-ticketid-edit", 
+              placeholder: "Enter Ticket ID", 
+              name: "ticketid-edit", 
+              className: "form-control", 
+              defaultValue: task.ticketID, 
+              onChange: this.props.idChange}
+              )
+              ), 
+              React.createElement("div", null, 
+            React.createElement("label", null, 
+             "Start:"
+            ), 
+            React.createElement("input", {
+              id: task.id +"-start-time-edit", 
+              type: "text", 
+              name: "start-time-edit", 
+              className: "form-control", 
+              placeholder: "hh:mm:ss dd/mm/yy", 
+              defaultValue: Moment(task.startTime).format('HH:mm:ss DD/MM/YY'), 
+              onChange: this.props.startChange}
+              ), 
+            React.createElement("label", null, 
+             "Stop:"
+            ), 
+            React.createElement("input", {
+              id: task.id +"-stop-time-edit", 
+              type: "text", 
+              name: "stop-time-edit", 
+              className: "form-control", 
+              placeholder: "hh:mm:ss dd/mm/yy", 
+              defaultValue: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : "", 
+              onChange: this.props.stopChange}
+              )
+              ), 
+            React.createElement("div", null, 
+            React.createElement("label", null, 
+             "Note:"
+            ), 
+            React.createElement("textarea", {
+              id: task.id +"-note-edit", 
+              name: "note-edit", 
+              className: "form-control", 
+              placeholder: "", 
+              defaultValue: task.note, 
+              onChange: this.props.noteChange}
+              )
+              )
+        )
       )
     );
   }
 });
 
+
 module.exports = TaskItem;
-},{"moment":11,"react":158}],6:[function(require,module,exports){
+},{"./SearchBox.jsx":3,"moment":11,"react":158}],6:[function(require,module,exports){
 var Utils = require('../utils.js');
 var Moment = require('moment');
+var GenomeAPI = require('./GenomeAPI.js');
+var $ = require('jquery');
+var Q = require('q');
 
 var TaskModel = function (key) {
 	this.key = key;
 	this.tasks = Utils.store(key);
 	this.onChanges = [];
 };
+
 
 TaskModel.prototype.subscribe = function (onChange) {
 	this.onChanges.push(onChange);
@@ -485,7 +628,8 @@ TaskModel.prototype.addTask = function (task) {
 		ticketID: task.ticketID || null,
 		projectID: task.projectID || null,
 		isClientBillable: task.isClientBillable || null,
-		type: task.type || null
+		type: task.type || null,
+		note: task.note || null
 	};
 
 	console.log('addTask:', newTask)
@@ -496,13 +640,127 @@ TaskModel.prototype.addTask = function (task) {
 
 TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
-		return task !== taskToStop ?
-			task :
-			Utils.extend({}, task, {stopTime: Moment().format() });
+		if(task === taskToStop)
+		{	
+			if (!task.stopTime){
+				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss DD/MM/YY');
+				return Utils.extend({}, task, {stopTime: Moment().format() });
+			}
+		}
+		return task;
 	});
 
 	this.inform();
 };
+
+TaskModel.prototype.expand = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: true });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.contract = function (taskToExpand) {
+	this.tasks = this.tasks.map(function (task) {
+		return task !== taskToExpand ?
+			task :
+			Utils.extend({}, task, { expanded: false });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.handleIdChange = function (taskToChange) {
+		var scope = this;
+		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
+		//		return Utils.extend({}, task, {ticketID: ticketid});
+
+  		GenomeAPI.getProjectInfo(ticketid).then(function(ticketData){
+  						console.log("pass");
+			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange){
+			
+		  			if (!(ticketData.Entries[0].TicketStatusName === "closed"))
+		  			{	
+		  	
+		  				document.getElementById(task.id + "-title-edit").value = ticketData.Entries[0].Title;
+		  				return Utils.extend({}, task,
+								{ticketID: ticketid,
+								projectID: ticketData.Entries[0].ProjectID,
+						      	title: ticketData.Entries[0].Title});
+		  			}
+		  			else
+		  				return Utils.extend({}, task, {ticketID: ticketid});	
+		  		
+  				}
+  				else
+  					return task;
+  			});
+  			scope.inform();
+  		}).fail(function(error){
+			console.log("fail");
+			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange)
+					return Utils.extend({}, task, {ticketID: ticketid, projectID: null});
+				else
+  					return task;
+  			});
+  			scope.inform();
+  		});
+};
+
+TaskModel.prototype.handleTitleChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange)
+			   	return Utils.extend({}, task, {title: document.getElementById(task.id + "-title-edit").value});
+			
+			return task;
+		});
+
+		this.inform();
+};
+
+TaskModel.prototype.handleNoteChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange)
+			   	return Utils.extend({}, task, {note: document.getElementById(task.id + "-note-edit").value});
+			
+			return task;
+		});
+
+		this.inform();
+};
+
+TaskModel.prototype.handleStartChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid())
+			        return Utils.extend({}, task, {startTime: start});
+				    
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
+TaskModel.prototype.handleStopChange = function (taskToChange) {
+	  	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			    if (Moment(stop).isValid())
+		        	return Utils.extend({}, task, {stopTime: stop});
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
 
 TaskModel.prototype.destroy = function (task) {
 	this.tasks = this.tasks.filter(function (candidate) {
@@ -523,7 +781,7 @@ TaskModel.prototype.save = function (taskToSave, text) {
 module.exports = TaskModel;
 
 
-},{"../utils.js":7,"moment":11}],7:[function(require,module,exports){
+},{"../utils.js":7,"./GenomeAPI.js":2,"jquery":10,"moment":11,"q":12}],7:[function(require,module,exports){
 var Q = require('q');
 
 var Utils = {

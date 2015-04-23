@@ -4,7 +4,11 @@ var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var TaskItem = require('./taskItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
+var $ = require('jquery');
+window.jQuery = $;
 var Moment = require('moment');
+var saveTask;
+var ENTER_KEY = 13;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -14,7 +18,7 @@ var GSchedulerApp = React.createClass({
     };
   },
   componentDidMount: function() {
-    window.onblur = this.closeScheduler;
+    //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
   },
   componentWillUnmount: function() {
@@ -26,15 +30,31 @@ var GSchedulerApp = React.createClass({
     this.getTotalTaskTime(tasks);
   },
 
-  createTask: function(title) {
+  createTask: function(task) {
     this.stopAll();
-    var task = {title: title};
-    this.addTask(task);
+    this.props.model.addTask(task);
+  },
+
+  saveTaskTitle: function(title) {
+    saveTask = {title: title};
   },
 
   addTask: function (task) {
+    //this.stopAll();
+    //this.props.model.addTask(task);
+    saveTask = task;
+  },
+
+  handleNoteKeyDown: function(event){
+    if (event.which !== ENTER_KEY) {
+      return;
+    }
     this.stopAll();
-    this.props.model.addTask(task);
+    saveTask.note = $('#new-note').val();
+    this.props.model.addTask(saveTask);
+    $('.typeahead').val('');
+    $('#new-note').val('');
+    saveTask = null;
   },
 
   stop: function (task) {
@@ -48,6 +68,14 @@ var GSchedulerApp = React.createClass({
   destroy: function (task) {
     this.props.model.destroy(task);
   },
+  
+  expand: function(task){
+    this.props.model.expand(task);
+  },
+
+  contract: function(task){
+    this.props.model.contract(task);
+  },
 
   save: function () {
     var scope = this;
@@ -60,6 +88,22 @@ var GSchedulerApp = React.createClass({
         _.each(tasks, scope.destroy);
       });
     }
+  },
+  
+  handleTitleChange: function(task){
+      this.props.model.handleTitleChange(task);  
+  },
+  handleIdChange: function(task){
+      this.props.model.handleIdChange(task);  
+  },
+  handleStartChange: function(task){
+      this.props.model.handleStartChange(task);  
+  },
+  handleStopChange: function(task){
+      this.props.model.handleStopChange(task);  
+  },
+  handleNoteChange: function(task){
+      this.props.model.handleNoteChange(task);  
   },
 
   closeScheduler: function() {
@@ -85,9 +129,16 @@ var GSchedulerApp = React.createClass({
         <TaskItem
           key={task.id}
           task={task}
-          onPlay={this.createTask.bind(this, task.title)}
+          onPlay={this.createTask.bind(this, task)}
           onStop={this.stop.bind(this, task)}
           onDestroy={this.destroy.bind(this, task)}
+          expandItems={this.expand.bind(this,task)}
+          contractItems={this.contract.bind(this,task)}
+          titleChange={this.handleTitleChange.bind(this,task)}
+          idChange={this.handleIdChange.bind(this,task)}
+          startChange={this.handleStartChange.bind(this,task)}
+          stopChange={this.handleStopChange.bind(this,task)}
+          noteChange={this.handleNoteChange.bind(this,task)}
         />
       );
     }, this);
@@ -106,9 +157,22 @@ var GSchedulerApp = React.createClass({
     return (
       <div>
         <header id="header">
-          <SearchBox 
-            onSelect={this.addTask} onCreate={this.createTask}
+        <div className="input-wrap">
+          <SearchBox
+            id="new-task"
+            name="search"
+            placeholder="Task name/ID"
+            onSelect={this.addTask} onCreate={this.saveTaskTitle}
           />
+          <input 
+            id="new-note"
+            type="text" 
+            name="note" 
+            className="form-control note" 
+            placeholder="Note"
+            onKeyDown={this.handleNoteKeyDown}
+            />
+        </div>
            <dl>
             <dt>Today</dt>
             <dd>{this.state.totalTaskTime}</dd>

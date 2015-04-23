@@ -64,7 +64,7 @@ var SearchBox = React.createClass({
 				isClientBillable: task.isClientBillable,
 				type: task.type
 			});
-			el.typeahead('val', '');
+			$("#new-note").focus();
 		});
 	},
 	
@@ -74,29 +74,27 @@ var SearchBox = React.createClass({
 	},
 
 	handleNewTaskKeyDown: function(event) {
-		if (event.which !== ENTER_KEY) {
-		  return;
-		}
-		event.preventDefault();
-
 		var $element = $(this.refs.newField.getDOMNode());
 		var title = $element.typeahead('val').trim();
 
 		if (title) {
 		  this.props.onCreate(title);
-		  $element.typeahead('val', '');
+		  if (event.which === ENTER_KEY) {
+	    	$("#new-note").focus();
+		  }	  
 		}
 	},
 
 	render: function(){
 		return (
 			<input 
-			id="new-task"
+			id={this.props.id}
 			type="search" 
-			name="search" 
-      ref="newField"
+			name={this.props.name} 
+      		ref="newField"
 			className="form-control typeahead structuremap-search" 
-			placeholder="Task name/ID"
+			placeholder={this.props.placeholder}
+			defaultValue={this.props.defaultValue}
 			onKeyDown={this.handleNewTaskKeyDown}
 			/>
 		);
