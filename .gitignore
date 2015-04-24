@@ -1,8 +1,10 @@
-node_modules
-temp
-.tmp
-dist
 .sass-cache
+.tmp
+temp
+node_modules
 app/bower_components
 test/bower_components
+dist
 package
+app/scripts/*-bundle.js
+.DS_Store

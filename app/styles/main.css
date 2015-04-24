@@ -2241,5 +2241,9 @@ footer {
     border-radius: 30px;
     padding: 3px 20px 3px 20px;
     font: normal 20px Helvetica, Arial, sans-serif; }
+  footer button:disabled {
+    cursor: default; }
+    footer button:disabled:hover {
+      background-color: #459ec5; }
 
 /*# sourceMappingURL=main.css.map */
