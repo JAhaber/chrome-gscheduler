@@ -1,6 +1,6 @@
 {
   "name": "gscheduler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "dependencies": {
     "es6-promise": "^2.0.1",
     "jquery": "^2.1.3",
