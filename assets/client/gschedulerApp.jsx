@@ -229,7 +229,9 @@ var GSchedulerApp = React.createClass({
         {main}
 
         <footer>
-          <button type="button" onClick={this.save}>Save</button>
+        
+          <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
+          
         </footer>
 
       </div>
