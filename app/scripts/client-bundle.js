@@ -391,6 +391,10 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
   handleNoteChange: function(task){
       this.props.model.handleNoteChange(task);  
   },
+  handleDateChange: function(task){
+      this.props.model.handleDateChange(task);  
+  },
+
 
   closeScheduler: function() {
     window.close();
@@ -408,37 +412,75 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
 
   render: function() {
     var main;
+    var curDate = Moment();
+    var newDate = null;
+    var model = this.props.model;
     var tasks = this.props.model.tasks;
+    var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
+    sortedList.reverse();
+    var TodayFirst = [];
 
-    var taskItems = tasks.map(function (task) {
+     _.each(sortedList, function(l){
+
+      if(Moment(l.startTime).isSame(curDate, 'day' ))
+        TodayFirst.push(l);
+    });
+    _.each(sortedList, function(l){
+      if(!(Moment(l.startTime).isSame(curDate, 'day' )))
+        TodayFirst.push(l);
+    });
+    
+    var taskItems = TodayFirst.map(function (task) {
+
+      if(Moment(task.startTime).isSame(curDate, 'day' ))
+        newDate = null;
+      else{
+        curDate = Moment(task.startTime);
+        newDate = (
+          React.createElement("label", {className: "date-label"}, 
+          Moment(curDate).format('MMMM D, YYYY')
+          )
+          );
+      }
       return (
-        React.createElement(TaskItem, {
-          key: task.id, 
-          task: task, 
-          onPlay: this.createTask.bind(this, task), 
-          onStop: this.stop.bind(this, task), 
-          onDestroy: this.destroy.bind(this, task), 
-          expandItems: this.expand.bind(this,task), 
-          contractItems: this.contract.bind(this,task), 
-          titleChange: this.handleTitleChange.bind(this,task), 
-          idChange: this.handleIdChange.bind(this,task), 
-          startChange: this.handleStartChange.bind(this,task), 
-          stopChange: this.handleStopChange.bind(this,task), 
-          noteChange: this.handleNoteChange.bind(this,task)}
-        )
-      );
+          React.createElement("span", null, 
+          newDate, 
+          React.createElement(TaskItem, {
+            key: task.id, 
+            task: task, 
+            model: model, 
+            onPlay: this.createTask.bind(this, task), 
+            onStop: this.stop.bind(this, task), 
+            onDestroy: this.destroy.bind(this, task), 
+            expandItems: this.expand.bind(this,task), 
+            contractItems: this.contract.bind(this,task), 
+            titleChange: this.handleTitleChange.bind(this,task), 
+            idChange: this.handleIdChange.bind(this,task), 
+            startChange: this.handleStartChange.bind(this,task), 
+            stopChange: this.handleStopChange.bind(this,task), 
+            noteChange: this.handleNoteChange.bind(this,task), 
+            dateChange: this.handleDateChange.bind(this, task)}
+          )
+          )
+        );
+      
+      
     }, this);
 
     if (taskItems.length) {
       main = (
         React.createElement("section", {id: "main"}, 
-         
+          React.createElement("dl", null, 
+            React.createElement("dt", null, "Today"), 
+            React.createElement("dd", null, this.state.totalTaskTime)
+          ), 
           React.createElement("ul", {id: "task-list"}, 
             taskItems
           )
         )
       );
     }
+    
 
     return (
       React.createElement("div", null, 
@@ -458,17 +500,16 @@ var GSchedulerApp = React.createClass({displayName: "GSchedulerApp",
             placeholder: "Note", 
             onKeyDown: this.handleNoteKeyDown}
             )
+        )
+           
         ), 
-           React.createElement("dl", null, 
-            React.createElement("dt", null, "Today"), 
-            React.createElement("dd", null, this.state.totalTaskTime)
-          )
-        ), 
-
+          
         main, 
+
         React.createElement("footer", null, 
           React.createElement("button", {type: "button", onClick: this.save}, "Save")
         )
+
       )
     );
   }
@@ -483,10 +524,10 @@ module.exports = GSchedulerApp;
 
 var React = require('react');
 var Moment = require('moment');
-
 var TaskItem = React.createClass({displayName: "TaskItem",
 	getInitialState: function () {
-		return {timeElapsed: ''};
+    var task = this.props.task;
+		return {timeElapsed: '', date: Moment(task.startTime).format('YYYY-MM-DD')};
 	},
   tick: function() {
     var task = this.props.task;
@@ -502,11 +543,17 @@ var TaskItem = React.createClass({displayName: "TaskItem",
   componentWillUnmount: function() {
     clearInterval(this.interval);
   },
+  dateChange: function(event) {
+    this.setState({date: event.target.value});
+    this.props.model.handleDateChange(this.props.task, event.target.value);
+
+  },
 
   render: function() {
   	var task = this.props.task;
-    var SearchBox = require('./SearchBox.jsx');
+
     return (
+      
       React.createElement("div", {className: this.props.task.projectID ? "border-left hasID" : "border-left"}, 
         React.createElement("li", {className: this.props.task.stopTime ? 'task stopped' : 'task'}, 
           
@@ -538,11 +585,12 @@ var TaskItem = React.createClass({displayName: "TaskItem",
               ), 
             
           React.createElement("label", null, 
-            "Ticket ID:"
+            "Task ID:"
             ), 
-            React.createElement("input", {type: "text", 
+            React.createElement("input", {
+              type: "text", 
               id: task.id +"-ticketid-edit", 
-              placeholder: "Enter Ticket ID", 
+              placeholder: "Enter Task ID", 
               name: "ticketid-edit", 
               className: "form-control", 
               defaultValue: task.ticketID, 
@@ -551,6 +599,20 @@ var TaskItem = React.createClass({displayName: "TaskItem",
               ), 
               React.createElement("div", null, 
             React.createElement("label", null, 
+             "Date:"
+            ), 
+            React.createElement("input", {
+              id: task.id +"-date-edit", 
+              type: "date", 
+              name: "date-edit", 
+              className: "form-control", 
+              value: this.state.date, 
+              onChange: this.dateChange}
+              )
+            ), 
+            React.createElement("div", null, 
+            React.createElement("label", null, 
+            
              "Start:"
             ), 
             React.createElement("input", {
@@ -558,8 +620,8 @@ var TaskItem = React.createClass({displayName: "TaskItem",
               type: "text", 
               name: "start-time-edit", 
               className: "form-control", 
-              placeholder: "hh:mm:ss dd/mm/yy", 
-              defaultValue: Moment(task.startTime).format('HH:mm:ss DD/MM/YY'), 
+              placeholder: "hh:mm:ss", 
+              defaultValue: Moment(task.startTime).format('HH:mm:ss'), 
               onChange: this.props.startChange}
               ), 
             React.createElement("label", null, 
@@ -570,8 +632,8 @@ var TaskItem = React.createClass({displayName: "TaskItem",
               type: "text", 
               name: "stop-time-edit", 
               className: "form-control", 
-              placeholder: "hh:mm:ss dd/mm/yy", 
-              defaultValue: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss DD/MM/YY') : "", 
+              placeholder: "hh:mm:ss", 
+              defaultValue: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "", 
               onChange: this.props.stopChange}
               )
               ), 
@@ -596,7 +658,7 @@ var TaskItem = React.createClass({displayName: "TaskItem",
 
 
 module.exports = TaskItem;
-},{"./SearchBox.jsx":3,"moment":11,"react":158}],6:[function(require,module,exports){
+},{"moment":11,"react":158}],6:[function(require,module,exports){
 var Utils = require('../utils.js');
 var Moment = require('moment');
 var GenomeAPI = require('./GenomeAPI.js');
@@ -643,7 +705,7 @@ TaskModel.prototype.stop = function (taskToStop) {
 		if(task === taskToStop)
 		{	
 			if (!task.stopTime){
-				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss DD/MM/YY');
+				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss');
 				return Utils.extend({}, task, {stopTime: Moment().format() });
 			}
 		}
@@ -656,7 +718,7 @@ TaskModel.prototype.stop = function (taskToStop) {
 TaskModel.prototype.expand = function (taskToExpand) {
 	this.tasks = this.tasks.map(function (task) {
 		return task !== taskToExpand ?
-			task :
+			Utils.extend({}, task, { expanded: false }) :
 			Utils.extend({}, task, { expanded: true });
 	});
 
@@ -677,7 +739,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
 		var scope = this;
 		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
-
+		
   		GenomeAPI.getProjectInfo(ticketid).then(function(ticketData){
   						console.log("pass");
 			scope.tasks = scope.tasks.map(function (task) {
@@ -710,6 +772,18 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
   			});
   			scope.inform();
   		});
+
+  		if (ticketid === "") {
+  			console.log("query");
+  			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange)
+					return Utils.extend({}, task, {ticketID: ticketid, projectID: null});
+				else
+  					return task;
+  			});
+  			scope.inform();
+  		}
+  		
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange) {
@@ -721,6 +795,29 @@ TaskModel.prototype.handleTitleChange = function (taskToChange) {
 		});
 
 		this.inform();
+};
+
+TaskModel.prototype.handleDateChange = function (taskToChange, date) {
+	  	console.log(date);
+	  	if(Moment(date, "YYYY-MM-DD").isValid()){
+	  		this.tasks = this.tasks.map(function (task) {
+				if (task === taskToChange){
+					
+					var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+					var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+				 	start = Moment(date, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
+				 	
+				 	if (Moment(stop).isValid())
+				 	 	stop = Moment(date, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();	
+				 	
+				   	return Utils.extend({}, task, {startTime: start, stopTime: stop});
+
+				}
+				return task;
+			});
+			this.inform();
+		}
+		
 };
 
 TaskModel.prototype.handleNoteChange = function (taskToChange) {
@@ -738,8 +835,18 @@ TaskModel.prototype.handleStartChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-		      	if (Moment(start).isValid())
-			        return Utils.extend({}, task, {startTime: start});
+			 	var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid()){
+		      		if (Moment(start).isAfter(stop))
+		      		{
+		      			stop = Moment(start).hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
+		      			document.getElementById(task.id + "-stop-time-edit").value = Moment(stop).format('HH:mm:ss');
+						return Utils.extend({}, task, {startTime: start, stopTime: stop});
+		      		}
+		      		else
+		      			return Utils.extend({}, task, {startTime: start});
+		      	}
+			        
 				    
 			}
 			return task;
@@ -752,7 +859,7 @@ TaskModel.prototype.handleStopChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-			    if (Moment(stop).isValid())
+				if (Moment(stop).isValid())
 		        	return Utils.extend({}, task, {stopTime: stop});
 			}
 			return task;

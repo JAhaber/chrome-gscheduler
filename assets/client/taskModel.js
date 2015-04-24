@@ -44,7 +44,7 @@ TaskModel.prototype.stop = function (taskToStop) {
 		if(task === taskToStop)
 		{	
 			if (!task.stopTime){
-				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss DD/MM/YY');
+				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss');
 				return Utils.extend({}, task, {stopTime: Moment().format() });
 			}
 		}
@@ -57,7 +57,7 @@ TaskModel.prototype.stop = function (taskToStop) {
 TaskModel.prototype.expand = function (taskToExpand) {
 	this.tasks = this.tasks.map(function (task) {
 		return task !== taskToExpand ?
-			task :
+			Utils.extend({}, task, { expanded: false }) :
 			Utils.extend({}, task, { expanded: true });
 	});
 
@@ -78,7 +78,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
 		var scope = this;
 		var ticketid = document.getElementById(taskToChange.id + "-ticketid-edit").value;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
-
+		
   		GenomeAPI.getProjectInfo(ticketid).then(function(ticketData){
   						console.log("pass");
 			scope.tasks = scope.tasks.map(function (task) {
@@ -111,6 +111,18 @@ TaskModel.prototype.handleIdChange = function (taskToChange) {
   			});
   			scope.inform();
   		});
+
+  		if (ticketid === "") {
+  			console.log("query");
+  			scope.tasks = scope.tasks.map(function (task) {
+				if (task === taskToChange)
+					return Utils.extend({}, task, {ticketID: ticketid, projectID: null});
+				else
+  					return task;
+  			});
+  			scope.inform();
+  		}
+  		
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange) {
@@ -122,6 +134,29 @@ TaskModel.prototype.handleTitleChange = function (taskToChange) {
 		});
 
 		this.inform();
+};
+
+TaskModel.prototype.handleDateChange = function (taskToChange, date) {
+	  	console.log(date);
+	  	if(Moment(date, "YYYY-MM-DD").isValid()){
+	  		this.tasks = this.tasks.map(function (task) {
+				if (task === taskToChange){
+					
+					var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+					var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+				 	start = Moment(date, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
+				 	
+				 	if (Moment(stop).isValid())
+				 	 	stop = Moment(date, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();	
+				 	
+				   	return Utils.extend({}, task, {startTime: start, stopTime: stop});
+
+				}
+				return task;
+			});
+			this.inform();
+		}
+		
 };
 
 TaskModel.prototype.handleNoteChange = function (taskToChange) {
@@ -139,8 +174,18 @@ TaskModel.prototype.handleStartChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-		      	if (Moment(start).isValid())
-			        return Utils.extend({}, task, {startTime: start});
+			 	var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+		      	if (Moment(start).isValid()){
+		      		if (Moment(start).isAfter(stop))
+		      		{
+		      			stop = Moment(start).hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
+		      			document.getElementById(task.id + "-stop-time-edit").value = Moment(stop).format('HH:mm:ss');
+						return Utils.extend({}, task, {startTime: start, stopTime: stop});
+		      		}
+		      		else
+		      			return Utils.extend({}, task, {startTime: start});
+		      	}
+			        
 				    
 			}
 			return task;
@@ -153,7 +198,7 @@ TaskModel.prototype.handleStopChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-			    if (Moment(stop).isValid())
+				if (Moment(stop).isValid())
 		        	return Utils.extend({}, task, {stopTime: stop});
 			}
 			return task;

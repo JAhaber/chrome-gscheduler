@@ -105,6 +105,10 @@ var GSchedulerApp = React.createClass({
   handleNoteChange: function(task){
       this.props.model.handleNoteChange(task);  
   },
+  handleDateChange: function(task){
+      this.props.model.handleDateChange(task);  
+  },
+
 
   closeScheduler: function() {
     window.close();
@@ -122,37 +126,75 @@ var GSchedulerApp = React.createClass({
 
   render: function() {
     var main;
+    var curDate = Moment();
+    var newDate = null;
+    var model = this.props.model;
     var tasks = this.props.model.tasks;
+    var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
+    sortedList.reverse();
+    var TodayFirst = [];
 
-    var taskItems = tasks.map(function (task) {
+     _.each(sortedList, function(l){
+
+      if(Moment(l.startTime).isSame(curDate, 'day' ))
+        TodayFirst.push(l);
+    });
+    _.each(sortedList, function(l){
+      if(!(Moment(l.startTime).isSame(curDate, 'day' )))
+        TodayFirst.push(l);
+    });
+    
+    var taskItems = TodayFirst.map(function (task) {
+
+      if(Moment(task.startTime).isSame(curDate, 'day' ))
+        newDate = null;
+      else{
+        curDate = Moment(task.startTime);
+        newDate = (
+          <label className="date-label">
+          {Moment(curDate).format('MMMM D, YYYY')}
+          </label>
+          );
+      }
       return (
-        <TaskItem
-          key={task.id}
-          task={task}
-          onPlay={this.createTask.bind(this, task)}
-          onStop={this.stop.bind(this, task)}
-          onDestroy={this.destroy.bind(this, task)}
-          expandItems={this.expand.bind(this,task)}
-          contractItems={this.contract.bind(this,task)}
-          titleChange={this.handleTitleChange.bind(this,task)}
-          idChange={this.handleIdChange.bind(this,task)}
-          startChange={this.handleStartChange.bind(this,task)}
-          stopChange={this.handleStopChange.bind(this,task)}
-          noteChange={this.handleNoteChange.bind(this,task)}
-        />
-      );
+          <span>
+          {newDate}
+          <TaskItem
+            key={task.id}
+            task={task}
+            model={model}
+            onPlay={this.createTask.bind(this, task)}
+            onStop={this.stop.bind(this, task)}
+            onDestroy={this.destroy.bind(this, task)}
+            expandItems={this.expand.bind(this,task)}
+            contractItems={this.contract.bind(this,task)}
+            titleChange={this.handleTitleChange.bind(this,task)}
+            idChange={this.handleIdChange.bind(this,task)}
+            startChange={this.handleStartChange.bind(this,task)}
+            stopChange={this.handleStopChange.bind(this,task)}
+            noteChange={this.handleNoteChange.bind(this,task)}
+            dateChange={this.handleDateChange.bind(this, task)}
+          />
+          </span>
+        );
+      
+      
     }, this);
 
     if (taskItems.length) {
       main = (
         <section id="main">
-         
+          <dl>
+            <dt>Today</dt>
+            <dd>{this.state.totalTaskTime}</dd>
+          </dl>
           <ul id="task-list">
             {taskItems}
           </ul>
         </section>
       );
     }
+    
 
     return (
       <div>
@@ -173,16 +215,15 @@ var GSchedulerApp = React.createClass({
             onKeyDown={this.handleNoteKeyDown}
             />
         </div>
-           <dl>
-            <dt>Today</dt>
-            <dd>{this.state.totalTaskTime}</dd>
-          </dl>
+           
         </header>
-
+          
         {main}
+
         <footer>
           <button type="button" onClick={this.save}>Save</button>
         </footer>
+
       </div>
     );
   }

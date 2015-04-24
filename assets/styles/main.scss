@@ -5,10 +5,16 @@
 @import "vendor/font-awesome/scss/font-awesome";
 
 @import "modules/searchbox";
-
+html{
+  height:100%;
+}
 body{
+  height:100%;
   margin:0;
   padding:0;
+  div{
+    height:100%;
+  }
 }
 
 h2 {
@@ -20,7 +26,6 @@ a.stop,
 a.destroy {
   display: inline-block;
   width: 1.9em;
-  height: 1.8em;
   font-size: 1.2em;
   color: white;
   text-align: center;
@@ -46,12 +51,11 @@ i{
     }
 
 header {
-  padding:50px 20px 0 20px;
-  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat top 10px right 20px,
-    linear-gradient(#3f9dc7, #2585b0);
+  padding:20px 20px 0 20px;
+  background: linear-gradient(#3f9dc7, #2585b0);
 .input-wrap{
   position:relative;
-  margin-bottom:30px;
+  padding-bottom:20px;
 }
 
   .typeahead {
@@ -79,33 +83,41 @@ header {
       right:0;
     }
   
-
-  dl {
-
-    @include clearfix;
-    margin: 0;
-    dt, dd {
-      color:#fff;
-      font: normal 20px Helvetica, Arial, sans-serif;
-      @include span-columns(6 of 12);
-      margin-top: 0.75em;
-      margin: 0;
-      padding-bottom:5px;
-    }
-    dd {
-      text-align: right;
-    }
-  }
 }
 
-#main dl {
+#main{
+  height: calc(100% - 129px);
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+      width: 8px;
+} 
+  &::-webkit-scrollbar-track {
+      background-color: #3f9dc7;
+} /* the new scrollbar will have a flat appearance with the set background color */
+ 
+&::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.4); 
+} /* this will style the thumb, ignoring the track */
+ 
+&::-webkit-scrollbar-button {
+      background-color: #2585b0;
+      height:28px;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+ 
+}
+
+dl {
   @include clearfix;
+  background-color: #2585b0;
+  padding:0px 20px 0 20px;
   margin: 0;
   dt, dd {
+    color:#fff;
+    font: normal 20px Helvetica, Arial, sans-serif;
     @include span-columns(6 of 12);
-    font-weight: bold;
     margin-top: 0.75em;
     margin: 0;
+    padding-bottom:5px;
   }
   dd {
     text-align: right;
@@ -114,9 +126,17 @@ header {
 
 #task-list {
   font-size: em(12);
-  
 
+  .date-label{
+    font: normal 20px Helvetica, Arial, sans-serif;
+    color: #585858;
+    margin:25px 0 0 0;
+    padding:0 0 10px 20px;
+    border-bottom:1px solid #000;
+  }
+  
   .border-left{
+
     background-color: #ffdd57;
     padding-left:10px;
 
@@ -148,6 +168,7 @@ header {
       white-space: nowrap;
       overflow: hidden;
       font-weight:normal;
+      margin-bottom:0em;
     }
     .timeElapsed {
       color:#084b68;
@@ -184,7 +205,7 @@ header {
           vertical-align:top;
           padding-top:2px;
         }
-        input[type="text"], textarea{
+        input[type="text"], input[type="date"], textarea{
           margin-left:10px;
           margin-right:10px;
           width:30%;
@@ -198,15 +219,21 @@ header {
     }
 }
 
-
 footer {
-  margin:15px;
+  position:fixed;
+  width:100%;
+  bottom:0;
+  padding:0;
   text-align:right;
+  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat bottom 17px left 20px,
+    linear-gradient(#3f9dc7, #2585b0);
   button{
+    margin:10px;
+    margin-right:20px;
     background-color: #459ec5;
     border: 1px solid #459ec5;
     border-radius: 30px;
-    padding: 6px 25px 6px 25px;
+    padding: 3px 20px 3px 20px;
     font: normal 20px Helvetica, Arial, sans-serif;
 
   }
