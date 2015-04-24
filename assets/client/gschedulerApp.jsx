@@ -9,6 +9,7 @@ window.jQuery = $;
 var Moment = require('moment');
 var saveTask;
 var ENTER_KEY = 13;
+var TAB_KEY = 9;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -35,8 +36,9 @@ var GSchedulerApp = React.createClass({
     this.props.model.addTask(task);
   },
 
-  saveTaskTitle: function(title) {
+  saveTaskTitle: function(title, e) {
     saveTask = {title: title};
+    this.handleNoteKeyDown(e)
   },
 
   addTask: function (task) {
@@ -46,17 +48,23 @@ var GSchedulerApp = React.createClass({
   },
 
   handleNoteKeyDown: function(event){
-    if (event.which !== ENTER_KEY) {
+    if (event.which !== ENTER_KEY && event.which !== TAB_KEY) {
       return;
     }
     this.stopAll();
     saveTask.note = $('#new-note').val();
     this.props.model.addTask(saveTask);
-    $('.typeahead').val('');
+
+    this.clearText();
+
+    $('#new-task').focus();
+  },
+  clearText: function(){
+    $('.typeahead').typeahead('val', '');
     $('#new-note').val('');
     saveTask = null;
+    console.log("Clear");
   },
-
   stop: function (task) {
     this.props.model.stop(task);
   },

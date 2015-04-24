@@ -4,8 +4,9 @@ var $ = require('jquery');
 window.jQuery = $;
 require('typeahead.js');
 
-
+var selected = false;
 var ENTER_KEY = 13;
+var TAB_KEY = 9;
 var apiEndpoint = 'https://genome.klick.com/api/Ticket.json?Enabled=true&ForAutocompleter=false&Keyword=%QUERY&NumRecords=100';
 
 // Instantiate the Bloodhound suggestion engine
@@ -42,7 +43,6 @@ var SearchBox = React.createClass({
 
 		var self = this;
 		var $element = $(this.getDOMNode());
-
 		// Instantiate the Typeahead UI
 		$('.typeahead').typeahead({
 		  hint: true,
@@ -54,7 +54,9 @@ var SearchBox = React.createClass({
 		  displayKey: 'titleAndID',
 		  source: tickets.ttAdapter(),
 		}).focus();
-
+		$element.on('typeahead:opened', function(e, task){
+			selected=false;
+		});
 		$element.on('typeahead:selected', function(e, task){
 			var el = $(e.target);
 			self.props.onSelect({
@@ -64,8 +66,22 @@ var SearchBox = React.createClass({
 				isClientBillable: task.isClientBillable,
 				type: task.type
 			});
+			selected = true;
 			$("#new-note").focus();
 		});
+		$element.on('typeahead:autocompleted', function(e, task){
+			var el = $(e.target);
+			self.props.onSelect({
+				title: task.title,
+				ticketID: task.ticketID,
+				projectID: task.projectID,
+				isClientBillable: task.isClientBillable,
+				type: task.type
+			});
+			selected = true;
+			$("#new-note").focus();
+		});
+		
 	},
 	
 	componentWillUnmount: function(){
@@ -76,13 +92,22 @@ var SearchBox = React.createClass({
 	handleNewTaskKeyDown: function(event) {
 		var $element = $(this.refs.newField.getDOMNode());
 		var title = $element.typeahead('val').trim();
-
-		if (title) {
-		  this.props.onCreate(title);
-		  if (event.which === ENTER_KEY) {
-	    	$("#new-note").focus();
-		  }	  
+		console.log(event.which);
+		if (event.which === ENTER_KEY) {
+		  	if (title && !selected) {
+	   			this.props.onCreate(title, event);
+			}
+			else{
+				selected = false;
+			  	$("#new-note").focus();
+			}
 		}
+		if (event.which === TAB_KEY){
+			if (title && !selected) {
+	   			this.props.onCreate(title, event);
+			}
+		}
+		
 	},
 
 	render: function(){
@@ -94,7 +119,6 @@ var SearchBox = React.createClass({
       		ref="newField"
 			className="form-control typeahead structuremap-search" 
 			placeholder={this.props.placeholder}
-			defaultValue={this.props.defaultValue}
 			onKeyDown={this.handleNewTaskKeyDown}
 			/>
 		);
