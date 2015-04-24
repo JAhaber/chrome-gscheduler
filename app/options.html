@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Test Extension Options</title>
+  <style>
+    body: { padding: 10px; }
+    .option { padding: 5px; font: normal 14px Times New Roman, Times, serif;}
+    h2{ margin-bottom: 10px;}
+    .emph {font: bold italic 14px Times New Roman, Times, serif;}
+    .radio {
+        display:inline-block;
+        padding: 0px 15px 10px 0;
+        font: normal 14px Times New Roman, Times, serif;
+    }
+    input[type="radio"]{
+        margin-right:5px;
+    }
+  </style>
+</head>
+
+<body>
+    <div class="option">
+      <h2>Save tasks as:</h2>
+        <div>
+            <span class="radio"><input type="radio" name="type" value="Sequenced">Sequenced</span>
+            <span class="radio"><input type="radio" name="type" value="Actual">Actual</span>
+        </div>
+        <span class="emph">Sequenced</span> will save your tasks one after another, starting from 9:00 am. <span class="emph">Actual</span> will save your tasks using their start and stop times.
+    </div>
+
+    <div class="option">
+      <h2>Hotkey</h2>
+      <div>
+      <input type="text" id="hotkey" value="Ctrl+Shift+," onfocus="callFocus(this);" onclick="callFocus(this);" />
+      </div>
+    </div>
+
+  <div id="status"></div>
+  <button id="save">Save</button>
+
+  <script src="options.js"></script>
+</body>
+</html>
