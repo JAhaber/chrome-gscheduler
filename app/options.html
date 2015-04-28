@@ -5,7 +5,8 @@
   <style>
     body: { padding: 10px; }
     .option { padding: 5px; font: normal 14px Times New Roman, Times, serif;}
-    h2{ margin-bottom: 10px;}
+    h2{ margin-bottom: 10px; font: normal 16px Times New Roman, Times, serif;}
+    .form-wrapper{margin: 15px;}
     .emph {font: bold italic 14px Times New Roman, Times, serif;}
     .radio {
         display:inline-block;
@@ -15,28 +16,24 @@
     input[type="radio"]{
         margin-right:5px;
     }
+    #status{display:inline-block; color:#01b73b; font: bold 12px Times New Roman, Times, serif;}
   </style>
 </head>
 
 <body>
     <div class="option">
       <h2>Save tasks as:</h2>
-        <div>
+        <div class="form-wrapper" 
             <span class="radio"><input type="radio" name="type" value="Sequenced">Sequenced</span>
             <span class="radio"><input type="radio" name="type" value="Actual">Actual</span>
         </div>
-        <span class="emph">Sequenced</span> will save your tasks one after another, starting from 9:00 am. <span class="emph">Actual</span> will save your tasks using their start and stop times.
+        <p><span class="emph">Sequenced</span> - Save tasks in order starting from 9:00 am.<br>
+        <span class="emph">Actual</span> - Save tasks using start and stop times.</p>
     </div>
 
-    <div class="option">
-      <h2>Hotkey</h2>
-      <div>
-      <input type="text" id="hotkey" value="Ctrl+Shift+," onfocus="callFocus(this);" onclick="callFocus(this);" />
-      </div>
-    </div>
 
-  <div id="status"></div>
-  <button id="save">Save</button>
+  
+  <button id="save">Save</button> <div id="status"></div>
 
   <script src="options.js"></script>
 </body>
