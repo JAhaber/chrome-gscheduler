@@ -65,6 +65,11 @@ var GSchedulerApp = React.createClass({
     saveTask = null;
     console.log("Clear");
   },
+  
+  stopTask: function (task) {
+    chrome.runtime.sendMessage(false, function(response) {});
+    this.stop(task);
+  },
   stop: function (task) {
     this.props.model.stop(task);
   },
@@ -74,6 +79,8 @@ var GSchedulerApp = React.createClass({
   },
 
   destroy: function (task) {
+    if (!(task.stopTime))
+      chrome.runtime.sendMessage(false, function(response) {});
     this.props.model.destroy(task);
   },
   
@@ -88,7 +95,7 @@ var GSchedulerApp = React.createClass({
   save: function () {
     var scope = this;
     scope.stopAll();
-
+    chrome.runtime.sendMessage(false, function(response) {});
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
       GenomeAPI.postTimeEntries(tasks)
@@ -172,7 +179,7 @@ var GSchedulerApp = React.createClass({
             task={task}
             model={model}
             onPlay={this.createTask.bind(this, task)}
-            onStop={this.stop.bind(this, task)}
+            onStop={this.stopTask.bind(this, task)}
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}

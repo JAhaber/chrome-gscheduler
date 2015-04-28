@@ -8,6 +8,7 @@ var SWITCHER_WIDTH = 455;
 var click_count = 0;
 var Reminder = "Never";
 var Timeout = null;
+var taskRunning = false;
 
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
@@ -71,11 +72,17 @@ chrome.browserAction.onClicked.addListener(function(command) {
      
 });
 
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    taskRunning = request;
+  });
+
 
 chrome.storage.sync.get({
     autoRemind: 'Never'
   }, function(items) {
     Remind = items.autoRemind;
+    Remind = 0.25;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
@@ -84,7 +91,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
   }, function(items) {
     Remind = items.autoRemind;
     clearTimeout(Timeout);
-    startAutoReminder();
   });
 });
 
@@ -115,20 +121,22 @@ var runGScheduler = function(){
 };
 
 var startAutoReminder = function(){
-  if (!(Remind === "Never")){
-    if (Timeout === null){
+  if (taskRunning){
+    if (!(Remind === "Never")){
+      if (Timeout === null){
 
-      Timeout = setTimeout(function(){
-        var switcherWindowId = windowManager.getSwitcherWindowId();
-        switcherWindowId.then(function(id){
-          if (id === null)
-            runGScheduler();
-          else
-            chrome.windows.update(id, {focused: true});
-          Timeout = null;
-        });
-       
-      }, 1000*60*Remind);
+        Timeout = setTimeout(function(){
+          var switcherWindowId = windowManager.getSwitcherWindowId();
+          switcherWindowId.then(function(id){
+            if (id === null)
+              runGScheduler();
+            else
+              chrome.windows.update(id, {focused: true});
+            Timeout = null;
+          });
+         
+        }, 1000*60*Remind);
+      }
     }
   }
 };
