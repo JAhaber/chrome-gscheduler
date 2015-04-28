@@ -5,7 +5,7 @@
   <style>
     body: { padding: 10px; }
     .option { padding: 5px; font: normal 14px Times New Roman, Times, serif;}
-    h2{ margin-bottom: 10px; font: normal 16px Times New Roman, Times, serif;}
+    h2{ margin-bottom: 10px; font: bold 16px Times New Roman, Times, serif;}
     .form-wrapper{margin: 15px;}
     .emph {font: bold italic 14px Times New Roman, Times, serif;}
     .radio {
@@ -23,7 +23,7 @@
 <body>
     <div class="option">
       <h2>Save tasks as:</h2>
-        <div class="form-wrapper" 
+        <div class="form-wrapper">
             <span class="radio"><input type="radio" name="type" value="Sequenced">Sequenced</span>
             <span class="radio"><input type="radio" name="type" value="Actual">Actual</span>
         </div>
@@ -32,7 +32,10 @@
     </div>
 
 
-  
+    <div class="option">
+      <h2>Hotkey:</h2>
+      <p>You can edit the default hotkey for GScheduler on the <a id="openShortcuts">Chrome Keyboard Shortcuts</a> page</p>
+    </div>
   <button id="save">Save</button> <div id="status"></div>
 
   <script src="options.js"></script>

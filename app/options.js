@@ -37,3 +37,7 @@ function restore_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click',
     save_options);
+
+document.getElementById('openShortcuts').addEventListener('click', function(){
+    chrome.tabs.create({url:'chrome://extensions/configureCommands'});      
+});
