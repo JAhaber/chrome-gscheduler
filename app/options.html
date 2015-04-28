@@ -36,6 +36,22 @@
       <h2>Hotkey:</h2>
       <p>You can edit the default hotkey for GScheduler on the <a id="openShortcuts">Chrome Keyboard Shortcuts</a> page</p>
     </div>
+
+    <div class="option">
+      <h2>Auto-reminder:</h2>
+      <p>Remind me that I have a task running every: 
+        <select id="autoReminder">
+          <option value="Never">Never</option>
+          <option value="15">15 Mins</option>
+          <option value="30">30 Mins</option>
+          <option value="45">45 Mins</option>
+          <option value="60">1 Hour</option>
+          <option value="120">2 Hours</option>
+          <option value="240">4 Hours</option>
+          <option value="480">8 Hours</option>
+        </select>
+      </p>
+    </div>
   <button id="save">Save</button> <div id="status"></div>
 
   <script src="options.js"></script>
