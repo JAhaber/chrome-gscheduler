@@ -4,12 +4,14 @@ var _ = require('underscore');
 var Promise = require('es6-promise').Promise;
 var Q = require('q');
 var Moment = require('moment');
+var isSequenced;
 
 var GenomeAPI = {
 
 	ROUND_TO: 15,
 	CURRENT_USER: null,
 	GENOME_ENDPOINT: 'https://genome.klick.com/api',
+
 
   request: function(url, options) {
   	var options = options || {};
@@ -60,6 +62,8 @@ var GenomeAPI = {
 	},
 	postTimeEntry: function(task, options) {
 		options = options || {};
+		if (!task.note)
+			task.note = "";
 		options.data = {
 			Date: task.startTime,
 			Duration: this.getDuration(task, GenomeAPI.ROUND_TO),
@@ -71,7 +75,7 @@ var GenomeAPI = {
 			TicketID: task.ticketID || null,
 			ProjectID: task.projectID || null,
 			Type: 'Project',
-			Note: task.note,
+			Note: task.note || "",
 			IsClientBillable: task.isClientBillable || false
 		};
 
@@ -85,8 +89,9 @@ var GenomeAPI = {
 	},
 
 	postTimeEntries: function(tasks, options) {
+
 		options = $.extend({}, options, {
-			isSequenced: true
+			isSequenced: isSequenced
 		});
 		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
@@ -116,7 +121,8 @@ var GenomeAPI = {
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
-
+		console.log(task.startTime);
+		console.log(task.stopTime);
 		if (roundTo) {
 			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
@@ -126,6 +132,26 @@ var GenomeAPI = {
 	}
 
 }
+
+chrome.storage.sync.get({
+    saveType: 'Sequenced'
+  }, function(items) {
+   if(items.saveType === 'Sequenced')
+   		isSequenced = true;
+   	else
+   		isSequenced = false;
+  });
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+  chrome.storage.sync.get({
+    saveType: 'Sequenced'
+  }, function(items) {
+    if(items.saveType === 'Sequenced')
+   		isSequenced = true;
+   	else
+   		isSequenced = false;
+  });
+});
 
 module.exports = GenomeAPI;
 

@@ -36,8 +36,16 @@
         "https://genome.klick.com/",
         "https://genome.klick.com/scheduler/#/day/now/"
     ],
-    "web_accessible_resources": [
-        "images/genome.png"
-    ],
+    "options_ui": {
+        // Required.
+        "page": "options.html",
+        // Recommended.
+        "chrome_style": true
+        // Not recommended; only provided for backwards compatibility,
+        // and will be unsupported in a future version of Chrome (TBD).
+        //"open_in_tab": true
+    },
+    "web_accessible_resources": ["images/genome.png"],
+
     "content_security_policy": "script-src 'self' https://genome.klick.com; object-src 'self'"
 }
