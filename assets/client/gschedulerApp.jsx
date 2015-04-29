@@ -128,7 +128,7 @@ var GSchedulerApp = React.createClass({
       this.props.model.handleDateChange(task);  
   },
   openOptions: function(){
-    chrome.tabs.create({ url : 'chrome://extensions?options=odomkcbkhdfkmgfadgcngckijockpmkm'});
+    chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
   },
 
   closeScheduler: function() {
