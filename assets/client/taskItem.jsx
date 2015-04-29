@@ -4,7 +4,7 @@ var Moment = require('moment');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
-		return {timeElapsed: '', date: Moment(task.startTime).format('YYYY-MM-DD')};
+		return {timeElapsed: '', date: Moment(task.startTime).format('YYYY-MM-DD'), title: task.title, ticketID: task.ticketID};
 	},
   tick: function() {
     var task = this.props.task;
@@ -26,6 +26,17 @@ var TaskItem = React.createClass({
   dateChange: function(event) {
     this.setState({date: event.target.value});
     this.props.model.handleDateChange(this.props.task, event.target.value);
+
+  },
+  titleChange: function(event) {
+    this.setState({title: event.target.value});
+    this.props.model.handleTitleChange(this.props.task, event.target.value);
+
+  },
+
+   idChange: function(event) {
+    this.setState({ticketID: event.target.value});
+    this.props.model.handleIdChange(this.props.task, event.target.value);
 
   },
 
@@ -60,8 +71,8 @@ var TaskItem = React.createClass({
               name="title-edit" 
               className="form-control" 
               placeholder="Enter Title"
-              defaultValue={task.title}
-              onChange={this.props.titleChange}
+              value={this.state.title}
+              onChange={this.titleChange}
               />
             
           <label>
@@ -73,8 +84,8 @@ var TaskItem = React.createClass({
               placeholder="Enter Task ID"
               name="ticketid-edit"
               className="form-control" 
-              defaultValue={task.ticketID}
-              onChange={this.props.idChange}
+              value={this.state.ticketID}
+              onChange={this.idChange}
               />
               </div>
               <div>
