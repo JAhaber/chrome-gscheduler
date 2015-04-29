@@ -9,6 +9,8 @@ var click_count = 0;
 var Reminder = "Never";
 var Timeout = null;
 var taskRunning = false;
+var tick = 0;
+var ticker = null;
 
 chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
@@ -42,6 +44,7 @@ chrome.windows.onRemoved.addListener(function(windowID){
   switcherWindowId.then(function(id){
     if (windowID === id){
       windowManager.setSwitcherWindowId(null);
+      startTicker();
       startAutoReminder();
     }
   });
@@ -74,7 +77,11 @@ chrome.browserAction.onClicked.addListener(function(command) {
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    taskRunning = request;
+    if ('running' in request)
+      taskRunning = request.running;
+    if ('tick' in request)
+      tick = request.tick;
+      
   });
 
 
@@ -111,7 +118,8 @@ var runGScheduler = function(){
         var top = currentWindow.top + PADDING_TOP;
         var height = Math.max(currentWindow.height - PADDING_TOP - PADDING_BOTTOM, 600);
         var width = SWITCHER_WIDTH;
-        
+        clearInterval(ticker);
+        ticker = null;
         windowManager.showSwitcher(width, height, left, top);
       }
       else
@@ -139,6 +147,16 @@ var startAutoReminder = function(){
     }
   }
 };
+
+var startTicker = function(){
+  if (taskRunning){
+    ticker = setInterval(function(){
+      tick = tick + 1000;
+      chrome.browserAction.setBadgeText({text : Math.floor(moment.duration(moment().hour(0).minute(0).second(tick/1000).format('HH:mm:ss')).asMinutes()) + "m" });
+    }, 1000);
+  }
+};
+
 
 chrome.browserAction.setBadgeBackgroundColor({color:'#2585b0'});
 
