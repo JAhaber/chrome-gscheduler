@@ -123,7 +123,9 @@ var GSchedulerApp = React.createClass({
   handleDateChange: function(task){
       this.props.model.handleDateChange(task);  
   },
-
+  openOptions: function(){
+    chrome.tabs.create({ url : 'chrome://extensions?options=odomkcbkhdfkmgfadgcngckijockpmkm'});
+  },
 
   closeScheduler: function() {
     window.close();
@@ -236,7 +238,9 @@ var GSchedulerApp = React.createClass({
         {main}
 
         <footer>
-        
+          <a className="options" onClick={this.openOptions}>
+            <i className="fa fa-cog"></i>
+          </a>
           <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
           
         </footer>
