@@ -78,7 +78,7 @@ TaskModel.prototype.contract = function (taskToExpand) {
 	this.inform();
 };
 
-TaskModel.prototype.handleIdChange = function (taskToChange, value) {
+TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 		var scope = this;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
 		
@@ -89,7 +89,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value) {
 		  			if (!(ticketData.Entries[0].TicketStatusName === "closed"))
 		  			{	
 		  	
-		  				document.getElementById(task.id + "-title-edit").value = ticketData.Entries[0].Title;
+		  				itemScope.setState({title: ticketData.Entries[0].Title});
 		  				return Utils.extend({}, task,
 								{ticketID: value,
 								projectID: ticketData.Entries[0].ProjectID,

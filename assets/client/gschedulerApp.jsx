@@ -112,8 +112,8 @@ var GSchedulerApp = React.createClass({
   handleTitleChange: function(task, value){
       this.props.model.handleTitleChange(task, value);  
   },
-  handleIdChange: function(task, value){
-      this.props.model.handleIdChange(task, value);  
+  handleIdChange: function(task, value, scope){
+      this.props.model.handleIdChange(task, value, scope);  
   },
   handleStartChange: function(task){
       this.props.model.handleStartChange(task);  

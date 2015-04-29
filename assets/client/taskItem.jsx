@@ -36,7 +36,7 @@ var TaskItem = React.createClass({
 
    idChange: function(event) {
     this.setState({ticketID: event.target.value});
-    this.props.model.handleIdChange(this.props.task, event.target.value);
+    this.props.model.handleIdChange(this.props.task, event.target.value, this);
 
   },
 
