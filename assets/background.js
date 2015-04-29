@@ -158,6 +158,6 @@ var startTicker = function(){
 };
 
 
-chrome.browserAction.setBadgeBackgroundColor({color:'#2585b0'});
+chrome.browserAction.setBadgeBackgroundColor({color:'#d21245'});
 
 
