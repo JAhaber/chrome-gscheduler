@@ -67,7 +67,7 @@ var GSchedulerApp = React.createClass({
   },
   
   stopTask: function (task) {
-    chrome.runtime.sendMessage(false, function(response) {});
+    chrome.runtime.sendMessage({running: false}, function(response) {});
     this.stop(task);
   },
   stop: function (task) {
@@ -83,7 +83,7 @@ var GSchedulerApp = React.createClass({
     if (!(task.stopTime))
     {
       chrome.browserAction.setBadgeText({text : ""});
-      chrome.runtime.sendMessage(false, function(response) {});
+      chrome.runtime.sendMessage({running: false}, function(response) {});
     }
     this.props.model.destroy(task);
   },
@@ -99,7 +99,7 @@ var GSchedulerApp = React.createClass({
   save: function () {
     var scope = this;
     scope.stopAll();
-    chrome.runtime.sendMessage(false, function(response) {});
+    chrome.runtime.sendMessage({running: false}, function(response) {});
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
       GenomeAPI.postTimeEntries(tasks)
