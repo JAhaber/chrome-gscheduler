@@ -9,7 +9,7 @@ var TaskModel = function (key) {
 	this.tasks = Utils.store(key);
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
-			chrome.runtime.sendMessage(true, function(response) {});
+			chrome.runtime.sendMessage({running: true}, function(response) {});
 		}
 	});
 	this.onChanges = [];
@@ -39,7 +39,7 @@ TaskModel.prototype.addTask = function (task) {
 	};
 
 	console.log('addTask:', newTask)
-	chrome.runtime.sendMessage(true, function(response) {});
+	chrome.runtime.sendMessage({running: true}, function(response) {});
 	this.tasks.unshift(newTask);
 	this.inform();
 };
