@@ -71,6 +71,7 @@ var GSchedulerApp = React.createClass({
     this.stop(task);
   },
   stop: function (task) {
+    chrome.browserAction.setBadgeText({text : ""});
     this.props.model.stop(task);
   },
 
@@ -80,7 +81,10 @@ var GSchedulerApp = React.createClass({
 
   destroy: function (task) {
     if (!(task.stopTime))
+    {
+      chrome.browserAction.setBadgeText({text : ""});
       chrome.runtime.sendMessage(false, function(response) {});
+    }
     this.props.model.destroy(task);
   },
   

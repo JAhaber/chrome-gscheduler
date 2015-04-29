@@ -139,6 +139,7 @@ var startAutoReminder = function(){
     }
   }
 };
-// chrome.browserAction.setBadgeText({text:data.unreadItems});
+
+chrome.browserAction.setBadgeBackgroundColor({color:'#2585b0'});
 
 
