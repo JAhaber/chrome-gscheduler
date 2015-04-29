@@ -9,6 +9,7 @@ window.jQuery = $;
 var Moment = require('moment');
 var saveTask;
 var ENTER_KEY = 13;
+var TAB_KEY = 9;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -35,8 +36,9 @@ var GSchedulerApp = React.createClass({
     this.props.model.addTask(task);
   },
 
-  saveTaskTitle: function(title) {
+  saveTaskTitle: function(title, e) {
     saveTask = {title: title};
+    this.handleNoteKeyDown(e)
   },
 
   addTask: function (task) {
@@ -46,18 +48,30 @@ var GSchedulerApp = React.createClass({
   },
 
   handleNoteKeyDown: function(event){
-    if (event.which !== ENTER_KEY) {
+    if (event.which !== ENTER_KEY && event.which !== TAB_KEY) {
       return;
     }
     this.stopAll();
     saveTask.note = $('#new-note').val();
     this.props.model.addTask(saveTask);
-    $('.typeahead').val('');
+
+    this.clearText();
+
+    $('#new-task').focus();
+  },
+  clearText: function(){
+    $('.typeahead').typeahead('val', '');
     $('#new-note').val('');
     saveTask = null;
+    console.log("Clear");
   },
-
+  
+  stopTask: function (task) {
+    chrome.runtime.sendMessage({running: false}, function(response) {});
+    this.stop(task);
+  },
   stop: function (task) {
+    chrome.browserAction.setBadgeText({text : ""});
     this.props.model.stop(task);
   },
 
@@ -66,6 +80,11 @@ var GSchedulerApp = React.createClass({
   },
 
   destroy: function (task) {
+    if (!(task.stopTime))
+    {
+      chrome.browserAction.setBadgeText({text : ""});
+      chrome.runtime.sendMessage({running: false}, function(response) {});
+    }
     this.props.model.destroy(task);
   },
   
@@ -80,7 +99,7 @@ var GSchedulerApp = React.createClass({
   save: function () {
     var scope = this;
     scope.stopAll();
-
+    chrome.runtime.sendMessage({running: false}, function(response) {});
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
       GenomeAPI.postTimeEntries(tasks)
@@ -108,7 +127,9 @@ var GSchedulerApp = React.createClass({
   handleDateChange: function(task){
       this.props.model.handleDateChange(task);  
   },
-
+  openOptions: function(){
+    chrome.tabs.create({ url : 'chrome://extensions?options=odomkcbkhdfkmgfadgcngckijockpmkm'});
+  },
 
   closeScheduler: function() {
     window.close();
@@ -164,7 +185,7 @@ var GSchedulerApp = React.createClass({
             task={task}
             model={model}
             onPlay={this.createTask.bind(this, task)}
-            onStop={this.stop.bind(this, task)}
+            onStop={this.stopTask.bind(this, task)}
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
@@ -221,7 +242,11 @@ var GSchedulerApp = React.createClass({
         {main}
 
         <footer>
-          <button type="button" onClick={this.save}>Save</button>
+          <a className="options" onClick={this.openOptions}>
+            <i className="fa fa-cog"></i>
+          </a>
+          <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
+          
         </footer>
 
       </div>

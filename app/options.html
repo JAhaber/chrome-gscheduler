@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Test Extension Options</title>
+  <style>
+    body: { padding: 10px; }
+    .option { padding: 5px; font: normal 14px Times New Roman, Times, serif;}
+    h2{ margin-bottom: 10px; font: bold 16px Times New Roman, Times, serif;}
+    .form-wrapper{margin: 15px;}
+    .emph {font: bold italic 14px Times New Roman, Times, serif;}
+    .radio {
+        display:inline-block;
+        padding: 0px 15px 10px 0;
+        font: normal 14px Times New Roman, Times, serif;
+    }
+    input[type="radio"]{
+        margin-right:5px;
+    }
+    #status{display:inline-block; color:#01b73b; font: bold 12px Times New Roman, Times, serif;}
+  </style>
+</head>
+
+<body>
+    <div class="option">
+      <h2>Save tasks as:</h2>
+        <div class="form-wrapper">
+            <span class="radio"><input type="radio" name="type" value="Sequenced">Sequenced</span>
+            <span class="radio"><input type="radio" name="type" value="Actual">Actual</span>
+        </div>
+        <p><span class="emph">Sequenced</span> - Save tasks in order starting from 9:00 am.<br>
+        <span class="emph">Actual</span> - Save tasks using start and stop times.</p>
+    </div>
+
+
+    <div class="option">
+      <h2>Hotkey:</h2>
+      <p>You can edit the default hotkey for GScheduler on the <a id="openShortcuts">Chrome Keyboard Shortcuts</a> page</p>
+    </div>
+
+    <div class="option">
+      <h2>Auto-reminder:</h2>
+      <p>Remind me that I have a task running every: 
+        <select id="autoReminder">
+          <option value="Never">Never</option>
+          <option value="15">15 Mins</option>
+          <option value="30">30 Mins</option>
+          <option value="45">45 Mins</option>
+          <option value="60">1 Hour</option>
+          <option value="120">2 Hours</option>
+          <option value="240">4 Hours</option>
+          <option value="480">8 Hours</option>
+        </select>
+      </p>
+    </div>
+  <button id="save">Save</button> <div id="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

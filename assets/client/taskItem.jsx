@@ -12,6 +12,11 @@ var TaskItem = React.createClass({
     var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
     var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
 
+    if (!this.props.task.stopTime){
+      chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asMinutes()) + "m" });
+      chrome.runtime.sendMessage({tick: elapsedMilliseconds}, function(response) {});
+    }
+
   	this.setState({timeElapsed: timeElapsed});
   },
   componentDidMount: function() {

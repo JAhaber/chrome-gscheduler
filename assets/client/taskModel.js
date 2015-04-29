@@ -7,6 +7,11 @@ var Q = require('q');
 var TaskModel = function (key) {
 	this.key = key;
 	this.tasks = Utils.store(key);
+	this.tasks.forEach(function(task){
+		if (!(task.stopTime)){
+			chrome.runtime.sendMessage({running: true}, function(response) {});
+		}
+	});
 	this.onChanges = [];
 };
 
@@ -34,7 +39,7 @@ TaskModel.prototype.addTask = function (task) {
 	};
 
 	console.log('addTask:', newTask)
-
+	chrome.runtime.sendMessage({running: true}, function(response) {});
 	this.tasks.unshift(newTask);
 	this.inform();
 };
@@ -50,7 +55,6 @@ TaskModel.prototype.stop = function (taskToStop) {
 		}
 		return task;
 	});
-
 	this.inform();
 };
 
@@ -198,8 +202,10 @@ TaskModel.prototype.handleStopChange = function (taskToChange) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-				if (Moment(stop).isValid())
+				if (Moment(stop).isValid()){
+				 	stop = Moment(document.getElementById(task.id + "-date-edit").value, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
 		        	return Utils.extend({}, task, {stopTime: stop});
+		        }
 			}
 			return task;
 		});
