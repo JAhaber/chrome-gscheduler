@@ -237,6 +237,12 @@ footer {
     font: normal 20px Helvetica, Arial, sans-serif;
 
   }
+  button:disabled{
+    cursor:default;
+    &:hover{
+      background-color: #459ec5;
+    }
+  }
 }
 
 
