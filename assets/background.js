@@ -82,7 +82,6 @@ chrome.storage.sync.get({
     autoRemind: 'Never'
   }, function(items) {
     Remind = items.autoRemind;
-    Remind = 0.25;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
