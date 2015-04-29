@@ -4,7 +4,12 @@ var Moment = require('moment');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
-		return {timeElapsed: '', date: Moment(task.startTime).format('YYYY-MM-DD'), title: task.title, ticketID: task.ticketID};
+		return {timeElapsed: '',
+    date: Moment(task.startTime).format('YYYY-MM-DD'),
+    title: task.title,
+    ticketID: task.ticketID,
+    note: task.note
+    };
 	},
   tick: function() {
     var task = this.props.task;
@@ -34,7 +39,13 @@ var TaskItem = React.createClass({
 
   },
 
-   idChange: function(event) {
+  noteChange: function(event) {
+    this.setState({note: event.target.value});
+    this.props.model.handleNoteChange(this.props.task, event.target.value);
+
+  },
+
+  idChange: function(event) {
     this.setState({ticketID: event.target.value});
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
 
@@ -137,8 +148,8 @@ var TaskItem = React.createClass({
               name="note-edit" 
               className="form-control" 
               placeholder=""
-              defaultValue={task.note}
-              onChange={this.props.noteChange}
+              value={this.state.note}
+              onChange={this.noteChange}
               />
               </div>
         </div>

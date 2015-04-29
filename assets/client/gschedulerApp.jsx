@@ -189,12 +189,8 @@ var GSchedulerApp = React.createClass({
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
-            titleChange={this.handleTitleChange.bind(this,task)}
-            idChange={this.handleIdChange.bind(this,task)}
             startChange={this.handleStartChange.bind(this,task)}
             stopChange={this.handleStopChange.bind(this,task)}
-            noteChange={this.handleNoteChange.bind(this,task)}
-            dateChange={this.handleDateChange.bind(this, task)}
           />
           </span>
         );

@@ -158,10 +158,10 @@ TaskModel.prototype.handleDateChange = function (taskToChange, date) {
 		
 };
 
-TaskModel.prototype.handleNoteChange = function (taskToChange) {
+TaskModel.prototype.handleNoteChange = function (taskToChange, value) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange)
-			   	return Utils.extend({}, task, {note: document.getElementById(task.id + "-note-edit").value});
+			   	return Utils.extend({}, task, {note: value});
 			
 			return task;
 		});
