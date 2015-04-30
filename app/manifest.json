@@ -37,13 +37,8 @@
         "https://genome.klick.com/scheduler/#/day/now/"
     ],
     "options_ui": {
-        // Required.
         "page": "options.html",
-        // Recommended.
         "chrome_style": true
-        // Not recommended; only provided for backwards compatibility,
-        // and will be unsupported in a future version of Chrome (TBD).
-        //"open_in_tab": true
     },
     "web_accessible_resources": ["images/genome.png"],
 
