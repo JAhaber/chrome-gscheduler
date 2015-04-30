@@ -152,12 +152,15 @@ var startTicker = function(){
   if (taskRunning){
     ticker = setInterval(function(){
       tick = tick + 1000;
-      chrome.browserAction.setBadgeText({text : Math.floor(moment.duration(moment().hour(0).minute(0).second(tick/1000).format('HH:mm:ss')).asMinutes()) + "m" });
+      if (Math.floor(moment.duration(moment().hour(0).minute(0).second(tick/1000).format('HH:mm:ss')).asMinutes()) > 59)
+        chrome.browserAction.setBadgeText({text : Math.floor(moment.duration(moment().hour(0).minute(0).second(tick/1000).format('HH:mm:ss')).asHours()) + " hr" });
+      else  
+        chrome.browserAction.setBadgeText({text : Math.floor(moment.duration(moment().hour(0).minute(0).second(tick/1000).format('HH:mm:ss')).asMinutes()) + " m" });
     }, 1000);
   }
 };
 
 
-chrome.browserAction.setBadgeBackgroundColor({color:'#2585b0'});
+chrome.browserAction.setBadgeBackgroundColor({color:'#d21245'});
 
 

@@ -13,7 +13,10 @@ var TaskItem = React.createClass({
     var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
 
     if (!this.props.task.stopTime){
-      chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asMinutes()) + "m" });
+      if (Math.floor(Moment.duration(timeElapsed).asMinutes()) > 59)
+        chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asHours()) + " hr" });
+      else
+        chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asMinutes()) + " m" });
       chrome.runtime.sendMessage({tick: elapsedMilliseconds}, function(response) {});
     }
 
