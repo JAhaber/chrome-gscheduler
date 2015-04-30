@@ -204,6 +204,8 @@ TaskModel.prototype.handleStopChange = function (taskToChange) {
 				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
 				if (Moment(stop).isValid()){
 				 	stop = Moment(document.getElementById(task.id + "-date-edit").value, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
+				 	if (!(task.stopTime))
+				 		chrome.browserAction.setBadgeText({text : ""});
 		        	return Utils.extend({}, task, {stopTime: stop});
 		        }
 			}
