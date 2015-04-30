@@ -48,7 +48,7 @@ var GSchedulerApp = React.createClass({
   },
 
   handleNoteKeyDown: function(event){
-    if (event.which !== ENTER_KEY && event.which !== TAB_KEY) {
+    if (event.which !== ENTER_KEY) {
       return;
     }
     this.stopAll();
