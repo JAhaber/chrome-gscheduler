@@ -25,18 +25,26 @@ TaskModel.prototype.inform = function () {
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
-TaskModel.prototype.addTask = function (task) {
+TaskModel.prototype.addTask = function (task, start, stop) {
 
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
-		startTime: Moment().format(),
+		startTime: start || Moment().format(),
 		ticketID: task.ticketID || null,
 		projectID: task.projectID || null,
 		isClientBillable: task.isClientBillable || null,
 		type: task.type || null,
 		note: task.note || null
 	};
+
+	if (stop){
+		this.tasks = this.tasks.map(function (taskToStop) {
+			return taskToStop !== task ?
+				taskToStop :
+				Utils.extend({}, taskToStop, { stopTime: stop });
+		});
+	}
 
 	console.log('addTask:', newTask)
 	chrome.runtime.sendMessage({running: true}, function(response) {});

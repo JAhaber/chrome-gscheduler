@@ -14,6 +14,14 @@ var TaskItem = React.createClass({
   tick: function() {
     var task = this.props.task;
     var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
+
+    if (Moment(stopTime).isAfter(task.startTime, 'day'))
+    {
+      stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
+      this.props.model.addTask(task, Moment(stopTime).add(1,'s'), stopTime);
+    }
+
+
     var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
     var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
 
