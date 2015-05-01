@@ -8,16 +8,19 @@ var TaskItem = React.createClass({
     date: Moment(task.startTime).format('YYYY-MM-DD'),
     title: task.title,
     ticketID: task.ticketID,
-    note: task.note
+    note: task.note,
+    startTime: Moment(task.startTime).format('HH:mm:ss'),
+    stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""
     };
 	},
   tick: function() {
     var task = this.props.task;
-    var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
+    var stopTime = !this.props.task.stopTime ? Moment().add(15,"h").format() : this.props.task.stopTime;
 
     if (Moment(stopTime).isAfter(task.startTime, 'day'))
     {
       stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
+      this.setState({stopTime: Moment(stopTime).format('HH:mm:ss')});
       this.props.model.addTask(task, Moment(stopTime).add(1,'s'), stopTime);
     }
 
@@ -63,6 +66,22 @@ var TaskItem = React.createClass({
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
 
   },
+  stopChange: function(event) {
+    this.setState({stopTime: event.target.value});
+    this.props.model.handleStopChange(this.props.task, event.target.value);
+
+  },
+
+  startChange: function(event) {
+    this.setState({startTime: event.target.value});
+    this.props.model.handleStartChange(this.props.task, event.target.value);
+
+  },
+
+  onStop: function(event){
+    this.setState({stopTime: Moment().format('HH:mm:ss')});
+    this.props.onStop();
+  },
 
   render: function() {
   	var task = this.props.task;
@@ -80,7 +99,7 @@ var TaskItem = React.createClass({
           <div className="controls">
             <span className="timeElapsed">{this.state.timeElapsed}</span>
             <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-            <a className="stop" onClick={this.props.onStop}><i className="fa fa-stop"></i></a>
+            <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
             <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
           </div>
         </li>
@@ -136,8 +155,8 @@ var TaskItem = React.createClass({
               name="start-time-edit" 
               className="form-control" 
               placeholder="hh:mm:ss"
-              defaultValue={Moment(task.startTime).format('HH:mm:ss')}
-              onChange={this.props.startChange}
+              value={this.state.startTime}
+              onChange={this.startChange}
               />
             <label>
              Stop:
@@ -148,8 +167,8 @@ var TaskItem = React.createClass({
               name="stop-time-edit" 
               className="form-control" 
               placeholder="hh:mm:ss"
-              defaultValue={task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""}
-              onChange={this.props.stopChange}
+              value={this.state.stopTime}
+              onChange={this.stopChange}
               />
               </div>
             <div>

@@ -108,7 +108,6 @@ var GenomeAPI = {
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
-
 			deferred.resolve(GenomeAPI.postTimeEntry(newTask));
 
 			return deferred.promise;
@@ -121,8 +120,8 @@ var GenomeAPI = {
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
-		console.log(task.startTime);
-		console.log(task.stopTime);
+		console.log(Moment(task.startTime).format("HH:mm:ss dd:MM:YYYY"));
+		console.log(Moment(task.stopTime).format("HH:mm:ss dd:MM:YYYY"));
 		if (roundTo) {
 			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;

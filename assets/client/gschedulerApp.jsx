@@ -189,8 +189,6 @@ var GSchedulerApp = React.createClass({
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
-            startChange={this.handleStartChange.bind(this,task)}
-            stopChange={this.handleStopChange.bind(this,task)}
           />
           </span>
         );

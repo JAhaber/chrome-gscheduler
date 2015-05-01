@@ -57,8 +57,7 @@ TaskModel.prototype.stop = function (taskToStop) {
 		if(task === taskToStop)
 		{	
 			if (!task.stopTime){
-				document.getElementById(task.id + "-stop-time-edit").value = Moment().format('HH:mm:ss');
-				return Utils.extend({}, task, {stopTime: Moment().format() });
+				return Utils.extend({}, task, {stopTime: Moment(task.startTime).hour(Moment().hour()).minute(Moment().minute()).second(Moment().second()).millisecond(Moment().millisecond()).format() });
 			}
 		}
 		return task;
@@ -177,20 +176,13 @@ TaskModel.prototype.handleNoteChange = function (taskToChange, value) {
 		this.inform();
 };
 
-TaskModel.prototype.handleStartChange = function (taskToChange) {
+TaskModel.prototype.handleStartChange = function (taskToChange, value) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
-			 	var start = Moment(document.getElementById(task.id + "-start-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
-			 	var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+			 	var start = Moment(value, 'HH:mm:ss').format();
 		      	if (Moment(start).isValid()){
-		      		if (Moment(start).isAfter(stop))
-		      		{
-		      			stop = Moment(start).hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
-		      			document.getElementById(task.id + "-stop-time-edit").value = Moment(stop).format('HH:mm:ss');
-						return Utils.extend({}, task, {startTime: start, stopTime: stop});
-		      		}
-		      		else
-		      			return Utils.extend({}, task, {startTime: start});
+		      		start = Moment(document.getElementById(task.id + "-date-edit").value, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
+		      		return Utils.extend({}, task, {startTime: start});
 		      	}
 			        
 				    
@@ -201,10 +193,10 @@ TaskModel.prototype.handleStartChange = function (taskToChange) {
 		this.inform();
 };
 
-TaskModel.prototype.handleStopChange = function (taskToChange) {
+TaskModel.prototype.handleStopChange = function (taskToChange, value) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
-				var stop = Moment(document.getElementById(task.id + "-stop-time-edit").value, 'HH:mm:ss DD/MM/YY').format();
+				var stop = Moment(value, 'HH:mm:ss').format();
 				if (Moment(stop).isValid()){
 				 	stop = Moment(document.getElementById(task.id + "-date-edit").value, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
 				 	if (!(task.stopTime))
