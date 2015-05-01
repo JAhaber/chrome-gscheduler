@@ -15,13 +15,13 @@ var TaskItem = React.createClass({
 	},
   tick: function() {
     var task = this.props.task;
-    var stopTime = !this.props.task.stopTime ? Moment().add(15,"h").format() : this.props.task.stopTime;
+    var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
 
     if (Moment(stopTime).isAfter(task.startTime, 'day'))
     {
       stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
       this.setState({stopTime: Moment(stopTime).format('HH:mm:ss')});
-      this.props.model.addTask(task, Moment(stopTime).add(1,'s'), stopTime);
+      this.props.model.addTask(task, Moment(stopTime).add(1,'s').format(), stopTime);
     }
 
 

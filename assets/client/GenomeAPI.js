@@ -120,8 +120,8 @@ var GenomeAPI = {
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
-		console.log(Moment(task.startTime).format("HH:mm:ss dd:MM:YYYY"));
-		console.log(Moment(task.stopTime).format("HH:mm:ss dd:MM:YYYY"));
+		console.log(Moment(task.startTime).format());
+		console.log(Moment(task.stopTime).format());
 		if (roundTo) {
 			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
