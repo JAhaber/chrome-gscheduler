@@ -120,35 +120,42 @@ var GenomeAPI = {
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
-		console.log(Moment(task.startTime).format());
-		console.log(Moment(task.stopTime).format());
-		if (roundTo) {
+		
+		if (!(roundTo === "None")) {
 			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
 		}
-
+		else
+			durationAsMinutes = Math.round(durationAsMinutes);
+console.log(durationAsMinutes);
 		return durationAsMinutes;
 	}
 
 }
 
 chrome.storage.sync.get({
-    saveType: 'Sequenced'
+    saveType: 'Sequenced',
+    roundTime: '15'
   }, function(items) {
    if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+
+	GenomeAPI.ROUND_TO = items.roundTime;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-    saveType: 'Sequenced'
+    saveType: 'Sequenced',
+    roundTime: '15'
   }, function(items) {
     if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+
+  	GenomeAPI.ROUND_TO = items.roundTime;
   });
 });
 
