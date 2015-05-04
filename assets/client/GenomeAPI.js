@@ -108,7 +108,6 @@ var GenomeAPI = {
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
-
 			deferred.resolve(GenomeAPI.postTimeEntry(newTask));
 
 			return deferred.promise;
@@ -121,35 +120,48 @@ var GenomeAPI = {
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
-		console.log(task.startTime);
-		console.log(task.stopTime);
-		if (roundTo) {
+		
+		if (!(roundTo === "None")) {
 			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
 		}
+		else
+			durationAsMinutes = Math.round(durationAsMinutes);
 
+		var diff = Moment(task.startTime).add(durationAsMinutes, 'm').diff(Moment(task.startTime).hour(23).minute(59).second(0), 'm');
+
+		if (diff > 0){
+			durationAsMinutes = durationAsMinutes - diff;
+		}
+		
 		return durationAsMinutes;
 	}
 
 }
 
 chrome.storage.sync.get({
-    saveType: 'Sequenced'
+    saveType: 'Sequenced',
+    roundTime: '15'
   }, function(items) {
    if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+
+	GenomeAPI.ROUND_TO = items.roundTime;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-    saveType: 'Sequenced'
+    saveType: 'Sequenced',
+    roundTime: '15'
   }, function(items) {
     if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+
+  	GenomeAPI.ROUND_TO = items.roundTime;
   });
 });
 

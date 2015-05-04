@@ -4,11 +4,27 @@ var Moment = require('moment');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
-		return {timeElapsed: '', date: Moment(task.startTime).format('YYYY-MM-DD')};
+		return {timeElapsed: '',
+    date: Moment(task.startTime).format('YYYY-MM-DD'),
+    title: task.title,
+    ticketID: task.ticketID,
+    note: task.note,
+    startTime: Moment(task.startTime).format('HH:mm:ss'),
+    stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""
+    };
 	},
   tick: function() {
     var task = this.props.task;
     var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
+
+    if (Moment(stopTime).isAfter(task.startTime, 'day'))
+    {
+      stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
+      this.setState({stopTime: Moment(stopTime).format('HH:mm:ss')});
+      this.props.model.addTask(task, Moment(stopTime).add(1,'s').format(), stopTime);
+    }
+
+
     var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
     var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
 
@@ -33,6 +49,39 @@ var TaskItem = React.createClass({
     this.props.model.handleDateChange(this.props.task, event.target.value);
 
   },
+  titleChange: function(event) {
+    this.setState({title: event.target.value});
+    this.props.model.handleTitleChange(this.props.task, event.target.value);
+
+  },
+
+  noteChange: function(event) {
+    this.setState({note: event.target.value});
+    this.props.model.handleNoteChange(this.props.task, event.target.value);
+
+  },
+
+  idChange: function(event) {
+    this.setState({ticketID: event.target.value});
+    this.props.model.handleIdChange(this.props.task, event.target.value, this);
+
+  },
+  stopChange: function(event) {
+    this.setState({stopTime: event.target.value});
+    this.props.model.handleStopChange(this.props.task, event.target.value);
+
+  },
+
+  startChange: function(event) {
+    this.setState({startTime: event.target.value});
+    this.props.model.handleStartChange(this.props.task, event.target.value);
+
+  },
+
+  onStop: function(event){
+    this.setState({stopTime: Moment().format('HH:mm:ss')});
+    this.props.onStop();
+  },
 
   render: function() {
   	var task = this.props.task;
@@ -50,7 +99,7 @@ var TaskItem = React.createClass({
           <div className="controls">
             <span className="timeElapsed">{this.state.timeElapsed}</span>
             <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-            <a className="stop" onClick={this.props.onStop}><i className="fa fa-stop"></i></a>
+            <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
             <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
           </div>
         </li>
@@ -65,8 +114,8 @@ var TaskItem = React.createClass({
               name="title-edit" 
               className="form-control" 
               placeholder="Enter Title"
-              defaultValue={task.title}
-              onChange={this.props.titleChange}
+              value={this.state.title}
+              onChange={this.titleChange}
               />
             
           <label>
@@ -78,8 +127,8 @@ var TaskItem = React.createClass({
               placeholder="Enter Task ID"
               name="ticketid-edit"
               className="form-control" 
-              defaultValue={task.ticketID}
-              onChange={this.props.idChange}
+              value={this.state.ticketID}
+              onChange={this.idChange}
               />
               </div>
               <div>
@@ -106,8 +155,8 @@ var TaskItem = React.createClass({
               name="start-time-edit" 
               className="form-control" 
               placeholder="hh:mm:ss"
-              defaultValue={Moment(task.startTime).format('HH:mm:ss')}
-              onChange={this.props.startChange}
+              value={this.state.startTime}
+              onChange={this.startChange}
               />
             <label>
              Stop:
@@ -118,8 +167,8 @@ var TaskItem = React.createClass({
               name="stop-time-edit" 
               className="form-control" 
               placeholder="hh:mm:ss"
-              defaultValue={task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""}
-              onChange={this.props.stopChange}
+              value={this.state.stopTime}
+              onChange={this.stopChange}
               />
               </div>
             <div>
@@ -131,8 +180,8 @@ var TaskItem = React.createClass({
               name="note-edit" 
               className="form-control" 
               placeholder=""
-              defaultValue={task.note}
-              onChange={this.props.noteChange}
+              value={this.state.note}
+              onChange={this.noteChange}
               />
               </div>
         </div>

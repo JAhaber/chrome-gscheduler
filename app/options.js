@@ -3,10 +3,12 @@
 function save_options() {
   var type = document.querySelector('input[name="type"]:checked').value;
   var remind = document.getElementById('autoReminder').value;
+  var round = document.getElementById('roundTime').value;
 
   chrome.storage.sync.set({
     saveType: type,
-    autoRemind: remind
+    autoRemind: remind,
+    roundTime: round
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -23,7 +25,8 @@ function restore_options() {
   // Use default value color = 'red' and likesColor = true.
   chrome.storage.sync.get({
     saveType: 'Sequenced',
-    autoRemind: 'Never'
+    autoRemind: 'Never',
+    roundTime: '15'
   }, function(items) {
     var radioType = document.getElementsByName('type');
     for (i = 0; i < radioType.length; i++) {
@@ -33,6 +36,7 @@ function restore_options() {
         }
     }
     document.getElementById('autoReminder').value = items.autoRemind;
+    document.getElementById('roundTime').value = items.roundTime;
     
   });
 }
