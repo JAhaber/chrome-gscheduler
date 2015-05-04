@@ -129,11 +129,9 @@ var GenomeAPI = {
 			durationAsMinutes = Math.round(durationAsMinutes);
 
 		var diff = Moment(task.startTime).add(durationAsMinutes, 'm').diff(Moment(task.startTime).hour(23).minute(59).second(0), 'm');
-		console.log(durationAsMinutes);
-		console.log(diff)
+
 		if (diff > 0){
 			durationAsMinutes = durationAsMinutes - diff;
-			console.log(durationAsMinutes);
 		}
 		
 		return durationAsMinutes;

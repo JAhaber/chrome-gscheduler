@@ -92,7 +92,6 @@ var SearchBox = React.createClass({
 	handleNewTaskKeyDown: function(event) {
 		var $element = $(this.refs.newField.getDOMNode());
 		var title = $element.typeahead('val').trim();
-		console.log(event.which);
 		if (event.which === ENTER_KEY) {
 		  	if (title && !selected) {
 	   			this.props.onCreate(title, event);

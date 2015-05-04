@@ -37,7 +37,6 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		type: task.type || null,
 		note: task.note || null
 	};
-	console.log(newTask.startTime);
 	if (stop){
 		this.tasks = this.tasks.map(function (taskToStop) {
 			return taskToStop !== task ?
