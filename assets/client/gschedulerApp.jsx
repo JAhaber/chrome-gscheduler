@@ -52,7 +52,10 @@ var GSchedulerApp = React.createClass({
       return;
     }
     this.stopAll();
-    saveTask.note = $('#new-note').val();
+    if (saveTask)
+      saveTask.note = $('#new-note').val();
+    else
+     saveTask = {title: $('#new-note').val()};
     this.props.model.addTask(saveTask);
 
     this.clearText();
