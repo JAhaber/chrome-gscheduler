@@ -213,6 +213,13 @@ dl {
           margin-right:10px;
           width:30%;
           display:inline-block;
+
+          &:disabled{
+            background-color:#f8f8f8;
+          }
+        }
+        input[type="date"]{
+          height: 28px;
         }
         textarea{
           width:calc(73% + 20px);

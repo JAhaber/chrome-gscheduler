@@ -2225,6 +2225,10 @@ dl {
       margin-right: 10px;
       width: 30%;
       display: inline-block; }
+      #task-list .details div input[type="text"]:disabled, #task-list .details div input[type="date"]:disabled, #task-list .details div textarea:disabled {
+        background-color: #f8f8f8; }
+    #task-list .details div input[type="date"] {
+      height: 28px; }
     #task-list .details div textarea {
       width: calc(73% + 20px); }
 
