@@ -15,6 +15,7 @@ var TaskItem = React.createClass({
 	},
   tick: function() {
     var task = this.props.task;
+
     var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
 
     if (Moment(stopTime).isAfter(task.startTime, 'day'))
@@ -35,14 +36,23 @@ var TaskItem = React.createClass({
         chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asMinutes()) + " m" });
       chrome.runtime.sendMessage({tick: elapsedMilliseconds}, function(response) {});
     }
+    else{
+      this.componentWillUnmount();
+    }
 
   	this.setState({timeElapsed: timeElapsed});
   },
   componentDidMount: function() {
-    this.interval = setInterval(this.tick, 100);
+    if (!this.props.task.stopTime)
+      this.interval = setInterval(this.tick, 100);
+    else{
+      this.updateDuration();
+    }
   },
   componentWillUnmount: function() {
+    
     clearInterval(this.interval);
+    this.interval = null;
   },
   dateChange: function(event) {
     this.setState({date: event.target.value});
@@ -69,9 +79,19 @@ var TaskItem = React.createClass({
   stopChange: function(event) {
     this.setState({stopTime: event.target.value});
     this.props.model.handleStopChange(this.props.task, event.target.value);
-
+    this.updateDuration(event.target.value);
   },
-
+  durationChange: function(event) {
+    
+  },
+  updateDuration: function(value){
+      var task = this.props.task;
+      var stopTime = value ? Moment(value, 'HH:mm:ss').format() : this.props.task.stopTime;
+      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
+      var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
+     
+      this.setState({timeElapsed: timeElapsed});
+  },
   startChange: function(event) {
     this.setState({startTime: event.target.value});
     this.props.model.handleStartChange(this.props.task, event.target.value);
@@ -131,23 +151,10 @@ var TaskItem = React.createClass({
               onChange={this.idChange}
               />
               </div>
-              <div>
-            <label>
-             Date:
-            </label>
-            <input 
-              id={task.id +"-date-edit"}
-              type="date" 
-              name="date-edit" 
-              className="form-control"
-              value={this.state.date}
-              onChange={this.dateChange}
-              />
-            </div>
+            
             <div>
             <label>
-            
-             Start:
+              Start:
             </label>
             <input 
               id={task.id +"-start-time-edit"}
@@ -169,8 +176,38 @@ var TaskItem = React.createClass({
               placeholder="hh:mm:ss"
               value={this.state.stopTime}
               onChange={this.stopChange}
+              disabled={this.props.task.stopTime ? "" : "disabled"}
               />
               </div>
+
+            <div>
+            <label>
+             Date:
+            </label>
+            <input 
+              id={task.id +"-date-edit"}
+              type="date" 
+              name="date-edit" 
+              className="form-control"
+              value={this.state.date}
+              disabled={this.props.task.stopTime ? "" : "disabled"}
+              onChange={this.dateChange}
+              />
+              <label>
+             Duration:
+            </label>
+            <input 
+              id={task.id +"-duration-edit"}
+              type="text" 
+              name="duration-edit" 
+              className="form-control" 
+              placeholder="hh:mm:ss"
+              value={this.state.timeElapsed}
+              onChange={this.durationChange}
+              disabled={this.props.task.stopTime ? "" : "disabled"}
+              />
+            </div>
+
             <div>
             <label>
              Note:
