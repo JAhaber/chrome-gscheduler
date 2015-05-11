@@ -82,7 +82,12 @@ var TaskItem = React.createClass({
     this.updateDuration(event.target.value);
   },
   durationChange: function(event) {
-    
+    this.setState({timeElapsed: event.target.value});
+    var duration = Moment.duration(event.target.value);
+    var stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
+
+    this.setState({stopTime: Moment(stop).format('HH:mm:ss')});
+    this.props.model.handleStopChange(this.props.task, stop);
   },
   updateDuration: function(value){
       var task = this.props.task;
