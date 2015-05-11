@@ -56,8 +56,10 @@ var TaskItem = React.createClass({
   },
   dateChange: function(event) {
     this.setState({date: event.target.value});
-    this.props.model.handleDateChange(this.props.task, event.target.value);
 
+  },
+  dateBlur: function(event) {
+    this.props.model.handleDateChange(this.props.task, event.target.value);
   },
   titleChange: function(event) {
     this.setState({title: event.target.value});
@@ -73,16 +75,22 @@ var TaskItem = React.createClass({
 
   idChange: function(event) {
     this.setState({ticketID: event.target.value});
+  },
+  idBlur: function(event) {
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
-
   },
   stopChange: function(event) {
     this.setState({stopTime: event.target.value});
+  },
+  stopBlur: function(event) {
     this.props.model.handleStopChange(this.props.task, event.target.value);
     this.updateDuration(event.target.value);
   },
   durationChange: function(event) {
     this.setState({timeElapsed: event.target.value});
+    
+  },
+  durationBlur: function(event) {
     var duration = Moment.duration(event.target.value);
     var stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
 
@@ -92,20 +100,27 @@ var TaskItem = React.createClass({
   updateDuration: function(value){
       var task = this.props.task;
       var stopTime = value ? Moment(value, 'HH:mm:ss').format() : this.props.task.stopTime;
-      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
+      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(this.state.startTime, 'HH:mm:ss').format())).asMilliseconds();
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
      
       this.setState({timeElapsed: timeElapsed});
   },
   startChange: function(event) {
     this.setState({startTime: event.target.value});
+  },
+  startBlur: function(event) {
     this.props.model.handleStartChange(this.props.task, event.target.value);
-
+    this.updateDuration();
   },
 
   onStop: function(event){
     this.setState({stopTime: Moment().format('HH:mm:ss')});
     this.props.onStop();
+  },
+
+  errorHandler: function (event, state){
+
+
   },
 
   render: function() {
@@ -154,6 +169,7 @@ var TaskItem = React.createClass({
               className="form-control" 
               value={this.state.ticketID}
               onChange={this.idChange}
+              onBlur={this.idBlur}
               />
               </div>
             
@@ -169,6 +185,7 @@ var TaskItem = React.createClass({
               placeholder="hh:mm:ss"
               value={this.state.startTime}
               onChange={this.startChange}
+              onBlur={this.startBlur}
               />
             <label>
              Stop:
@@ -181,6 +198,7 @@ var TaskItem = React.createClass({
               placeholder="hh:mm:ss"
               value={this.state.stopTime}
               onChange={this.stopChange}
+              onBlur={this.stopBlur}
               disabled={this.props.task.stopTime ? "" : "disabled"}
               />
               </div>
@@ -197,6 +215,7 @@ var TaskItem = React.createClass({
               value={this.state.date}
               disabled={this.props.task.stopTime ? "" : "disabled"}
               onChange={this.dateChange}
+              onBlur={this.dateBlur}
               />
               <label>
              Duration:
@@ -209,6 +228,7 @@ var TaskItem = React.createClass({
               placeholder="hh:mm:ss"
               value={this.state.timeElapsed}
               onChange={this.durationChange}
+              onBlur={this.durationBlur}
               disabled={this.props.task.stopTime ? "" : "disabled"}
               />
             </div>
