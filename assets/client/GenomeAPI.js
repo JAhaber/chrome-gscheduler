@@ -79,7 +79,12 @@ var GenomeAPI = {
 			IsClientBillable: task.isClientBillable || false
 		};
 
+		var nonProjectData = {
+			TimeSheetCategoryID: task.categoryID || null
+		}
+
 		task.projectID ? $.extend(options.data, projectData) : false;
+		task.projectID ? $.extend(options.data, nonProjectData) : false;
 
 		return GenomeAPI.getUser()
 						.then(function(user){

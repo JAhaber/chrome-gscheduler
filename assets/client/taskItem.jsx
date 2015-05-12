@@ -1,6 +1,7 @@
 
 var React = require('react');
 var Moment = require('moment');
+var $ = require('jquery');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
@@ -11,12 +12,13 @@ var TaskItem = React.createClass({
     note: task.note,
     startTime: Moment(task.startTime).format('HH:mm:ss'),
     stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""
+    
     };
 	},
   tick: function() {
     var task = this.props.task;
 
-    var stopTime = !this.props.task.stopTime ? Moment().format() : this.props.task.stopTime;
+    var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
 
     if (Moment(stopTime).isAfter(task.startTime, 'day'))
     {
@@ -83,19 +85,23 @@ var TaskItem = React.createClass({
     this.setState({stopTime: event.target.value});
   },
   stopBlur: function(event) {
-    this.props.model.handleStopChange(this.props.task, event.target.value);
-    this.updateDuration(event.target.value);
+    
+      this.props.model.handleStopChange(this.props.task, event.target.value);
+      this.updateDuration(event.target.value);
+   
   },
   durationChange: function(event) {
     this.setState({timeElapsed: event.target.value});
     
   },
   durationBlur: function(event) {
-    var duration = Moment.duration(event.target.value);
-    var stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
+   
+      var duration = Moment.duration(event.target.value);
+      var stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
 
-    this.setState({stopTime: Moment(stop).format('HH:mm:ss')});
-    this.props.model.handleStopChange(this.props.task, stop);
+      this.setState({stopTime: Moment(stop).format('HH:mm:ss')});
+      this.props.model.handleStopChange(this.props.task, stop);
+  
   },
   updateDuration: function(value){
       var task = this.props.task;
@@ -109,8 +115,37 @@ var TaskItem = React.createClass({
     this.setState({startTime: event.target.value});
   },
   startBlur: function(event) {
-    this.props.model.handleStartChange(this.props.task, event.target.value);
-    this.updateDuration();
+    var task = this.props.task;
+    if (Moment(this.state.startTime, 'HH:mm:ss').isValid()){
+      var duration;
+      var stop = this.state.stopTime;
+      var start = event.target.value;
+      if (task.stopTime){
+        
+        if (Moment(this.state.startTime, "HH:mm:ss").isAfter(Moment(this.state.stopTime, "HH:mm:ss")))
+         {
+          duration = Moment.duration($("#"+task.id + "-duration-edit").val());
+          stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
+
+          if (Moment(stop).diff(Moment(task.startTime).hour(23).minute(59).second(59), 's') > 0){
+            stop = Moment("23:59:59", "HH:mm:ss");
+          }
+         }
+        this.setState({startTime: Moment(this.state.startTime, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
+      }
+      else{
+        if (Moment(this.state.startTime, "HH:mm:ss").isAfter(Moment()))
+          start = Moment().format('HH:mm:ss');        
+        else
+          start = Moment(this.state.startTime, "HH:mm:ss").format('HH:mm:ss');
+        this.setState({startTime: start});
+      }    
+      this.props.model.handleStartStopChange(this.props.task, start, stop);
+    }
+    else{
+      this.setState({startTime: Moment(task.startTime).format('HH:mm:ss')});
+    }
+    
   },
 
   onStop: function(event){
@@ -118,17 +153,18 @@ var TaskItem = React.createClass({
     this.props.onStop();
   },
 
-  errorHandler: function (event, state){
-
-
-  },
-
   render: function() {
   	var task = this.props.task;
+    var colorClass = "border-left";
+    if (this.props.task.projectID)
+      colorClass = "border-left hasID";
+    else if (this.props.task.categoryID)
+      colorClass = "border-left hasCategory";
+    
 
     return (
       
-      <div className={this.props.task.projectID ? "border-left hasID" : "border-left"}>
+      <div className={colorClass}>
         <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
           
             <label className={this.props.task.expanded ? 'open' : 'closed'}>
@@ -144,7 +180,7 @@ var TaskItem = React.createClass({
           </div>
         </li>
         <div className={this.props.task.expanded ? 'details on' : 'details'}>
-        <div>
+        <div id={task.id + "-edit"}>
             <label>
              Title:
             </label>
@@ -181,7 +217,7 @@ var TaskItem = React.createClass({
               id={task.id +"-start-time-edit"}
               type="text" 
               name="start-time-edit" 
-              className="form-control" 
+              className="form-control"
               placeholder="hh:mm:ss"
               value={this.state.startTime}
               onChange={this.startChange}
@@ -194,7 +230,7 @@ var TaskItem = React.createClass({
               id={task.id +"-stop-time-edit"}
               type="text" 
               name="stop-time-edit" 
-              className="form-control" 
+              className="form-control"
               placeholder="hh:mm:ss"
               value={this.state.stopTime}
               onChange={this.stopChange}
@@ -224,7 +260,7 @@ var TaskItem = React.createClass({
               id={task.id +"-duration-edit"}
               type="text" 
               name="duration-edit" 
-              className="form-control" 
+              className="form-control"
               placeholder="hh:mm:ss"
               value={this.state.timeElapsed}
               onChange={this.durationChange}

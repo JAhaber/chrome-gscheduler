@@ -2157,6 +2157,8 @@ dl {
     border-bottom: 1px solid #000; }
     #task-list .border-left.hasID {
       background-color: #b6e5ff; }
+    #task-list .border-left.hasCategory {
+      background-color: #D3D3D3; }
   #task-list li.task {
     background-color: #fff;
     padding: 10px 5px 10px;
@@ -2257,5 +2259,9 @@ footer {
     cursor: default; }
     footer button:disabled:hover {
       background-color: #459ec5; }
+
+.error {
+  border: 1px solid #d21245 !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px #d21245 !important; }
 
 /*# sourceMappingURL=main.css.map */
