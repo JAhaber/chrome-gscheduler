@@ -116,19 +116,33 @@ var TaskItem = React.createClass({
     
   },
   durationBlur: function(event) {
-   
-      var duration = Moment.duration(event.target.value);
-      var stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
+      var task = this.props.task;
+      if (Moment(this.state.timeElapsed, 'HH:mm:ss').isValid()){
+        var duration = Moment(event.target.value, ["HH:mm:ss", "HHmm:ss", "HH:mmss", "HHmmss"] ).format("HH:mm:ss");
+        var stop = Moment(this.state.startTime, "HH:mm:ss").add(Moment.duration(duration));
+        
+        if (Moment(stop).diff(Moment().hour(23).minute(59).second(59), 's') > 0){
+          stop = Moment("23:59:59", "HH:mm:ss");
+        }
 
-      this.setState({stopTime: Moment(stop).format('HH:mm:ss')});
-      this.props.model.handleStopChange(this.props.task, stop);
-  
+        this.setState({stopTime: Moment(stop).format('HH:mm:ss')});
+        this.props.model.handleStartStopChange(task, this.state.startTime, stop);
+        this.updateDuration(stop);
+      }
+      else{
+        this.updateDuration();  
+      }
+      
   },
   updateDuration: function(value, start){
       var task = this.props.task;
       start = start || this.state.startTime;
       var stopTime = value ? Moment(value, 'HH:mm:ss').format() : this.props.task.stopTime;
       var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(start, 'HH:mm:ss').format())).asMilliseconds();
+     
+      if (elapsedMilliseconds < 0)
+        elapsedMilliseconds= elapsedMilliseconds * (-1);
+      
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
      
       this.setState({timeElapsed: timeElapsed});
@@ -149,7 +163,7 @@ var TaskItem = React.createClass({
           duration = Moment.duration($("#"+task.id + "-duration-edit").val());
           stop = Moment(start, "HH:mm:ss").add(duration);
 
-          if (Moment(stop).diff(Moment(task.start).hour(23).minute(59).second(59), 's') > 0){
+          if (Moment(stop).diff(Moment().hour(23).minute(59).second(59), 's') > 0){
             stop = Moment("23:59:59", "HH:mm:ss");
           }
          }
