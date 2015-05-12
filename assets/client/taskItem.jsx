@@ -85,9 +85,30 @@ var TaskItem = React.createClass({
     this.setState({stopTime: event.target.value});
   },
   stopBlur: function(event) {
-    
-      this.props.model.handleStopChange(this.props.task, event.target.value);
-      this.updateDuration(event.target.value);
+    var task = this.props.task;
+         
+    if (Moment(this.state.stopTime, 'HH:mm:ss').isValid()){
+      var duration;
+      var stop = Moment(event.target.value, ["HH:mm:ss", "HHmm:ss", "HH:mmss", "HHmmss"] ).format("HH:mm:ss");
+      var start = this.state.startTime;
+     
+        
+      if (Moment(start, "HH:mm:ss").isAfter(Moment(stop, "HH:mm:ss")))
+       {
+        duration = Moment.duration($("#"+task.id + "-duration-edit").val());
+        start = Moment(stop, "HH:mm:ss").subtract(duration);
+
+        if (Moment(start).diff(Moment(task.stop).hour(0).minute(0).second(0), 's') < 0)
+          start = Moment("00:00:00", "HH:mm:ss");
+       }
+      this.setState({startTime: Moment(start, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
+     
+      this.props.model.handleStartStopChange(task, start, stop);
+      this.updateDuration(stop, start);
+    }
+    else{
+      this.setState({stopTime: Moment(task.stopTime).format('HH:mm:ss')});
+    }
    
   },
   durationChange: function(event) {
@@ -103,10 +124,11 @@ var TaskItem = React.createClass({
       this.props.model.handleStopChange(this.props.task, stop);
   
   },
-  updateDuration: function(value){
+  updateDuration: function(value, start){
       var task = this.props.task;
+      start = start || this.state.startTime;
       var stopTime = value ? Moment(value, 'HH:mm:ss').format() : this.props.task.stopTime;
-      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(this.state.startTime, 'HH:mm:ss').format())).asMilliseconds();
+      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(start, 'HH:mm:ss').format())).asMilliseconds();
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
      
       this.setState({timeElapsed: timeElapsed});
@@ -119,28 +141,28 @@ var TaskItem = React.createClass({
     if (Moment(this.state.startTime, 'HH:mm:ss').isValid()){
       var duration;
       var stop = this.state.stopTime;
-      var start = event.target.value;
+      var start = Moment(event.target.value, ["HH:mm:ss", "HHmm:ss", "HH:mmss", "HHmmss"] ).format("HH:mm:ss");
       if (task.stopTime){
         
-        if (Moment(this.state.startTime, "HH:mm:ss").isAfter(Moment(this.state.stopTime, "HH:mm:ss")))
+        if (Moment(start, "HH:mm:ss").isAfter(Moment(stop, "HH:mm:ss")))
          {
           duration = Moment.duration($("#"+task.id + "-duration-edit").val());
-          stop = Moment(this.state.startTime, "HH:mm:ss").add(duration);
+          stop = Moment(start, "HH:mm:ss").add(duration);
 
-          if (Moment(stop).diff(Moment(task.startTime).hour(23).minute(59).second(59), 's') > 0){
+          if (Moment(stop).diff(Moment(task.start).hour(23).minute(59).second(59), 's') > 0){
             stop = Moment("23:59:59", "HH:mm:ss");
           }
          }
-        this.setState({startTime: Moment(this.state.startTime, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
+         
+        this.setState({startTime: Moment(start, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
       }
       else{
-        if (Moment(this.state.startTime, "HH:mm:ss").isAfter(Moment()))
+        if (Moment(start, "HH:mm:ss").isAfter(Moment()))
           start = Moment().format('HH:mm:ss');        
-        else
-          start = Moment(this.state.startTime, "HH:mm:ss").format('HH:mm:ss');
         this.setState({startTime: start});
       }    
-      this.props.model.handleStartStopChange(this.props.task, start, stop);
+      this.props.model.handleStartStopChange(task, start, stop);
+      this.updateDuration(stop, start);
     }
     else{
       this.setState({startTime: Moment(task.startTime).format('HH:mm:ss')});
