@@ -80,11 +80,14 @@ var GenomeAPI = {
 		};
 
 		var nonProjectData = {
-			TimeSheetCategoryID: task.categoryID || null
+			TimeSheetCategoryID: task.categoryID || null,
+			Type: 'Non-Project'
 		}
 
 		task.projectID ? $.extend(options.data, projectData) : false;
-		task.projectID ? $.extend(options.data, nonProjectData) : false;
+		task.categoryID ? $.extend(options.data, nonProjectData) : false;
+		console.log(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json');
+		console.log( options);
 
 		return GenomeAPI.getUser()
 						.then(function(user){

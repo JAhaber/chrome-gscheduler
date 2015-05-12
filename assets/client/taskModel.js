@@ -26,12 +26,10 @@ TaskModel.prototype.inform = function () {
 };
 
 TaskModel.prototype.addTask = function (task, start, stop) {
-	var category = null;
+	/*var category = null;
 
-	if (task.title === "L&D")
-		category = 29;
-	else if (task.title === "Lunch")
-		category = 39;
+	if (!task.ticketID)
+		category = this.checkNonProject(task.title);*/
 
 	var newTask = {
 		id: Utils.uuid(),
@@ -42,7 +40,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		isClientBillable: task.isClientBillable || null,
 		type: task.type || null,
 		note: task.note || null,
-		categoryID: category
+		categoryID: task.category
 	};
 	if (stop){
 		this.tasks = this.tasks.map(function (taskToStop) {
@@ -56,6 +54,17 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	chrome.runtime.sendMessage({running: true}, function(response) {});
 	this.tasks.unshift(newTask);
 	this.inform();
+};
+
+TaskModel.prototype.checkNonProject = function (title){
+	if (title === "L&D" || title === "Learning & Development" || title === "Learning and Development")
+		return 29;
+	else if (title === "Lunch")
+		return 39;
+	else if (title === "Tavern")
+		return 45;
+
+	return null;
 };
 
 TaskModel.prototype.stop = function (taskToStop) {
@@ -140,14 +149,12 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange, value) {
-		var category = null;
-		if (value === "L&D")
-			category = 29;
-		else if (value === "Lunch")
-			category = 39;
+		/*var category = null;
+		if(!taskToChange.ticketID)
+			category = this.checkNonProject(value);*/
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange)
-			   	return Utils.extend({}, task, {title: value, categoryID: category});
+			   	return Utils.extend({}, task, {title: value, categoryID: null});
 			
 			return task;
 		});
@@ -209,40 +216,6 @@ TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop)
 			    	return Utils.extend({}, task, {stopTime: stop});
 			    }
 				    
-			}
-			return task;
-		});
-
-		this.inform();
-};
-
-TaskModel.prototype.handleStartChange = function (taskToChange, value) {
-	  	this.tasks = this.tasks.map(function (task) {
-			if (task === taskToChange){
-			 	var start = Moment(value, 'HH:mm:ss').format();
-		      	if (Moment(start).isValid()){
-		      		start = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
-		      		return Utils.extend({}, task, {startTime: start});
-		      	}
-			        
-				    
-			}
-			return task;
-		});
-
-		this.inform();
-};
-
-TaskModel.prototype.handleStopChange = function (taskToChange, value) {
-	  	this.tasks = this.tasks.map(function (task) {
-			if (task === taskToChange){
-				var stop = Moment(value, 'HH:mm:ss').format();
-				if (Moment(stop).isValid()){
-				 	stop = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
-				 	if (!(task.stopTime))
-				 		chrome.browserAction.setBadgeText({text : ""});
-		        	return Utils.extend({}, task, {stopTime: stop});
-		        }
 			}
 			return task;
 		});

@@ -28,11 +28,31 @@ var tickets = new Bloodhound({
 						ticketID: ticket.TicketID,
 						projectID: ticket.ProjectID,
 						isClientBillable: ticket.IsClientBillable,
-						type: ticket.Type
+						type: ticket.Type,
+						category: null
+			    };
+				});
+			}
+    },
+    prefetch:{
+    	url: "https://genome.klick.com/api/TimeSheetCategory.json?Enabled=true",
+    	filter: function (tickets) {
+				// Map the remote source JSON array to a JavaScript object array
+				return $.map(tickets.Entries, function (ticket) {
+			    return {
+						title: ticket.Name,
+						titleAndID: "Non-Project - "+ ticket.Name,
+						ticketID: null,
+						projectID: null,
+						isClientBillable: false,
+						type: null,
+						category: ticket.TimeSheetCategoryID
 			    };
 				});
 			}
     }
+
+    
 });
 
 var SearchBox = React.createClass({
@@ -64,7 +84,8 @@ var SearchBox = React.createClass({
 				ticketID: task.ticketID,
 				projectID: task.projectID,
 				isClientBillable: task.isClientBillable,
-				type: task.type
+				type: task.type,
+				category: task.category || null
 			});
 			selected = true;
 			$("#new-note").focus();
@@ -76,7 +97,8 @@ var SearchBox = React.createClass({
 				ticketID: task.ticketID,
 				projectID: task.projectID,
 				isClientBillable: task.isClientBillable,
-				type: task.type
+				type: task.type,
+				category: task.category || null
 			});
 			selected = true;
 			$("#new-note").focus();
