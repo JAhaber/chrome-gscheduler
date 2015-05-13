@@ -51,16 +51,21 @@ var GSchedulerApp = React.createClass({
     if (event.which !== ENTER_KEY) {
       return;
     }
-    this.stopAll();
-    if (saveTask)
-      saveTask.note = $('#new-note').val();
-    else
-     saveTask = {title: $('#new-note').val()};
-    this.props.model.addTask(saveTask);
+    if ($('#new-note').val() !== "" || $('#new-task').val() !== ""){
+      this.stopAll();
+      if (saveTask)
+        saveTask.note = $('#new-note').val();
+      else if (!saveTask && $('#new-task').val() !== "")
+        saveTask = {title: $('#new-task').val(), note: $('#new-note').val()};
+      else
+       saveTask = {title: $('#new-note').val()};
+      this.props.model.addTask(saveTask);
 
-    this.clearText();
+      this.clearText();
 
-    $('#new-task').focus();
+      $('#new-task').focus();
+    }
+    
   },
   clearText: function(){
     $('.typeahead').typeahead('val', '');
