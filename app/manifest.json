@@ -1,6 +1,6 @@
 {
     "name": "GScheduler",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "manifest_version": 2,
     "description": "Forgot to log your time...again? Genome locking you out...again? Perhaps you just need a faster, easier way to log it.",
     "icons": {
@@ -40,7 +40,8 @@
         "page": "options.html",
         "chrome_style": true
     },
-    "web_accessible_resources": ["images/genome.png"],
-
+    "web_accessible_resources": [
+        "images/genome.png"
+    ],
     "content_security_policy": "script-src 'self' https://genome.klick.com; object-src 'self'"
 }
