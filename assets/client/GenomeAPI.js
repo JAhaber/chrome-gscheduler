@@ -5,6 +5,8 @@ var Promise = require('es6-promise').Promise;
 var Q = require('q');
 var Moment = require('moment');
 var isSequenced;
+var sequenceHour = 9;
+var sequenceMin = 0;
 
 var GenomeAPI = {
 
@@ -108,7 +110,7 @@ var GenomeAPI = {
 			var duration = self.getDuration(task, GenomeAPI.ROUND_TO);
 			
 			if (!(Moment(previousTaskEndTime).date() === Moment(newTask.startTime).date())){
-				previousTaskEndTime = Moment(newTask.startTime).hour(9).minute(0).format();
+				previousTaskEndTime = Moment(newTask.startTime).hour(sequenceHour).minute(sequenceMin).format();
 			}
 				
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
@@ -147,12 +149,16 @@ var GenomeAPI = {
 
 chrome.storage.sync.get({
     saveType: 'Sequenced',
-    roundTime: '15'
+    roundTime: '15',
+    startHour: 9,
+    startMin: 0
   }, function(items) {
    if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+   	sequenceHour = items.startHour;
+   	sequenceMin = items.startMin;
 
 	GenomeAPI.ROUND_TO = items.roundTime;
   });
@@ -160,13 +166,16 @@ chrome.storage.sync.get({
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
     saveType: 'Sequenced',
-    roundTime: '15'
+    roundTime: '15',
+    startHour: 9,
+    startMin: 0
   }, function(items) {
     if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
-
+   	sequenceHour = items.startHour;
+   	sequenceMin = items.startMin;
   	GenomeAPI.ROUND_TO = items.roundTime;
   });
 });

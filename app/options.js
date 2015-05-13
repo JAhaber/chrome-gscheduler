@@ -4,11 +4,15 @@ function save_options() {
   var type = document.querySelector('input[name="type"]:checked').value;
   var remind = document.getElementById('autoReminder').value;
   var round = document.getElementById('roundTime').value;
+  var hour = document.getElementById('startHour').value;
+  var min = document.getElementById('startMin').value;
 
   chrome.storage.sync.set({
     saveType: type,
     autoRemind: remind,
-    roundTime: round
+    roundTime: round,
+    startHour: hour,
+    startMin: min
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -26,7 +30,9 @@ function restore_options() {
   chrome.storage.sync.get({
     saveType: 'Sequenced',
     autoRemind: 'Never',
-    roundTime: '15'
+    roundTime: '15',
+    startHour: "9",
+    startMin: "0"
   }, function(items) {
     var radioType = document.getElementsByName('type');
     for (i = 0; i < radioType.length; i++) {
@@ -37,6 +43,8 @@ function restore_options() {
     }
     document.getElementById('autoReminder').value = items.autoRemind;
     document.getElementById('roundTime').value = items.roundTime;
+    document.getElementById('startHour').value = items.startHour;
+    document.getElementById('startMin').value = items.startMin;
     
   });
 }
