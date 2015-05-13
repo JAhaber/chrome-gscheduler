@@ -91,6 +91,10 @@ module.exports = function (grunt) {
           {
             src: ['<%= config.assets %>/background.js'],
             dest: '<%= config.app %>/scripts/background-bundle.js'
+          },
+          {
+            src: ['<%= config.assets %>/options.jsx'],
+            dest: '<%= config.app %>/scripts/options-bundle.js'
           }
         ]
       }

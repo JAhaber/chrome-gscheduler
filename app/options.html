@@ -28,88 +28,14 @@
    select.long{
       width:70px;
    }
-    #status{display:inline-block; color:#01b73b; font: bold 12px Times New Roman, Times, serif;}
+    #status{display:inline-block; color:#01b73b; font: bold 12px Times New Roman, Times, serif; padding-left:15px;}
   </style>
 </head>
 
 <body>
-    <div class="option">
-      <h2>Save tasks as:</h2>
-        <div class="form-wrapper">
-            <span class="radio"><input type="radio" name="type" value="Sequenced" checked="checked">Sequenced</span>
-            <span class="radio"><input type="radio" name="type" value="Actual">Actual</span>
-        </div>
-        <p><span class="emph">Sequenced</span> - Save tasks in order using duration starting from <select id="startHour">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
-          <option value="21">21</option>
-          <option value="22">22</option>
-          <option value="23">23</option>
-        </select><b> :</b>
-        <select id="startMin">
-          <option value="0">00</option>
-          <option value="15">15</option>
-          <option value="30">30</option>
-          <option value="45">45</option>
-        </select><br>
-        <span class="emph">Actual</span> - Save tasks using start and stop times.</p>
-    </div>
+    
+  <div id="options-page"></div>
 
-
-    <div class="option">
-      <h2>Hotkey:</h2>
-      <p>You can edit the default hotkey for GScheduler on the <a id="openShortcuts">Chrome Keyboard Shortcuts</a> page</p>
-    </div>
-
-    <div class="option">
-      <h2>Auto-reminder:</h2>
-      <p>Remind me that I have a task running every: 
-        <select id="autoReminder" class="long">
-          <option value="Never">Never</option>
-          <option value="15">15 Mins</option>
-          <option value="30">30 Mins</option>
-          <option value="45">45 Mins</option>
-          <option value="60">1 Hour</option>
-          <option value="120">2 Hours</option>
-          <option value="240">4 Hours</option>
-          <option value="480">8 Hours</option>
-        </select>
-      </p>
-    </div>
-
-    <div class="option">
-      <h2>Round Elapsed Time:</h2>
-      <p>Round the stop time to the nearest&nbsp;
-        <select id="roundTime" class="long">
-          <option value="None">None</option>
-          <option value="5">5 Mins</option>
-          <option value="10">10 Mins</option>
-          <option value="15" selected="selected">15 Mins</option>
-        </select>
-        &nbsp;when saving to Genome.
-      </p>
-    </div>
-  <button id="save">Save</button> <div id="status"></div>
-
-  <script src="options.js"></script>
+  <script src="scripts/options-bundle.js"></script>
 </body>
 </html>
