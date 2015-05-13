@@ -26,11 +26,6 @@ TaskModel.prototype.inform = function () {
 };
 
 TaskModel.prototype.addTask = function (task, start, stop) {
-	/*var category = null;
-
-	if (!task.ticketID)
-		category = this.checkNonProject(task.title);*/
-
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -40,7 +35,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		isClientBillable: task.isClientBillable || null,
 		type: task.type || null,
 		note: task.note || null,
-		categoryID: task.category
+		categoryID: task.categoryID
 	};
 	if (stop){
 		this.tasks = this.tasks.map(function (taskToStop) {
@@ -56,16 +51,6 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	this.inform();
 };
 
-TaskModel.prototype.checkNonProject = function (title){
-	if (title === "L&D" || title === "Learning & Development" || title === "Learning and Development")
-		return 29;
-	else if (title === "Lunch")
-		return 39;
-	else if (title === "Tavern")
-		return 45;
-
-	return null;
-};
 
 TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
@@ -149,9 +134,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange, value) {
-		/*var category = null;
-		if(!taskToChange.ticketID)
-			category = this.checkNonProject(value);*/
+		
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange)
 			   	return Utils.extend({}, task, {title: value, categoryID: null});

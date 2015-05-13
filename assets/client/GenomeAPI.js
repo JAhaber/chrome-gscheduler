@@ -86,8 +86,6 @@ var GenomeAPI = {
 
 		task.projectID ? $.extend(options.data, projectData) : false;
 		task.categoryID ? $.extend(options.data, nonProjectData) : false;
-		console.log(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json');
-		console.log( options);
 
 		return GenomeAPI.getUser()
 						.then(function(user){
