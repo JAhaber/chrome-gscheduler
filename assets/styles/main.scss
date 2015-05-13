@@ -146,6 +146,9 @@ dl {
     &.hasID {
       background-color:#b6e5ff;  
     }
+    &.hasCategory{
+      background-color:#D3D3D3;
+    }
     border-bottom:1px solid #000;
   }
 
@@ -213,6 +216,13 @@ dl {
           margin-right:10px;
           width:30%;
           display:inline-block;
+
+          &:disabled{
+            background-color:#f8f8f8;
+          }
+        }
+        input[type="date"]{
+          height: 28px;
         }
         textarea{
           width:calc(73% + 20px);
@@ -257,6 +267,9 @@ footer {
 }
 
 
-
+.error{
+  border: 1px solid #d21245 !important;
+  box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px #d21245 !important;
+}
 
 

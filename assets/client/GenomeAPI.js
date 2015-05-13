@@ -5,6 +5,8 @@ var Promise = require('es6-promise').Promise;
 var Q = require('q');
 var Moment = require('moment');
 var isSequenced;
+var sequenceHour = 9;
+var sequenceMin = 0;
 
 var GenomeAPI = {
 
@@ -79,7 +81,13 @@ var GenomeAPI = {
 			IsClientBillable: task.isClientBillable || false
 		};
 
+		var nonProjectData = {
+			TimeSheetCategoryID: task.categoryID || null,
+			Type: 'Non-Project'
+		}
+
 		task.projectID ? $.extend(options.data, projectData) : false;
+		task.categoryID ? $.extend(options.data, nonProjectData) : false;
 
 		return GenomeAPI.getUser()
 						.then(function(user){
@@ -102,13 +110,12 @@ var GenomeAPI = {
 			var duration = self.getDuration(task, GenomeAPI.ROUND_TO);
 			
 			if (!(Moment(previousTaskEndTime).date() === Moment(newTask.startTime).date())){
-				previousTaskEndTime = Moment(newTask.startTime).hour(9).minute(0).format();
+				previousTaskEndTime = Moment(newTask.startTime).hour(sequenceHour).minute(sequenceMin).format();
 			}
 				
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
-
 			deferred.resolve(GenomeAPI.postTimeEntry(newTask));
 
 			return deferred.promise;
@@ -121,35 +128,55 @@ var GenomeAPI = {
 	// Find the duration in minutes of a task and optionally roundTo in (minutes)
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
-		console.log(task.startTime);
-		console.log(task.stopTime);
-		if (roundTo) {
+		
+		if (!(roundTo === "None")) {
 			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
 			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
 		}
+		else
+			durationAsMinutes = Math.round(durationAsMinutes);
 
+		var diff = Moment(task.startTime).add(durationAsMinutes, 'm').diff(Moment(task.startTime).hour(23).minute(59).second(0), 'm');
+
+		if (diff > 0){
+			durationAsMinutes = durationAsMinutes - diff;
+		}
+		
 		return durationAsMinutes;
 	}
 
 }
 
 chrome.storage.sync.get({
-    saveType: 'Sequenced'
+    saveType: 'Sequenced',
+    roundTime: '15',
+    startHour: 9,
+    startMin: 0
   }, function(items) {
    if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+   	sequenceHour = items.startHour;
+   	sequenceMin = items.startMin;
+
+	GenomeAPI.ROUND_TO = items.roundTime;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-    saveType: 'Sequenced'
+    saveType: 'Sequenced',
+    roundTime: '15',
+    startHour: 9,
+    startMin: 0
   }, function(items) {
     if(items.saveType === 'Sequenced')
    		isSequenced = true;
    	else
    		isSequenced = false;
+   	sequenceHour = items.startHour;
+   	sequenceMin = items.startMin;
+  	GenomeAPI.ROUND_TO = items.roundTime;
   });
 });
 

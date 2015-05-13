@@ -51,13 +51,21 @@ var GSchedulerApp = React.createClass({
     if (event.which !== ENTER_KEY) {
       return;
     }
-    this.stopAll();
-    saveTask.note = $('#new-note').val();
-    this.props.model.addTask(saveTask);
+    if ($('#new-note').val() !== "" || $('#new-task').val() !== ""){
+      this.stopAll();
+      if (saveTask)
+        saveTask.note = $('#new-note').val();
+      else if (!saveTask && $('#new-task').val() !== "")
+        saveTask = {title: $('#new-task').val(), note: $('#new-note').val()};
+      else
+       saveTask = {title: $('#new-note').val()};
+      this.props.model.addTask(saveTask);
 
-    this.clearText();
+      this.clearText();
 
-    $('#new-task').focus();
+      $('#new-task').focus();
+    }
+    
   },
   clearText: function(){
     $('.typeahead').typeahead('val', '');
@@ -109,17 +117,11 @@ var GSchedulerApp = React.createClass({
     }
   },
   
-  handleTitleChange: function(task){
-      this.props.model.handleTitleChange(task);  
+  handleTitleChange: function(task, value){
+      this.props.model.handleTitleChange(task, value);  
   },
-  handleIdChange: function(task){
-      this.props.model.handleIdChange(task);  
-  },
-  handleStartChange: function(task){
-      this.props.model.handleStartChange(task);  
-  },
-  handleStopChange: function(task){
-      this.props.model.handleStopChange(task);  
+  handleIdChange: function(task, value, scope){
+      this.props.model.handleIdChange(task, value, scope);  
   },
   handleNoteChange: function(task){
       this.props.model.handleNoteChange(task);  
@@ -189,12 +191,6 @@ var GSchedulerApp = React.createClass({
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
-            titleChange={this.handleTitleChange.bind(this,task)}
-            idChange={this.handleIdChange.bind(this,task)}
-            startChange={this.handleStartChange.bind(this,task)}
-            stopChange={this.handleStopChange.bind(this,task)}
-            noteChange={this.handleNoteChange.bind(this,task)}
-            dateChange={this.handleDateChange.bind(this, task)}
           />
           </span>
         );
