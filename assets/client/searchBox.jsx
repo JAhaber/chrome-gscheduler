@@ -85,7 +85,7 @@ var SearchBox = React.createClass({
 				projectID: task.projectID,
 				isClientBillable: task.isClientBillable,
 				type: task.type,
-				categoryID: task.category || null
+				categoryID: task.categoryID || null
 			});
 			selected = true;
 			$("#new-note").focus();
@@ -98,7 +98,7 @@ var SearchBox = React.createClass({
 				projectID: task.projectID,
 				isClientBillable: task.isClientBillable,
 				type: task.type,
-				categoryID: task.category || null
+				categoryID: task.categoryID || null
 			});
 			selected = true;
 			$("#new-note").focus();
