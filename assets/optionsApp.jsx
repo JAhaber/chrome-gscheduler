@@ -32,9 +32,9 @@ var OptionScript = React.createClass({
   restoreOptions: function () {
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
-      saveType: 'Sequenced',
+      saveType: 'Actual',
       autoRemind: 'Never',
-      roundTime: '15',
+      roundTime: '5',
       startHour: "9",
       startMin: "0"
     }, function(items) {
@@ -65,8 +65,8 @@ var OptionScript = React.createClass({
       <div className="option">
       <h2>Save tasks as:</h2>
         <div className="form-wrapper">
-            <span className="radio"><input type="radio" name="type" value="Sequenced" defaultChecked />Sequenced</span>
-            <span className="radio"><input type="radio" name="type" value="Actual" />Actual</span>
+            <span className="radio"><input type="radio" name="type" value="Sequenced" />Sequenced</span>
+            <span className="radio"><input type="radio" name="type" value="Actual" defaultChecked />Actual</span>
         </div>
         <p><span className="emph">Sequenced</span> - Save tasks in order using duration starting from <select id="startHour">
           <option value="0">0</option>
