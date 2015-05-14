@@ -103,7 +103,7 @@ var GenomeAPI = {
 		});
 		var self = this;
 		var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
-		var previousTaskEndTime = Moment().startOf('day').hour(9).minute(0).format();
+		var previousTaskEndTime = Moment().startOf('day').hour(sequenceHour).minute(sequenceMin).format();
 		var promises = sortedList.map(function (task, index) {
 			var deferred = Q.defer();
 			var newTask = _.extend({}, task);
@@ -111,9 +111,9 @@ var GenomeAPI = {
 			
 			if (!(Moment(previousTaskEndTime).date() === Moment(newTask.startTime).date())){
 				previousTaskEndTime = Moment(newTask.startTime).hour(sequenceHour).minute(sequenceMin).format();
-			}
-				
+			}	
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
+			
 			previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
 			deferred.resolve(GenomeAPI.postTimeEntry(newTask));
@@ -129,13 +129,9 @@ var GenomeAPI = {
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
 		
-		if (!(roundTo === "None")) {
-			durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
-			durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
-		}
-		else
-			durationAsMinutes = Math.round(durationAsMinutes);
-
+		durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
+		durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
+		
 		var diff = Moment(task.startTime).add(durationAsMinutes, 'm').diff(Moment(task.startTime).hour(23).minute(59).second(0), 'm');
 
 		if (diff > 0){
@@ -148,8 +144,8 @@ var GenomeAPI = {
 }
 
 chrome.storage.sync.get({
-    saveType: 'Sequenced',
-    roundTime: '15',
+    saveType: 'Actual',
+    roundTime: '5',
     startHour: 9,
     startMin: 0
   }, function(items) {
@@ -159,14 +155,16 @@ chrome.storage.sync.get({
    		isSequenced = false;
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
-
-	GenomeAPI.ROUND_TO = items.roundTime;
+   	if (items.roundTime === "None")
+		GenomeAPI.ROUND_TO = 1;
+	else
+		GenomeAPI.ROUND_TO = items.roundTime;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-    saveType: 'Sequenced',
-    roundTime: '15',
+    saveType: 'Actual',
+    roundTime: '5',
     startHour: 9,
     startMin: 0
   }, function(items) {
