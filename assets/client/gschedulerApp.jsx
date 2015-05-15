@@ -154,15 +154,32 @@ var GSchedulerApp = React.createClass({
     var model = this.props.model;
     var tasks = this.props.model.tasks;
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
+    
+    if(sortedList.length > 1){
+      _.each(sortedList, function(l, id){
+        if (id < sortedList.length - 1)
+        {
+          if (Moment(l.stopTime).isAfter(Moment(sortedList[id + 1].startTime)))
+            l.overlap = true;
+          else
+            l.overlap = false;
+        }
+        else
+          l.overlap = false;
+      });
+    }
+
     sortedList.reverse();
     var TodayFirst = [];
 
-     _.each(sortedList, function(l){
+    _.each(sortedList, function(l){
 
-      if(Moment(l.startTime).isSame(curDate, 'day' ))
+     if(Moment(l.startTime).isSame(curDate, 'day' ))
         TodayFirst.push(l);
     });
-    _.each(sortedList, function(l){
+
+    _.each(sortedList, function(l, id){
+      
       if(!(Moment(l.startTime).isSame(curDate, 'day' )))
         TodayFirst.push(l);
     });

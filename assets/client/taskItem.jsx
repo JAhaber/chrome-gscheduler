@@ -189,7 +189,27 @@ var TaskItem = React.createClass({
     this.props.onStop();
   },
 
+  appendZeroTip: function(event){
+    $("span.tooltip").remove();
+    var value = "Tasks with a duration of < 1 minute will not be saved";
+    var color = "rgba(255,235,153,0.9)";
+    $("body").append("<span class='tooltip'>" + value + "</span>");
+    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
+
+  },
+   appendOverlapTip: function(event){
+    $("span.tooltip").remove();
+    var value = "This task's end time is overlapping another task";
+    var color = "rgba(237,49,99,0.9)";
+    $("body").append("<span class='tooltip'>" + value + "</span>");
+    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
+
+  },
+  removeTip: function(event){
+    $("span.tooltip").remove();
+  },
   render: function() {
+   
   	var task = this.props.task;
     var colorClass = "border-left";
     if (this.props.task.projectID)
@@ -197,129 +217,147 @@ var TaskItem = React.createClass({
     else if (this.props.task.categoryID)
       colorClass = "border-left hasCategory";
     
-
+    var stopTime = Moment(task.stopTime).format() || Moment().format();
+   
     return (
       
-      <div className={colorClass}>
-        <li className={this.props.task.stopTime ? 'task stopped' : 'task'}>
-          
-            <label className={this.props.task.expanded ? 'open' : 'closed'}>
-              <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
-              <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}
-            </label>
-         
-          <div className="controls">
-            <span className="timeElapsed">{this.state.timeElapsed}</span>
-            <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-            <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
-            <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
-          </div>
-        </li>
-        <div className={this.props.task.expanded ? 'details on' : 'details'}>
-        <div id={task.id + "-edit"}>
-            <label>
-             Title:
-            </label>
-            <input 
-              id={task.id + "-title-edit"}
-              type="text" 
-              name="title-edit" 
-              className="form-control" 
-              placeholder="Enter Title"
-              value={this.state.title}
-              onChange={this.titleChange}
-              />
-            
-          <label>
-            Task ID:
-            </label>
-            <input
-              type="text"
-              id={task.id +"-ticketid-edit"}
-              placeholder="Enter Task ID"
-              name="ticketid-edit"
-              className="form-control" 
-              value={this.state.ticketID}
-              onChange={this.idChange}
-              onBlur={this.idBlur}
-              />
+      
+        <li className={task.stopTime ? 'task stopped' : 'task'}>
+          <div className={colorClass}>
+            <div className="task-wrapper">
+              <label className={task.expanded ? 'open' : 'closed'}>
+                <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
+                <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}
+              </label>
+           
+              <div className="controls">
+                {Moment.duration(Moment(stopTime).diff(Moment(task.startTime).format())).asMinutes() < 1 ? 
+                  <a className="zero tip" onMouseEnter={this.appendZeroTip} onMouseLeave={this.removeTip}><i className="fa fa-info-circle"></i></a>
+                  : "" }
+                {task.overlap ? 
+                  <a className="overlap tip" onMouseEnter={this.appendOverlapTip} onMouseLeave={this.removeTip}><i className="fa fa-exclamation-triangle"></i></a>
+                  : "" }
+                <span className="timeElapsed">{this.state.timeElapsed}</span>
+                <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
+                <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
+                <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
               </div>
-            
-            <div>
-            <label>
-              Start:
-            </label>
-            <input 
-              id={task.id +"-start-time-edit"}
-              type="text" 
-              name="start-time-edit" 
-              className="form-control"
-              placeholder="hh:mm:ss"
-              value={this.state.startTime}
-              onChange={this.startChange}
-              onBlur={this.startBlur}
-              />
-            <label>
-             Stop:
-            </label>
-            <input 
-              id={task.id +"-stop-time-edit"}
-              type="text" 
-              name="stop-time-edit" 
-              className="form-control"
-              placeholder="hh:mm:ss"
-              value={this.state.stopTime}
-              onChange={this.stopChange}
-              onBlur={this.stopBlur}
-              disabled={this.props.task.stopTime ? "" : "disabled"}
-              />
-              </div>
-
-            <div>
-            <label>
-             Date:
-            </label>
-            <input 
-              id={task.id +"-date-edit"}
-              type="date" 
-              name="date-edit" 
-              className="form-control"
-              value={this.state.date}
-              disabled={this.props.task.stopTime ? "" : "disabled"}
-              onChange={this.dateChange}
-              onBlur={this.dateBlur}
-              />
-              <label>
-             Duration:
-            </label>
-            <input 
-              id={task.id +"-duration-edit"}
-              type="text" 
-              name="duration-edit" 
-              className="form-control"
-              placeholder="hh:mm:ss"
-              value={this.state.timeElapsed}
-              onChange={this.durationChange}
-              onBlur={this.durationBlur}
-              disabled={this.props.task.stopTime ? "" : "disabled"}
-              />
+              
             </div>
-
-            <div>
-            <label>
-             Note:
-            </label>
-            <textarea 
-              id={task.id +"-note-edit"}
-              name="note-edit" 
-              className="form-control" 
-              placeholder=""
-              value={this.state.note}
-              onChange={this.noteChange}
-              />
+          <div className={task.expanded ? 'details on' : 'details'}>
+          <div>
+            <div className="item-wrap">
+              <label>
+               Title:
+              </label>
+              <input 
+                id={task.id + "-title-edit"}
+                type="text" 
+                name="title-edit" 
+                className="form-control" 
+                placeholder="Enter Title"
+                value={this.state.title}
+                onChange={this.titleChange}
+                />
               </div>
-        </div>
+            <div className="item-wrap">
+            <label>
+              Task ID:
+              </label>
+              <input
+                type="text"
+                id={task.id +"-ticketid-edit"}
+                placeholder="Enter Task ID"
+                name="ticketid-edit"
+                className="form-control" 
+                value={this.state.ticketID}
+                onChange={this.idChange}
+                onBlur={this.idBlur}
+                />
+              </div>
+            </div>
+            <div>
+            <div className="item-wrap">
+              <label>
+                Start:
+              </label>
+              <input 
+                id={task.id +"-start-time-edit"}
+                type="text" 
+                name="start-time-edit" 
+                className="form-control"
+                placeholder="hh:mm:ss"
+                value={this.state.startTime}
+                onChange={this.startChange}
+                onBlur={this.startBlur}
+                />
+              </div>
+              <div className="item-wrap">
+              <label>
+               Stop:
+              </label>
+              <input 
+                id={task.id +"-stop-time-edit"}
+                type="text" 
+                name="stop-time-edit" 
+                className="form-control"
+                placeholder="hh:mm:ss"
+                value={this.state.stopTime}
+                onChange={this.stopChange}
+                onBlur={this.stopBlur}
+                disabled={task.stopTime ? "" : "disabled"}
+                />
+                </div>
+            </div>
+              <div>
+              <div className="item-wrap">
+              <label>
+               Date:
+              </label>
+              <input 
+                id={task.id +"-date-edit"}
+                type="date" 
+                name="date-edit" 
+                className="form-control"
+                value={this.state.date}
+                disabled={task.stopTime ? "" : "disabled"}
+                onChange={this.dateChange}
+                onBlur={this.dateBlur}
+                />
+                </div>
+                <div className="item-wrap">
+                <label>
+               Duration:
+              </label>
+              <input 
+                id={task.id +"-duration-edit"}
+                type="text" 
+                name="duration-edit" 
+                className="form-control"
+                placeholder="hh:mm:ss"
+                value={this.state.timeElapsed}
+                onChange={this.durationChange}
+                onBlur={this.durationBlur}
+                disabled={task.stopTime ? "" : "disabled"}
+                />
+              </div>
+            </div>
+              <div>
+              <label>
+               Note:
+              </label>
+              <textarea 
+                id={task.id +"-note-edit"}
+                name="note-edit" 
+                className="form-control" 
+                placeholder=""
+                value={this.state.note}
+                onChange={this.noteChange}
+                />
+                </div>
+          </div>
       </div>
+      </li>
     );
   }
 });

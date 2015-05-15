@@ -21,6 +21,8 @@ h2 {
   margin: 14px 0 4px; 
 }
 
+a.overlap,
+a.zero,
 a.play, 
 a.stop,
 a.destroy {
@@ -29,6 +31,30 @@ a.destroy {
   font-size: 1.2em;
   color: white;
   text-align: center;
+}
+a.overlap,
+a.zero{
+  width:1em;
+  margin-right: 4px;
+}
+a.tip {
+    border-bottom: 1px dashed;
+    text-decoration: none;
+}
+a.tip:hover {
+    cursor: help;
+    position: relative;
+}
+span.tooltip {
+    text-align: center;
+    border: #c0c0c0 1px dotted;
+    padding: 2px 10px 2px 10px;
+    display: block;
+    width: 250px;
+    position: absolute;
+    text-decoration: none;
+    font-size: 0.9em;
+    z-index:1000;
 }
 
 i{
@@ -41,6 +67,14 @@ i{
   }
   .destroy &{
     color:#084b68;
+  }
+  .overlap &{
+    cursor: help;
+    color:#d21245; 
+  }
+  .zero &{
+    cursor: help;
+    color:#ffdd57; 
   }
 }
  .open .expand {
@@ -95,7 +129,7 @@ header {
       width: 8px;
 } 
   &::-webkit-scrollbar-track {
-      background-color: #3f9dc7;
+      background-color: #2585b0;
 } /* the new scrollbar will have a flat appearance with the set background color */
  
 &::-webkit-scrollbar-thumb {
@@ -139,7 +173,7 @@ dl {
   }
   
   .border-left{
-
+    line-height:0;
     background-color: #ffdd57;
     padding-left:10px;
 
@@ -152,10 +186,17 @@ dl {
     border-bottom:1px solid #000;
   }
 
+  .task-wrapper{
+    padding: 10px 5px 10px;
+    display: inline-block;
+    background-color: white;
+    width: 100%;
+    line-height: 18px;
+  }
+
   li.task {
 
     background-color: #fff;
-    padding: 10px 5px 10px;
     @include user-select(none);
     @include clearfix;
     
@@ -165,7 +206,9 @@ dl {
     .controls {
       @include span-columns(6 of 12);
     }
-
+    .errors{
+      width:5%;
+    }
     label {
       color:#084b68;
       font-size: 15px;
@@ -196,27 +239,33 @@ dl {
       display:none;
       height:100%;
       margin:0;
-      padding:15px 0 5px 0;
+      padding:15px 0 15px 15px;
       background-color:#f8f8f8;
+      line-height:1.5em;
       &.on{
         display:block;
       }
       div{
+        .item-wrap{
+          display: inline-block;
+          width: 50%;
+        }
+        
         label{
           font-size:12px;
           color:#084b68;
-          display:inline-block;
-          width:13%;
-          text-align:right;
+          display:block;
+          width:100%;
+          text-align:left;
           vertical-align:top;
+          padding: 0;
           padding-top:2px;
+
         }
         input[type="text"], input[type="date"], textarea{
-          margin-left:10px;
-          margin-right:10px;
-          width:30%;
-          display:inline-block;
-
+          display:block;
+          width:90%;
+          margin-bottom:5px;
           &:disabled{
             background-color:#f8f8f8;
           }
@@ -225,7 +274,7 @@ dl {
           height: 28px;
         }
         textarea{
-          width:calc(73% + 20px);
+          width:95%;
         }
       }
       
