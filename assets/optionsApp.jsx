@@ -6,14 +6,12 @@ var OptionScript = React.createClass({
   saveOptions: function () {
     var type = $('input[name=type]:checked').val();
     var remind = $('#autoReminder').val();
-    var round = $('#roundTime').val();
     var hour = $('#startHour').val();
     var min = $('#startMin').val();
 
     chrome.storage.sync.set({
       saveType: type,
       autoRemind: remind,
-      roundTime: round,
       startHour: hour,
       startMin: min
     }, function() {
@@ -34,7 +32,6 @@ var OptionScript = React.createClass({
     chrome.storage.sync.get({
       saveType: 'Actual',
       autoRemind: 'Never',
-      roundTime: '5',
       startHour: "9",
       startMin: "0"
     }, function(items) {
@@ -45,9 +42,7 @@ var OptionScript = React.createClass({
           break;
         }
       }
-      console.log("restore");
       $('#autoReminder').val(items.autoRemind);
-      $('#roundTime').val(items.roundTime);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
       
@@ -125,16 +120,6 @@ var OptionScript = React.createClass({
         </p>
       </div>
 
-      <div className="option">
-        <h2>Round Elapsed Time:</h2>
-        <p>Round the stop time to the nearest <select id="roundTime" className="long">
-            <option value="None">None</option>
-            <option value="5">5 Mins</option>
-            <option value="10">10 Mins</option>
-            <option value="15">15 Mins</option>
-          </select> when saving to Genome.
-        </p>
-      </div>
       <button id="save" onClick={this.saveOptions}>Save</button>
       <div id="status"></div>
       </div>
