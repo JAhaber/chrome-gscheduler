@@ -10,6 +10,7 @@ var Moment = require('moment');
 var saveTask;
 var ENTER_KEY = 13;
 var TAB_KEY = 9;
+var newestFirst = true;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -169,7 +170,9 @@ var GSchedulerApp = React.createClass({
       });
     }
 
-    sortedList.reverse();
+    if (newestFirst === true)
+      sortedList.reverse();
+
     var TodayFirst = [];
 
     _.each(sortedList, function(l){
@@ -265,6 +268,21 @@ var GSchedulerApp = React.createClass({
       </div>
     );
   }
+});
+
+
+chrome.storage.sync.get({
+    newestFirst: true
+  }, function(items) {
+    newestFirst = items.newestFirst;
+  });
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+  chrome.storage.sync.get({
+    newestFirst: true
+  }, function(items) {
+    newestFirst = items.newestFirst;
+  });
 });
 
 module.exports = GSchedulerApp;

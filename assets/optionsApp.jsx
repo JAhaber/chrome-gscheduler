@@ -4,16 +4,13 @@ var React = require('react');
 // Saves options to chrome.storage.sync.
 var OptionScript = React.createClass({
   saveOptions: function () {
-    var type = $('input[name=type]:checked').val();
-    var remind = $('#autoReminder').val();
-    var hour = $('#startHour').val();
-    var min = $('#startMin').val();
 
     chrome.storage.sync.set({
-      saveType: type,
-      autoRemind: remind,
-      startHour: hour,
-      startMin: min
+      newestFirst: $('#newestFirst').prop('checked'),
+      saveType: $('input[name=type]:checked').val(),
+      autoRemind: $('#autoReminder').val(),
+      startHour: $('#startHour').val(),
+      startMin: $('#startMin').val()
     }, function() {
       console.log("save");
       // Update status to let user know options were saved.
@@ -30,6 +27,7 @@ var OptionScript = React.createClass({
   restoreOptions: function () {
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
+      newestFirst: true,
       saveType: 'Actual',
       autoRemind: 'Never',
       startHour: "9",
@@ -45,7 +43,7 @@ var OptionScript = React.createClass({
       $('#autoReminder').val(items.autoRemind);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
-      
+      $('#newestFirst').prop('checked', newestFirst);
     });
   },
 
@@ -119,16 +117,17 @@ var OptionScript = React.createClass({
           </select>
         </p>
       </div>
+      <div className="option">
+        <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
+       </div>
 
-      <button id="save" onClick={this.saveOptions}>Save</button>
-      <div id="status"></div>
+      
+        <button id="save" onClick={this.saveOptions}>Save</button>
+
+        <div id="status"></div>
       </div>
       );
 
-    /*$.ready(OptionScript.restoreOptions());
-    $('#save').on('click', OptionScript.saveOptions());
-
-    */
   }
 });
 
