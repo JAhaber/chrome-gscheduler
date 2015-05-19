@@ -118,18 +118,6 @@ var GSchedulerApp = React.createClass({
     }
   },
   
-  handleTitleChange: function(task, value){
-      this.props.model.handleTitleChange(task, value);  
-  },
-  handleIdChange: function(task, value, scope){
-      this.props.model.handleIdChange(task, value, scope);  
-  },
-  handleNoteChange: function(task){
-      this.props.model.handleNoteChange(task);  
-  },
-  handleDateChange: function(task){
-      this.props.model.handleDateChange(task);  
-  },
   openOptions: function(){
     chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
   },
@@ -140,9 +128,13 @@ var GSchedulerApp = React.createClass({
 
   getTotalTaskTime: function(tasks) {
     var totalElapsedMilliseconds = _.reduce(tasks, function(totalElapsedMilliseconds, task){
-      var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
-      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
-      return totalElapsedMilliseconds + elapsedMilliseconds;
+      if(Moment(task.startTime).isSame(Moment(), 'day' )){
+        var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
+        var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
+        return totalElapsedMilliseconds + elapsedMilliseconds;  
+      }
+      else
+        return totalElapsedMilliseconds
     }, 0);
 
     this.setState({totalTaskTime: Moment().hour(0).minute(0).second(totalElapsedMilliseconds/1000).format('H[hrs] mm[mins]')});
@@ -158,15 +150,30 @@ var GSchedulerApp = React.createClass({
     
     if(sortedList.length > 1){
       _.each(sortedList, function(l, id){
+        l.gap = {};
         if (id < sortedList.length - 1)
         {
           if (Moment(l.stopTime).isAfter(Moment(sortedList[id + 1].startTime)))
             l.overlap = true;
           else
             l.overlap = false;
+          if(Moment(l.startTime).isSame(sortedList[id+1].startTime, 'day')){
+            if (Moment.duration(Moment(sortedList[id+1].startTime).diff(Moment(l.stopTime))).asMinutes() >= 1){
+              l.gap.duration = Moment.duration(Moment(sortedList[id+1].startTime).diff(Moment(l.stopTime))).asSeconds();
+              l.gap.nextId = sortedList[id+1].id;
+              l.gap.hasGap = true;
+            }
+            else
+              l.gap.hasGap = false;
+          }
+          else
+            l.gap.hasGap = false;
         }
-        else
+        else{
           l.overlap = false;
+          l.gap.hasGap = false;
+        }
+          
       });
     }
 
@@ -202,6 +209,7 @@ var GSchedulerApp = React.createClass({
       return (
           <span>
           {newDate}
+          
           <TaskItem
             key={task.id}
             task={task}
