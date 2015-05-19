@@ -32,6 +32,7 @@ a.destroy {
   color: white;
   text-align: center;
 }
+
 a.overlap,
 a.zero{
   width:1em;
@@ -121,6 +122,40 @@ header {
     }
   
 }
+
+.gap{
+  display:block;
+  padding:5px 6px 5px 25px;
+  border-bottom:1px solid #000;
+  background: rgba(126, 215, 255, 0.27);
+  .controls{
+    float:right;
+    display: inline-block;
+    a.next,
+    a.last,
+    a.add {
+      margin:0 5px 0 5px;
+      cursor:pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    a.add{
+      color:#084b68;
+    }
+    a.next{
+      color:#008356;
+    }
+    a.last{
+      color:#477dca;
+    }
+    i{
+      font-size:14px;
+    }
+  }
+
+}
+
 
 #main{
   height: calc(100% - 129px);

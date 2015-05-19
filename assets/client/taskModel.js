@@ -51,6 +51,28 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	this.inform();
 };
 
+TaskModel.prototype.addGap = function (start, stop) {
+	var newTask = {
+		id: Utils.uuid(),
+		title: "",
+		startTime: start,
+		stopTime: stop,
+		ticketID: null,
+		projectID: null,
+		isClientBillable: null,
+		type: null,
+		note: null,
+		categoryID: null,
+		expanded: true
+	};
+	this.tasks = this.tasks.map(function (taskExpanded) {
+			return taskExpanded.expanded ?
+				Utils.extend({}, taskExpanded, { expanded: false })
+				: taskExpanded;
+		});
+	this.tasks.unshift(newTask);
+	this.inform();
+};
 
 TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
@@ -150,12 +172,10 @@ TaskModel.prototype.handleDateChange = function (taskToChange, date) {
 	  		this.tasks = this.tasks.map(function (task) {
 				if (task === taskToChange){
 					
-					var start = Moment($("#" + task.id + "-start-time-edit").val(), 'HH:mm:ss DD/MM/YY').format();
-					var stop = Moment($("#" + task.id + "-stop-time-edit").val(), 'HH:mm:ss DD/MM/YY').format();
+					var start = task.startTime;
+					var stop = task.stopTime;
 				 	start = Moment(date, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
-				 	
-				 	if (Moment(stop).isValid())
-				 	 	stop = Moment(date, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();	
+				 	stop = Moment(date, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();	
 				 	
 				   	return Utils.extend({}, task, {startTime: start, stopTime: stop});
 
