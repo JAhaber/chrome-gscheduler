@@ -212,12 +212,23 @@ var TaskItem = React.createClass({
    
   	var task = this.props.task;
     var colorClass = "border-left";
+    var isLessThanOne = false;
     if (this.props.task.projectID)
       colorClass = "border-left hasID";
     else if (this.props.task.categoryID)
       colorClass = "border-left hasCategory";
     
-    var stopTime = Moment(task.stopTime).format() || Moment().format();
+    
+    if (task.stopTime){
+      var stopTime = Moment(task.stopTime).format();
+      if (Moment.duration(Moment(stopTime).diff(Moment(task.startTime).format())).asMinutes() < 1)
+        isLessThanOne = true;
+      else
+        isLessThanOne = false
+    }
+    else
+      isLessThanOne = false
+      
    
     return (
       
@@ -231,7 +242,7 @@ var TaskItem = React.createClass({
               </label>
            
               <div className="controls">
-                {Moment.duration(Moment(stopTime).diff(Moment(task.startTime).format())).asMinutes() < 1 ? 
+                {isLessThanOne ? 
                   <a className="zero tip" onMouseEnter={this.appendZeroTip} onMouseLeave={this.removeTip}><i className="fa fa-info-circle"></i></a>
                   : "" }
                 {task.overlap ? 
