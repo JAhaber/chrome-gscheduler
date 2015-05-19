@@ -2,6 +2,7 @@
 var React = require('react');
 var Moment = require('moment');
 var $ = require('jquery');
+var GapItem = require('./gapItem.jsx');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
@@ -15,34 +16,22 @@ var TaskItem = React.createClass({
     
     };
 	},
-  tick: function() {
-    var task = this.props.task;
+  
+  appendOverlapTip: function(event){
+    $("span.tooltip").remove();
+    var value = "This task's end time is overlapping another task";
+    var color = "rgba(237,49,99,0.9)";
+    $("body").append("<span class='tooltip'>" + value + "</span>");
+    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
 
-    var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
+  },
+  appendZeroTip: function(event){
+    $("span.tooltip").remove();
+    var value = "Tasks with a duration of < 1 minute will not be saved";
+    var color = "rgba(255,235,153,0.9)";
+    $("body").append("<span class='tooltip'>" + value + "</span>");
+    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
 
-    if (Moment(stopTime).isAfter(task.startTime, 'day'))
-    {
-      stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
-      this.setState({stopTime: Moment(stopTime).format('HH:mm:ss')});
-      this.props.model.addTask(task, Moment(stopTime).add(1,'s').format(), stopTime);
-    }
-
-
-    var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
-    var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
-
-    if (!this.props.task.stopTime){
-      if (Math.floor(Moment.duration(timeElapsed).asMinutes()) > 59)
-        chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asHours()) + " hr" });
-      else
-        chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asMinutes()) + " m" });
-      chrome.runtime.sendMessage({tick: elapsedMilliseconds}, function(response) {});
-    }
-    else{
-      this.componentWillUnmount();
-    }
-
-  	this.setState({timeElapsed: timeElapsed});
   },
   componentDidMount: function() {
     if (!this.props.task.stopTime)
@@ -63,58 +52,6 @@ var TaskItem = React.createClass({
   dateBlur: function(event) {
     this.props.model.handleDateChange(this.props.task, event.target.value);
   },
-  titleChange: function(event) {
-    this.setState({title: event.target.value});
-    this.props.model.handleTitleChange(this.props.task, event.target.value);
-
-  },
-
-  noteChange: function(event) {
-    this.setState({note: event.target.value});
-    this.props.model.handleNoteChange(this.props.task, event.target.value);
-
-  },
-
-  idChange: function(event) {
-    this.setState({ticketID: event.target.value});
-  },
-  idBlur: function(event) {
-    this.props.model.handleIdChange(this.props.task, event.target.value, this);
-  },
-  stopChange: function(event) {
-    this.setState({stopTime: event.target.value});
-  },
-  stopBlur: function(event) {
-    var task = this.props.task;
-         
-    if (Moment(this.state.stopTime, 'HH:mm:ss').isValid()){
-      var duration;
-      var stop = Moment(event.target.value, ["HH:mm:ss", "HHmm:ss", "HH:mmss", "HHmmss"] ).format("HH:mm:ss");
-      var start = this.state.startTime;
-     
-        
-      if (Moment(start, "HH:mm:ss").isAfter(Moment(stop, "HH:mm:ss")))
-       {
-        duration = Moment.duration($("#"+task.id + "-duration-edit").val());
-        start = Moment(stop, "HH:mm:ss").subtract(duration);
-
-        if (Moment(start).diff(Moment(task.stop).hour(0).minute(0).second(0), 's') < 0)
-          start = Moment("00:00:00", "HH:mm:ss");
-       }
-      this.setState({startTime: Moment(start, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
-     
-      this.props.model.handleStartStopChange(task, start, stop);
-      this.updateDuration(stop, start);
-    }
-    else{
-      this.setState({stopTime: Moment(task.stopTime).format('HH:mm:ss')});
-    }
-   
-  },
-  durationChange: function(event) {
-    this.setState({timeElapsed: event.target.value});
-    
-  },
   durationBlur: function(event) {
       var task = this.props.task;
       if (Moment(this.state.timeElapsed, 'HH:mm:ss').isValid()){
@@ -134,21 +71,34 @@ var TaskItem = React.createClass({
       }
       
   },
-  updateDuration: function(value, start){
-      var task = this.props.task;
-      start = start || this.state.startTime;
-      var stopTime = value ? Moment(value, 'HH:mm:ss').format() : this.props.task.stopTime;
-      var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(start, 'HH:mm:ss').format())).asMilliseconds();
-     
-      if (elapsedMilliseconds < 0)
-        elapsedMilliseconds= elapsedMilliseconds * (-1);
-      
-      var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
-     
-      this.setState({timeElapsed: timeElapsed});
+  durationChange: function(event) {
+    this.setState({timeElapsed: event.target.value});
+    
   },
-  startChange: function(event) {
-    this.setState({startTime: event.target.value});
+  extendLast: function(stop){
+    stop = Moment(stop).format("HH:mm:ss");
+    this.props.model.handleStartStopChange(this.props.task, this.state.startTime, stop);
+    this.setState({stopTime: stop})
+    this.updateDuration(stop);
+  },
+  idBlur: function(event) {
+    this.props.model.handleIdChange(this.props.task, event.target.value, this);
+  },
+
+  idChange: function(event) {
+    this.setState({ticketID: event.target.value});
+  },
+  noteChange: function(event) {
+    this.setState({note: event.target.value});
+    this.props.model.handleNoteChange(this.props.task, event.target.value);
+
+  },
+  onStop: function(event){
+    this.setState({stopTime: Moment().format('HH:mm:ss')});
+    this.props.onStop();
+  },
+  removeTip: function(event){
+    $("span.tooltip").remove();
   },
   startBlur: function(event) {
     var task = this.props.task;
@@ -183,34 +133,89 @@ var TaskItem = React.createClass({
     }
     
   },
-
-  onStop: function(event){
-    this.setState({stopTime: Moment().format('HH:mm:ss')});
-    this.props.onStop();
+  startChange: function(event) {
+    this.setState({startTime: event.target.value});
   },
+  stopBlur: function(event) {
+    var task = this.props.task;
+         
+    if (Moment(this.state.stopTime, 'HH:mm:ss').isValid()){
+      var duration;
+      var stop = Moment(event.target.value, ["HH:mm:ss", "HHmm:ss", "HH:mmss", "HHmmss"] ).format("HH:mm:ss");
+      var start = this.state.startTime;
+     
+        
+      if (Moment(start, "HH:mm:ss").isAfter(Moment(stop, "HH:mm:ss")))
+       {
+        duration = Moment.duration($("#"+task.id + "-duration-edit").val());
+        start = Moment(stop, "HH:mm:ss").subtract(duration);
 
-  appendZeroTip: function(event){
-    $("span.tooltip").remove();
-    var value = "Tasks with a duration of < 1 minute will not be saved";
-    var color = "rgba(255,235,153,0.9)";
-    $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
-
-  },
-   appendOverlapTip: function(event){
-    $("span.tooltip").remove();
-    var value = "This task's end time is overlapping another task";
-    var color = "rgba(237,49,99,0.9)";
-    $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
-
-  },
-  removeTip: function(event){
-    $("span.tooltip").remove();
-  },
-  render: function() {
+        if (Moment(start).diff(Moment(task.stop).hour(0).minute(0).second(0), 's') < 0)
+          start = Moment("00:00:00", "HH:mm:ss");
+       }
+      this.setState({startTime: Moment(start, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
+     
+      this.props.model.handleStartStopChange(task, start, stop);
+      this.updateDuration(stop, start);
+    }
+    else{
+      this.setState({stopTime: Moment(task.stopTime).format('HH:mm:ss')});
+    }
    
-  	var task = this.props.task;
+  },
+  stopChange: function(event) {
+    this.setState({stopTime: event.target.value});
+  },
+  tick: function() {
+    var task = this.props.task;
+
+    var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
+
+    if (Moment(stopTime).isAfter(task.startTime, 'day'))
+    {
+      stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
+      this.setState({stopTime: Moment(stopTime).format('HH:mm:ss')});
+      this.props.model.addTask(task, Moment(stopTime).add(1,'s').format(), stopTime);
+    }
+
+
+    var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();
+    var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
+
+    if (!this.props.task.stopTime){
+      if (Math.floor(Moment.duration(timeElapsed).asMinutes()) > 59)
+        chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asHours()) + " hr" });
+      else
+        chrome.browserAction.setBadgeText({text : Math.floor(Moment.duration(timeElapsed).asMinutes()) + " m" });
+      chrome.runtime.sendMessage({tick: elapsedMilliseconds}, function(response) {});
+    }
+    else{
+      this.componentWillUnmount();
+    }
+
+    this.setState({timeElapsed: timeElapsed});
+  },
+  titleChange: function(event) {
+    this.setState({title: event.target.value});
+    this.props.model.handleTitleChange(this.props.task, event.target.value);
+
+  },
+  updateDuration: function(value, start){
+      var task = this.props.task;
+      start = start || this.state.startTime;
+      var stopTime = value ? Moment(value, 'HH:mm:ss').format('HH:mm:ss') : Moment(this.props.task.stopTime).format("HH:mm:ss");
+      var elapsedMilliseconds = Moment.duration(Moment(stopTime, 'HH:mm:ss').diff(Moment(start, 'HH:mm:ss').format())).asMilliseconds();
+     
+      if (elapsedMilliseconds < 0)
+        elapsedMilliseconds= elapsedMilliseconds * (-1);
+      
+      var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
+      this.setState({timeElapsed: timeElapsed});
+  },
+  
+  render: function() {
+    var task = this.props.task;
+
     var colorClass = "border-left";
     var isLessThanOne = false;
     if (this.props.task.projectID)
@@ -228,11 +233,17 @@ var TaskItem = React.createClass({
     }
     else
       isLessThanOne = false
-      
    
     return (
-      
-      
+        <span>
+        {task.gap.hasGap ?
+          <GapItem 
+          task={task}
+          model={this.props.model}
+          gap={task.gap}
+          onLast={this.extendLast}
+           />
+          : ""}
         <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
             <div className="task-wrapper">
@@ -369,9 +380,9 @@ var TaskItem = React.createClass({
           </div>
       </div>
       </li>
+      </span>
     );
   }
 });
-
 
 module.exports = TaskItem;
