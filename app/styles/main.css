@@ -2263,6 +2263,9 @@ dl {
       font-size: 12px;
       font-family: "Lucida Console", Monaco, monospace;
       margin-right: 15px; }
+      #task-list li.task .timeElapsed.flash {
+        background-color: rgba(0, 255, 236, 0.4);
+        box-shadow: 0px 0px 6px rgba(0, 255, 236, 0.86); }
     #task-list li.task .controls {
       text-align: right; }
       #task-list li.task .controls a.play {

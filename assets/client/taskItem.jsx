@@ -47,14 +47,16 @@ var TaskItem = React.createClass({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""
     });
-
     this.updateDuration(Moment(task.stopTime).format('HH:mm:ss'), Moment(task.startTime).format('HH:mm:ss'));
+    /*task.flash = true;
+    setTimeout(function(){
+      task.flash = false;
+    }, 300);*/
     task.hasChanged = false;
    }
     
   },
   componentWillUnmount: function() {
-    
     clearInterval(this.interval);
     this.interval = null;
   },
@@ -76,7 +78,6 @@ var TaskItem = React.createClass({
         }
 
         this.props.model.handleStartStopChange(task, this.state.startTime, stop);
-        this.updateDuration(stop);
       }
       else{
         this.updateDuration();  
@@ -128,7 +129,6 @@ var TaskItem = React.createClass({
           start = Moment().format('HH:mm:ss');
       }    
       this.props.model.handleStartStopChange(task, start, stop);
-      this.updateDuration(stop, start);
     }
     else{
       this.setState({startTime: Moment(task.startTime).format('HH:mm:ss')});
@@ -156,7 +156,6 @@ var TaskItem = React.createClass({
           start = Moment("00:00:00", "HH:mm:ss");
        }
       this.props.model.handleStartStopChange(task, start, stop);
-      this.updateDuration(stop, start);
     }
     else{
       this.setState({stopTime: Moment(task.stopTime).format('HH:mm:ss')});

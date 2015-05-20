@@ -204,7 +204,7 @@ TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop)
 			if (task === taskToChange){
 			 	start = Moment(start, 'HH:mm:ss').format();
 			 	stop = Moment(stop, 'HH:mm:ss').format();
-		      	if (Moment(start).isValid() && Moment(stop).isValid()){
+		      	if (Moment(start).isValid() && Moment(stop).isValid() && task.stopTime){
 		      		start = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
 		      		stop = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
 				 	
