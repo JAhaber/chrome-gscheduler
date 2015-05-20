@@ -3,6 +3,7 @@ var React = require('react');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var TaskItem = require('./taskItem.jsx');
+var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var $ = require('jquery');
 window.jQuery = $;
@@ -104,7 +105,22 @@ var GSchedulerApp = React.createClass({
   contract: function(task){
     this.props.model.contract(task);
   },
-
+  extendNext: function(task){
+    var taskToChange;
+    _.each(this.props.model.tasks, function(l, id){
+      if (l.id === task.gap.nextId){
+        taskToChange = l;
+      }
+    });
+    var start = Moment(taskToChange.startTime).subtract(task.gap.duration, 's').format();
+    start = Moment(start).format("HH:mm:ss");
+    this.props.model.handleStartStopChange(taskToChange, start, Moment(taskToChange.stopTime).format("HH:mm:ss"));
+  },
+  extendLast: function(task){
+    var stop = Moment(task.stopTime).add(task.gap.duration, 's').format();
+    stop = Moment(stop).format("HH:mm:ss");
+    this.props.model.handleStartStopChange(task, Moment(task.startTime).format("HH:mm:ss"), stop);
+  },
   save: function () {
     var scope = this;
     scope.stopAll();
@@ -209,6 +225,21 @@ var GSchedulerApp = React.createClass({
       return (
           <span>
           {newDate}
+          {newestFirst ?
+            <span>
+            {task.gap.hasGap ?
+            <GapItem 
+            task={task}
+            model={this.props.model}
+            gap={task.gap}
+            newestFirst={newestFirst}
+            onLast={this.extendLast.bind(this, task)}
+            onNext={this.extendNext.bind(this, task)}
+             />
+
+            : ""}
+            </span>
+          : ""}
           
           <TaskItem
             key={task.id}
@@ -220,12 +251,25 @@ var GSchedulerApp = React.createClass({
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
           />
+          {!newestFirst ? 
+            <span>
+            {task.gap.hasGap ?
+            <GapItem 
+            task={task}
+            model={this.props.model}
+            gap={task.gap}
+            newestFirst={newestFirst}
+            onLast={this.extendLast.bind(this, task)}
+            onNext={this.extendNext.bind(this, task)}
+             />
+            : ""}
+            </span>
+          : ""}
           </span>
         );
       
       
     }, this);
-
     if (taskItems.length) {
       main = (
         <section id="main">

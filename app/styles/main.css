@@ -2136,6 +2136,31 @@ header {
     position: absolute;
     right: 0; }
 
+.gap {
+  display: block;
+  padding: 5px 6px 5px 25px;
+  border-bottom: 1px solid #000;
+  background: rgba(255, 237, 168, 0.11); }
+  .gap .controls {
+    float: right;
+    display: inline-block; }
+    .gap .controls a.next,
+    .gap .controls a.last,
+    .gap .controls a.add {
+      margin: 0 5px 0 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center; }
+    .gap .controls a.add {
+      color: #084b68; }
+    .gap .controls a.next {
+      color: #008356; }
+    .gap .controls a.last {
+      color: #477dca; }
+    .gap .controls i {
+      font-size: 14px; }
+
 #main {
   height: calc(100% - 129px);
   overflow-y: auto;

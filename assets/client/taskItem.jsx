@@ -2,7 +2,7 @@
 var React = require('react');
 var Moment = require('moment');
 var $ = require('jquery');
-var GapItem = require('./gapItem.jsx');
+
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
@@ -35,10 +35,23 @@ var TaskItem = React.createClass({
   },
   componentDidMount: function() {
     if (!this.props.task.stopTime)
-      this.interval = setInterval(this.tick, 100);
+      this.interval = setInterval(this.tick, 500);
     else{
       this.updateDuration();
     }
+  },
+  componentDidUpdate: function(){
+   var task = this.props.task;
+   if (task.hasChanged){
+    this.setState({
+      startTime: Moment(task.startTime).format('HH:mm:ss'),
+      stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""
+    });
+
+    this.updateDuration(Moment(task.stopTime).format('HH:mm:ss'), Moment(task.startTime).format('HH:mm:ss'));
+    task.hasChanged = false;
+   }
+    
   },
   componentWillUnmount: function() {
     
@@ -62,7 +75,6 @@ var TaskItem = React.createClass({
           stop = Moment("23:59:59", "HH:mm:ss");
         }
 
-        this.setState({stopTime: Moment(stop).format('HH:mm:ss')});
         this.props.model.handleStartStopChange(task, this.state.startTime, stop);
         this.updateDuration(stop);
       }
@@ -73,13 +85,6 @@ var TaskItem = React.createClass({
   },
   durationChange: function(event) {
     this.setState({timeElapsed: event.target.value});
-    
-  },
-  extendLast: function(stop){
-    stop = Moment(stop).format("HH:mm:ss");
-    this.props.model.handleStartStopChange(this.props.task, this.state.startTime, stop);
-    this.setState({stopTime: stop})
-    this.updateDuration(stop);
   },
   idBlur: function(event) {
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
@@ -116,14 +121,11 @@ var TaskItem = React.createClass({
           if (Moment(stop).diff(Moment().hour(23).minute(59).second(59), 's') > 0){
             stop = Moment("23:59:59", "HH:mm:ss");
           }
-         }
-         
-        this.setState({startTime: Moment(start, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
+        }
       }
       else{
         if (Moment(start, "HH:mm:ss").isAfter(Moment()))
-          start = Moment().format('HH:mm:ss');        
-        this.setState({startTime: start});
+          start = Moment().format('HH:mm:ss');
       }    
       this.props.model.handleStartStopChange(task, start, stop);
       this.updateDuration(stop, start);
@@ -153,8 +155,6 @@ var TaskItem = React.createClass({
         if (Moment(start).diff(Moment(task.stop).hour(0).minute(0).second(0), 's') < 0)
           start = Moment("00:00:00", "HH:mm:ss");
        }
-      this.setState({startTime: Moment(start, "HH:mm:ss").format('HH:mm:ss'), stopTime: Moment(stop, "HH:mm:ss").format('HH:mm:ss')});
-     
       this.props.model.handleStartStopChange(task, start, stop);
       this.updateDuration(stop, start);
     }
@@ -218,11 +218,11 @@ var TaskItem = React.createClass({
 
     var colorClass = "border-left";
     var isLessThanOne = false;
+          
     if (this.props.task.projectID)
       colorClass = "border-left hasID";
     else if (this.props.task.categoryID)
       colorClass = "border-left hasCategory";
-    
     
     if (task.stopTime){
       var stopTime = Moment(task.stopTime).format();
@@ -235,15 +235,7 @@ var TaskItem = React.createClass({
       isLessThanOne = false
    
     return (
-        <span>
-        {task.gap.hasGap ?
-          <GapItem 
-          task={task}
-          model={this.props.model}
-          gap={task.gap}
-          onLast={this.extendLast}
-           />
-          : ""}
+        
         <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
             <div className="task-wrapper">
@@ -380,7 +372,6 @@ var TaskItem = React.createClass({
           </div>
       </div>
       </li>
-      </span>
     );
   }
 });
