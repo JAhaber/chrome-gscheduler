@@ -62,6 +62,10 @@ var GenomeAPI = {
 		var options = {};
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);
 	},
+	getNonBillableTasks: function(){
+		var options = {};
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + "/TimeSheetCategory.json?Enabled=true", options);
+	},
 	postTimeEntry: function(task, options) {
 		options = options || {};
 		if (!task.note)
