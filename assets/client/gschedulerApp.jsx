@@ -12,9 +12,11 @@ var saveTask;
 var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var newestFirst = true;
+var nonBillables = { "Entries" : [] };
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
+    this.getNonBillables();
     return {
       tasks: [],
       totalTaskTime: ''
@@ -27,7 +29,13 @@ var GSchedulerApp = React.createClass({
   componentWillUnmount: function() {
     clearInterval(this.interval);
   },
-
+  getNonBillables: function(){
+      GenomeAPI.getNonBillableTasks().then(function(ticketData){
+        nonBillables = ticketData;
+      }).fail(function(error){
+        nonBillables = "fail";
+      });
+  },
   tick: function (val) {
     var tasks = this.props.model.tasks;
     this.getTotalTaskTime(tasks);
@@ -163,6 +171,12 @@ var GSchedulerApp = React.createClass({
     var model = this.props.model;
     var tasks = this.props.model.tasks;
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
+    if (nonBillables === "fail")
+    {
+      console.log("fail");
+      nonBillables = { "Entries" : [] };
+      this.getNonBillables();
+    }
     
     if(sortedList.length > 1){
       _.each(sortedList, function(l, id){
@@ -191,6 +205,10 @@ var GSchedulerApp = React.createClass({
         }
           
       });
+    }
+    else if (sortedList.length === 1){
+      sortedList[0].overlap = false;
+      sortedList[0].gap.hasGap = false;
     }
 
     if (newestFirst === true)
@@ -245,6 +263,7 @@ var GSchedulerApp = React.createClass({
             key={task.id}
             task={task}
             model={model}
+            nonBillables={nonBillables}
             onPlay={this.createTask.bind(this, task)}
             onStop={this.stopTask.bind(this, task)}
             onDestroy={this.destroy.bind(this, task)}
