@@ -199,6 +199,22 @@ TaskModel.prototype.handleNoteChange = function (taskToChange, value) {
 		this.inform();
 };
 
+TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBillables){
+	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+				for (var i = 0; i < nonBillables.Entries.length; i++)
+				{
+					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
+						return Utils.extend({}, task, {categoryID: value, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
+				}
+				return Utils.extend({}, task, {categoryID: value, title: "", projectID: null, ticketID: null, hasChanged: true});	
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
 TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){

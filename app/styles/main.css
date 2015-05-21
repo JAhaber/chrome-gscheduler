@@ -2286,25 +2286,42 @@ dl {
     #task-list .details div .item-wrap {
       display: inline-block;
       width: 50%; }
+      #task-list .details div .item-wrap.full {
+        width: 100%; }
     #task-list .details div label {
       font-size: 12px;
       color: #084b68;
       display: block;
-      width: 100%;
+      width: auto;
+      min-width: 8%;
       text-align: left;
       vertical-align: top;
       padding: 0;
       padding-top: 2px; }
+      #task-list .details div label.checkbox {
+        float: right;
+        margin-right: 10%;
+        width: auto;
+        min-width: 0; }
+    #task-list .details div .full .checkbox {
+      margin-right: 5%; }
     #task-list .details div input[type="text"], #task-list .details div input[type="date"], #task-list .details div textarea {
       display: block;
       width: 90%;
       margin-bottom: 5px; }
       #task-list .details div input[type="text"]:disabled, #task-list .details div input[type="date"]:disabled, #task-list .details div textarea:disabled {
         background-color: #f8f8f8; }
+    #task-list .details div .full input[type="text"] {
+      width: 95%; }
     #task-list .details div input[type="date"] {
       height: 28px; }
+    #task-list .details div input[type="checkbox"] {
+      float: right; }
     #task-list .details div textarea {
       width: 95%; }
+    #task-list .details div select {
+      width: 95%;
+      margin-bottom: 5px; }
 
 footer {
   position: fixed;

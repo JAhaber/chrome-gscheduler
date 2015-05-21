@@ -288,19 +288,31 @@ dl {
         .item-wrap{
           display: inline-block;
           width: 50%;
+          &.full{
+            width:100%;
+          }
         }
         
         label{
           font-size:12px;
           color:#084b68;
           display:block;
-          width:100%;
+          width:auto;
+          min-width:8%;
           text-align:left;
           vertical-align:top;
           padding: 0;
           padding-top:2px;
-
+          &.checkbox{
+            float:right;
+            margin-right: 10%;
+            width:auto;
+            min-width:0;
+          }
         }
+        .full .checkbox{
+              margin-right:5%;
+            }
         input[type="text"], input[type="date"], textarea{
           display:block;
           width:90%;
@@ -308,12 +320,23 @@ dl {
           &:disabled{
             background-color:#f8f8f8;
           }
+          
         }
+        .full input[type="text"] {
+            width:95%;
+          }
         input[type="date"]{
           height: 28px;
         }
+        input[type="checkbox"]{
+          float:right;
+        }
         textarea{
           width:95%;
+        }
+        select{
+          width:95%;
+          margin-bottom: 5px;
         }
       }
       
