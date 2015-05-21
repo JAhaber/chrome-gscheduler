@@ -35,7 +35,8 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		isClientBillable: task.isClientBillable || null,
 		type: task.type || null,
 		note: task.note || null,
-		categoryID: task.categoryID
+		categoryID: task.categoryID,
+		gap: {}
 	};
 	if (stop){
 		this.tasks = this.tasks.map(function (taskToStop) {
@@ -51,6 +52,28 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	this.inform();
 };
 
+TaskModel.prototype.addGap = function (start, stop) {
+	var newTask = {
+		id: Utils.uuid(),
+		title: "",
+		startTime: start,
+		stopTime: stop,
+		ticketID: null,
+		projectID: null,
+		isClientBillable: null,
+		type: null,
+		note: null,
+		categoryID: null,
+		expanded: true
+	};
+	this.tasks = this.tasks.map(function (taskExpanded) {
+			return taskExpanded.expanded ?
+				Utils.extend({}, taskExpanded, { expanded: false })
+				: taskExpanded;
+		});
+	this.tasks.unshift(newTask);
+	this.inform();
+};
 
 TaskModel.prototype.stop = function (taskToStop) {
 	this.tasks = this.tasks.map(function (task) {
@@ -150,12 +173,10 @@ TaskModel.prototype.handleDateChange = function (taskToChange, date) {
 	  		this.tasks = this.tasks.map(function (task) {
 				if (task === taskToChange){
 					
-					var start = Moment($("#" + task.id + "-start-time-edit").val(), 'HH:mm:ss DD/MM/YY').format();
-					var stop = Moment($("#" + task.id + "-stop-time-edit").val(), 'HH:mm:ss DD/MM/YY').format();
+					var start = task.startTime;
+					var stop = task.stopTime;
 				 	start = Moment(date, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
-				 	
-				 	if (Moment(stop).isValid())
-				 	 	stop = Moment(date, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();	
+				 	stop = Moment(date, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();	
 				 	
 				   	return Utils.extend({}, task, {startTime: start, stopTime: stop});
 
@@ -178,25 +199,41 @@ TaskModel.prototype.handleNoteChange = function (taskToChange, value) {
 		this.inform();
 };
 
+TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBillables){
+	this.tasks = this.tasks.map(function (task) {
+			if (task === taskToChange){
+				for (var i = 0; i < nonBillables.Entries.length; i++)
+				{
+					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
+						return Utils.extend({}, task, {categoryID: value, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
+				}
+				return Utils.extend({}, task, {categoryID: value, title: "", projectID: null, ticketID: null, hasChanged: true});	
+			}
+			return task;
+		});
+
+		this.inform();
+};
+
 TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop) {
 	  	this.tasks = this.tasks.map(function (task) {
 			if (task === taskToChange){
 			 	start = Moment(start, 'HH:mm:ss').format();
 			 	stop = Moment(stop, 'HH:mm:ss').format();
-		      	if (Moment(start).isValid() && Moment(stop).isValid()){
+		      	if (Moment(start).isValid() && Moment(stop).isValid() && task.stopTime){
 		      		start = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
 		      		stop = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
 				 	
-				 	return Utils.extend({}, task, {startTime: start, stopTime: stop});
+				 	return Utils.extend({}, task, {startTime: start, stopTime: stop, hasChanged: true});
 		      		
 		      	}
 		      	else if (Moment(start).isValid()){
 		      		start = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
-		      		return Utils.extend({}, task, {startTime: start});
+		      		return Utils.extend({}, task, {startTime: start, hasChanged: true});
 		      	}
 			    else if (Moment(stop).isValid()){
 			    	stop = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
-			    	return Utils.extend({}, task, {stopTime: stop});
+			    	return Utils.extend({}, task, {stopTime: stop, hasChanged: true});
 			    }
 				    
 			}

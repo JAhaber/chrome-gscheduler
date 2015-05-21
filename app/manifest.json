@@ -13,7 +13,7 @@
             "19": "images/icon-19.png",
             "38": "images/icon-38.png"
         },
-        "default_title": "gScheduler"
+        "default_title": "GScheduler"
     },
     "commands": {
         "show-gscheduler": {

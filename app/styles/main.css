@@ -2049,6 +2049,8 @@ body {
 h2 {
   margin: 14px 0 4px; }
 
+a.overlap,
+a.zero,
 a.play,
 a.stop,
 a.destroy {
@@ -2058,6 +2060,30 @@ a.destroy {
   color: white;
   text-align: center; }
 
+a.overlap,
+a.zero {
+  width: 1em;
+  margin-right: 4px; }
+
+a.tip {
+  border-bottom: 1px dashed;
+  text-decoration: none; }
+
+a.tip:hover {
+  cursor: help;
+  position: relative; }
+
+span.tooltip {
+  text-align: center;
+  border: #c0c0c0 1px dotted;
+  padding: 2px 10px 2px 10px;
+  display: block;
+  width: 250px;
+  position: absolute;
+  text-decoration: none;
+  font-size: 0.9em;
+  z-index: 1000; }
+
 i {
   cursor: pointer; }
   .play i {
@@ -2066,6 +2092,12 @@ i {
     color: #d21245; }
   .destroy i {
     color: #084b68; }
+  .overlap i {
+    cursor: help;
+    color: #d21245; }
+  .zero i {
+    cursor: help;
+    color: #ffdd57; }
 
 .open .expand {
   display: none; }
@@ -2104,6 +2136,31 @@ header {
     position: absolute;
     right: 0; }
 
+.gap {
+  display: block;
+  padding: 5px 6px 5px 25px;
+  border-bottom: 1px solid #000;
+  background: rgba(168, 225, 255, 0.11); }
+  .gap .controls {
+    float: right;
+    display: inline-block; }
+    .gap .controls a.next,
+    .gap .controls a.last,
+    .gap .controls a.add {
+      margin: 0 5px 0 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center; }
+    .gap .controls a.add {
+      color: #084b68; }
+    .gap .controls a.next {
+      color: #008356; }
+    .gap .controls a.last {
+      color: #477dca; }
+    .gap .controls i {
+      font-size: 14px; }
+
 #main {
   height: calc(100% - 129px);
   overflow-y: auto;
@@ -2113,7 +2170,7 @@ header {
   #main::-webkit-scrollbar {
     width: 8px; }
   #main::-webkit-scrollbar-track {
-    background-color: #3f9dc7; }
+    background-color: #2585b0; }
   #main::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.4); }
   #main::-webkit-scrollbar-button {
@@ -2152,6 +2209,7 @@ dl {
     padding: 0 0 10px 20px;
     border-bottom: 1px solid #000; }
   #task-list .border-left {
+    line-height: 0;
     background-color: #ffdd57;
     padding-left: 10px;
     border-bottom: 1px solid #000; }
@@ -2159,9 +2217,14 @@ dl {
       background-color: #b6e5ff; }
     #task-list .border-left.hasCategory {
       background-color: #D3D3D3; }
+  #task-list .task-wrapper {
+    padding: 10px 5px 10px;
+    display: inline-block;
+    background-color: white;
+    width: 100%;
+    line-height: 18px; }
   #task-list li.task {
     background-color: #fff;
-    padding: 10px 5px 10px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -2184,6 +2247,8 @@ dl {
       width: 48.82117%; }
       #task-list li.task .controls:last-child {
         margin-right: 0; }
+    #task-list li.task .errors {
+      width: 5%; }
     #task-list li.task label {
       color: #084b68;
       font-size: 15px;
@@ -2198,6 +2263,9 @@ dl {
       font-size: 12px;
       font-family: "Lucida Console", Monaco, monospace;
       margin-right: 15px; }
+      #task-list li.task .timeElapsed.flash {
+        background-color: rgba(0, 255, 236, 0.4);
+        box-shadow: 0px 0px 6px rgba(0, 255, 236, 0.86); }
     #task-list li.task .controls {
       text-align: right; }
       #task-list li.task .controls a.play {
@@ -2210,29 +2278,50 @@ dl {
     display: none;
     height: 100%;
     margin: 0;
-    padding: 15px 0 5px 0;
-    background-color: #f8f8f8; }
+    padding: 15px 0 15px 15px;
+    background-color: #f8f8f8;
+    line-height: 1.5em; }
     #task-list .details.on {
       display: block; }
+    #task-list .details div .item-wrap {
+      display: inline-block;
+      width: 50%; }
+      #task-list .details div .item-wrap.full {
+        width: 100%; }
     #task-list .details div label {
       font-size: 12px;
       color: #084b68;
-      display: inline-block;
-      width: 13%;
-      text-align: right;
+      display: block;
+      width: auto;
+      min-width: 8%;
+      text-align: left;
       vertical-align: top;
+      padding: 0;
       padding-top: 2px; }
+      #task-list .details div label.checkbox {
+        float: right;
+        margin-right: 10%;
+        width: auto;
+        min-width: 0; }
+    #task-list .details div .full .checkbox {
+      margin-right: 5%; }
     #task-list .details div input[type="text"], #task-list .details div input[type="date"], #task-list .details div textarea {
-      margin-left: 10px;
-      margin-right: 10px;
-      width: 30%;
-      display: inline-block; }
+      display: block;
+      width: 90%;
+      margin-bottom: 5px; }
       #task-list .details div input[type="text"]:disabled, #task-list .details div input[type="date"]:disabled, #task-list .details div textarea:disabled {
         background-color: #f8f8f8; }
+    #task-list .details div .full input[type="text"] {
+      width: 95%; }
     #task-list .details div input[type="date"] {
       height: 28px; }
+    #task-list .details div input[type="checkbox"] {
+      float: right; }
     #task-list .details div textarea {
-      width: calc(73% + 20px); }
+      width: 95%; }
+    #task-list .details div select {
+      width: 95%;
+      margin-bottom: 5px; }
 
 footer {
   position: fixed;

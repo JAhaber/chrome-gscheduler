@@ -10,7 +10,7 @@ var sequenceMin = 0;
 
 var GenomeAPI = {
 
-	ROUND_TO: 15,
+	ROUND_TO: 1,
 	CURRENT_USER: null,
 	GENOME_ENDPOINT: 'https://genome.klick.com/api',
 
@@ -61,6 +61,10 @@ var GenomeAPI = {
 	getProjectInfo: function(ticketid) {
 		var options = {};
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);
+	},
+	getNonBillableTasks: function(){
+		var options = {};
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + "/TimeSheetCategory.json?Enabled=true", options);
 	},
 	postTimeEntry: function(task, options) {
 		options = options || {};
@@ -129,8 +133,7 @@ var GenomeAPI = {
 	getDuration: function(task, roundTo) {
 		var durationAsMinutes = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMinutes();
 		
-		durationAsMinutes = roundTo * Math.round( durationAsMinutes / roundTo );
-		durationAsMinutes = durationAsMinutes < roundTo ? roundTo : durationAsMinutes;
+		durationAsMinutes = roundTo * Math.floor( durationAsMinutes / roundTo );
 		
 		var diff = Moment(task.startTime).add(durationAsMinutes, 'm').diff(Moment(task.startTime).hour(23).minute(59).second(0), 'm');
 
@@ -145,7 +148,6 @@ var GenomeAPI = {
 
 chrome.storage.sync.get({
     saveType: 'Actual',
-    roundTime: '5',
     startHour: 9,
     startMin: 0
   }, function(items) {
@@ -155,16 +157,11 @@ chrome.storage.sync.get({
    		isSequenced = false;
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
-   	if (items.roundTime === "None")
-		GenomeAPI.ROUND_TO = 1;
-	else
-		GenomeAPI.ROUND_TO = items.roundTime;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
     saveType: 'Actual',
-    roundTime: '5',
     startHour: 9,
     startMin: 0
   }, function(items) {
@@ -174,7 +171,6 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
    		isSequenced = false;
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
-  	GenomeAPI.ROUND_TO = items.roundTime;
   });
 });
 

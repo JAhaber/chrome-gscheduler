@@ -4,18 +4,13 @@ var React = require('react');
 // Saves options to chrome.storage.sync.
 var OptionScript = React.createClass({
   saveOptions: function () {
-    var type = $('input[name=type]:checked').val();
-    var remind = $('#autoReminder').val();
-    var round = $('#roundTime').val();
-    var hour = $('#startHour').val();
-    var min = $('#startMin').val();
 
     chrome.storage.sync.set({
-      saveType: type,
-      autoRemind: remind,
-      roundTime: round,
-      startHour: hour,
-      startMin: min
+      newestFirst: $('#newestFirst').prop('checked'),
+      saveType: $('input[name=type]:checked').val(),
+      autoRemind: $('#autoReminder').val(),
+      startHour: $('#startHour').val(),
+      startMin: $('#startMin').val()
     }, function() {
       console.log("save");
       // Update status to let user know options were saved.
@@ -32,9 +27,9 @@ var OptionScript = React.createClass({
   restoreOptions: function () {
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
+      newestFirst: true,
       saveType: 'Actual',
       autoRemind: 'Never',
-      roundTime: '5',
       startHour: "9",
       startMin: "0"
     }, function(items) {
@@ -45,12 +40,10 @@ var OptionScript = React.createClass({
           break;
         }
       }
-      console.log("restore");
       $('#autoReminder').val(items.autoRemind);
-      $('#roundTime').val(items.roundTime);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
-      
+      $('#newestFirst').prop('checked', newestFirst);
     });
   },
 
@@ -124,26 +117,17 @@ var OptionScript = React.createClass({
           </select>
         </p>
       </div>
-
       <div className="option">
-        <h2>Round Elapsed Time:</h2>
-        <p>Round the stop time to the nearest <select id="roundTime" className="long">
-            <option value="None">None</option>
-            <option value="5">5 Mins</option>
-            <option value="10">10 Mins</option>
-            <option value="15">15 Mins</option>
-          </select> when saving to Genome.
-        </p>
-      </div>
-      <button id="save" onClick={this.saveOptions}>Save</button>
-      <div id="status"></div>
+        <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
+       </div>
+
+      
+        <button id="save" onClick={this.saveOptions}>Save</button>
+
+        <div id="status"></div>
       </div>
       );
 
-    /*$.ready(OptionScript.restoreOptions());
-    $('#save').on('click', OptionScript.saveOptions());
-
-    */
   }
 });
 
