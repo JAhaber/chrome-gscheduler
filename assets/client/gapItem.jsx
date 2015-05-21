@@ -19,8 +19,8 @@ var GapItem = React.createClass({
         Gap Duration: {Moment().hour(0).minutes(0).second(gap.duration).format("HH:mm:ss")}
         <div className="controls">
           <a className="add" onClick={this.addTask}>Add Task <i className="fa fa-caret-square-o-right"></i></a>
-          <a className="last" onClick={this.props.onLast}>Extend Last <i className={this.props.newestFirst ? "fa fa-caret-square-o-up" : "fa fa-caret-square-o-down"}></i></a>
-          <a className="next" onClick={this.props.onNext}>Extend Next <i className={this.props.newestFirst ? "fa fa-caret-square-o-down" : "fa fa-caret-square-o-up"}></i></a>
+          <a className="last" onClick={this.props.onLast}>Extend Last <i className={this.props.newestFirst ? "fa fa-arrow-up" : "fa fa-arrow-down"}></i></a>
+          <a className="next" onClick={this.props.onNext}>Extend Next <i className={this.props.newestFirst ? "fa fa-arrow-down" : "fa fa-arrow-up"}></i></a>
         </div>
       </span>
 
