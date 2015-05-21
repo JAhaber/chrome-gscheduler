@@ -129,6 +129,13 @@ var GSchedulerApp = React.createClass({
     stop = Moment(stop).format("HH:mm:ss");
     this.props.model.handleStartStopChange(task, Moment(task.startTime).format("HH:mm:ss"), stop);
   },
+  backUp: function(tasks){
+    this.props.model.backUp(tasks);
+  },
+  restoreTasks: function(){
+    this.props.model.restoreBackUp();
+    this.removeTip();
+  },
   save: function () {
     var scope = this;
     scope.stopAll();
@@ -136,9 +143,10 @@ var GSchedulerApp = React.createClass({
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
       GenomeAPI.postTimeEntries(tasks)
+      .then(function(data){scope.backUp(tasks);})
       .then(function(data){
         _.each(tasks, scope.destroy);
-      });
+      }).then(function(){console.log(scope.props.model.backup);});
     }
   },
   
@@ -163,7 +171,16 @@ var GSchedulerApp = React.createClass({
 
     this.setState({totalTaskTime: Moment().hour(0).minute(0).second(totalElapsedMilliseconds/1000).format('H[hrs] mm[mins]')});
   },
-
+  appendRestoreTip: function(event){
+    $("span.tooltip").remove();
+    var value = "Restore the last set of tasks that were saved to Genome";
+    var color = "rgba(73, 177, 252, 0.9)";
+    $("body").append("<span class='tooltip'>" + value + "</span>");
+    $("span.tooltip").css({"top": ($(".restore").offset().top + 20) + "px", "left": ($(".restore").offset().left - 65) + "px", "background": color});
+  },
+  removeTip: function(event){
+    $("span.tooltip").remove();
+  },
   render: function() {
     var main;
     var curDate = Moment();
@@ -289,19 +306,30 @@ var GSchedulerApp = React.createClass({
       
       
     }, this);
-    if (taskItems.length) {
-      main = (
-        <section id="main">
-          <dl>
-            <dt>Today</dt>
-            <dd>{this.state.totalTaskTime}</dd>
-          </dl>
-          <ul id="task-list">
-            {taskItems}
-          </ul>
-        </section>
-      );
-    }
+    
+    main = (
+      <section id="main">
+      {taskItems.length ?
+        <span>
+        <dl>
+          <dt>Today</dt>
+          <dd>{this.state.totalTaskTime}</dd>
+        </dl>
+        <ul id="task-list">
+          {taskItems}
+        </ul>
+        </span>
+        : "" }
+
+        {this.props.model.backup.length > 0 ?
+        <span className="restore-tasks">
+          <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore Tasks <i className="fa fa-undo"></i></a>
+        </span>
+        : ""}
+      </section>
+    );
+   
+   
     
 
     return (

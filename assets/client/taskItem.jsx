@@ -363,6 +363,7 @@ var TaskItem = React.createClass({
                   type="date" 
                   name="date-edit" 
                   className="form-control"
+                  max={Moment().format("YYYY-MM-DD")}
                   value={this.state.date}
                   disabled={task.stopTime ? "" : "disabled"}
                   onChange={this.dateChange}
