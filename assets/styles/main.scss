@@ -340,10 +340,7 @@ dl {
         input[type="date"]{
           height: 28px;
         }
-        input[type="date"]::-webkit-inner-spin-button{
-            display:none;
-            -webkit-appearance: none;
-          }
+        
         input[type="checkbox"]{
           float:right;
         }
