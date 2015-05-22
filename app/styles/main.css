@@ -2176,6 +2176,16 @@ header {
   #main::-webkit-scrollbar-button {
     background-color: #2585b0;
     height: 28px; }
+  #main .restore-tasks {
+    padding-top: 10px;
+    text-align: center;
+    display: block; }
+    #main .restore-tasks .restore, #main .restore-tasks .remove {
+      color: #2585b0;
+      font-size: 14px;
+      cursor: pointer; }
+    #main .restore-tasks .remove {
+      color: #C21F1F; }
 
 dl {
   background-color: #2585b0;
@@ -2315,6 +2325,9 @@ dl {
       width: 95%; }
     #task-list .details div input[type="date"] {
       height: 28px; }
+    #task-list .details div input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+      -webkit-appearance: none; }
     #task-list .details div input[type="checkbox"] {
       float: right; }
     #task-list .details div textarea {

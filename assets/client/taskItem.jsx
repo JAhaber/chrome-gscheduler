@@ -66,7 +66,10 @@ var TaskItem = React.createClass({
 
   },
   dateBlur: function(event) {
-    this.props.model.handleDateChange(this.props.task, event.target.value);
+    if (Moment(event.target.value, "YYYY/MM/DD").isAfter(Moment()))
+      this.setState({date: Moment(this.props.task.startTime).format("YYYY-MM-DD")})
+    else
+      this.props.model.handleDateChange(this.props.task, event.target.value);
   },
   durationBlur: function(event) {
       var task = this.props.task;
@@ -363,6 +366,7 @@ var TaskItem = React.createClass({
                   type="date" 
                   name="date-edit" 
                   className="form-control"
+                  max={Moment().format("YYYY-MM-DD")}
                   value={this.state.date}
                   disabled={task.stopTime ? "" : "disabled"}
                   onChange={this.dateChange}

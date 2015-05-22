@@ -6,7 +6,13 @@ var Q = require('q');
 
 var TaskModel = function (key) {
 	this.key = key;
-	this.tasks = Utils.store(key);
+	var loadData = Utils.store(key);
+	if(loadData.backup){
+		this.backup = loadData.backup;
+		this.tasks = loadData.tasks;
+	}
+	else
+		this.tasks = loadData;
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
 			chrome.runtime.sendMessage({running: true}, function(response) {});
@@ -21,7 +27,8 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	Utils.store(this.key, this.tasks);
+	var store = { tasks: this.tasks, backup: this.backup }
+	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
@@ -85,6 +92,24 @@ TaskModel.prototype.stop = function (taskToStop) {
 		}
 		return task;
 	});
+	this.inform();
+};
+
+TaskModel.prototype.backUp = function (taskList) {
+	this.backup = taskList;
+	this.inform();
+};
+
+TaskModel.prototype.restoreBackUp = function () {
+	var scope = this;
+	this.backup.forEach(function(task){
+		scope.tasks.unshift(task);
+	});
+	this.backup = {};
+	this.inform();
+};
+TaskModel.prototype.removeBackUp = function () {
+	this.backup = {};
 	this.inform();
 };
 
