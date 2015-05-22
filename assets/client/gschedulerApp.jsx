@@ -136,6 +136,10 @@ var GSchedulerApp = React.createClass({
     this.props.model.restoreBackUp();
     this.removeTip();
   },
+  removeBackup: function(){
+    this.props.model.removeBackUp();
+    this.removeTip();
+  },
   save: function () {
     var scope = this;
     scope.stopAll();
@@ -173,10 +177,10 @@ var GSchedulerApp = React.createClass({
   },
   appendRestoreTip: function(event){
     $("span.tooltip").remove();
-    var value = "Restore the last set of tasks that were saved to Genome";
+    var value = "Restore the last set of tasks that were saved to Genome. This will not affect any new tasks.";
     var color = "rgba(73, 177, 252, 0.9)";
     $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(".restore").offset().top + 20) + "px", "left": ($(".restore").offset().left - 65) + "px", "background": color});
+    $("span.tooltip").css({"top": ($(".restore").offset().top + 20) + "px", "left": ($(".restore").offset().left - 50) + "px", "background": color});
   },
   removeTip: function(event){
     $("span.tooltip").remove();
@@ -323,7 +327,8 @@ var GSchedulerApp = React.createClass({
 
         {this.props.model.backup.length > 0 ?
         <span className="restore-tasks">
-          <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore Tasks <i className="fa fa-undo"></i></a>
+          <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
+          <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
         </span>
         : ""}
       </section>

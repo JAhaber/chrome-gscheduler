@@ -108,6 +108,10 @@ TaskModel.prototype.restoreBackUp = function () {
 	this.backup = {};
 	this.inform();
 };
+TaskModel.prototype.removeBackUp = function () {
+	this.backup = {};
+	this.inform();
+};
 
 TaskModel.prototype.expand = function (taskToExpand) {
 	this.tasks = this.tasks.map(function (task) {

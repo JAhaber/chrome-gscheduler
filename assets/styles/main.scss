@@ -180,11 +180,12 @@ header {
     padding-top:10px;
     text-align: center;
     display:block;
-    .restore{
+    .restore, .remove{
       color:#2585b0;
       font-size:14px;
       cursor:pointer;
     }
+    .remove{ color: #C21F1F; }
   }
 }
 
@@ -339,6 +340,10 @@ dl {
         input[type="date"]{
           height: 28px;
         }
+        input[type="date"]::-webkit-inner-spin-button{
+            display:none;
+            -webkit-appearance: none;
+          }
         input[type="checkbox"]{
           float:right;
         }
