@@ -2339,13 +2339,19 @@ footer {
   bottom: 0;
   padding: 0;
   text-align: right;
-  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 17px left 60px, linear-gradient(#3f9dc7, #2585b0); }
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 17px left 115px, linear-gradient(#3f9dc7, #2585b0); }
   footer .options {
     position: absolute;
     font-size: 20px;
     color: #fff;
     top: 11px;
     left: 10px; }
+  footer .log {
+    position: absolute;
+    font-size: 20px;
+    color: #fff;
+    top: 12px;
+    left: 40px; }
   footer button {
     margin: 10px;
     margin-right: 20px;
@@ -2362,5 +2368,42 @@ footer {
 .error {
   border: 1px solid #d21245 !important;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px #d21245 !important; }
+
+.updateLog {
+  position: absolute;
+  background-color: #fff;
+  top: 0;
+  left: 0;
+  height: calc(100% - 51px);
+  width: 100%;
+  color: #000;
+  overflow-y: scroll;
+  padding-bottom: 10px;
+  padding-left: 10px; }
+  .updateLog h1 {
+    margin-top: 5px; }
+  .updateLog p {
+    font-weight: bold;
+    margin: 15px 0 15px 0; }
+  .updateLog .divider {
+    border-top: 1px dashed #aaaaaa;
+    margin: 15px 10px 15px 0; }
+  .updateLog ul {
+    list-style-type: disc; }
+    .updateLog ul li {
+      list-style-position: outside;
+      list-style-type: disc;
+      font-size: 13px;
+      margin-left: 15px; }
+    .updateLog ul ul {
+      margin-left: 20px; }
+      .updateLog ul ul li {
+        list-style-type: circle; }
+  .updateLog .destroy {
+    position: absolute;
+    top: 0px;
+    right: 2px; }
+    .updateLog .destroy i {
+      color: #d21245; }
 
 /*# sourceMappingURL=main.css.map */

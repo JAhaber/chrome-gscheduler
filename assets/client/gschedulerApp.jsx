@@ -13,6 +13,7 @@ var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var newestFirst = true;
 var showBackup = true;
+var showLog = false;
 var nonBillables = { "Entries" : [] };
 
 var GSchedulerApp = React.createClass({
@@ -185,6 +186,12 @@ var GSchedulerApp = React.createClass({
     if ($("body").height() < ($(".restore").offset().top + 20 + 69))
       top = $(".restore").offset().top - 73
     $("span.tooltip").css({"top": top + "px", "left": ($(".restore").offset().left - 47) + "px", "background": color});
+  },
+  toggleLog: function(){
+    showLog = !showLog;
+  },
+  closeLog: function(){
+    showLog = false;
   },
   removeTip: function(event){
     $("span.tooltip").remove();
@@ -369,10 +376,58 @@ var GSchedulerApp = React.createClass({
           <a className="options" onClick={this.openOptions}>
             <i className="fa fa-cog"></i>
           </a>
+          <a className="log" onClick={this.toggleLog}>
+            <i className="fa fa-tag"></i>
+          </a>
           <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
           
         </footer>
-
+        {showLog ? 
+        <div className="updateLog">
+          <h1>GScheduler Version: 0.1.7 Changelog:</h1>
+          
+            <ul>
+              <p>Warnings</p>
+              <li>Added warning tooltips to notify users of issues with tasks:</li>
+              <ul>
+                <li>Warning will appear when a task is less than one minute in length to notify that it will not be saved</li>
+                <li>Warning will appear when a task's stop time overlaps a later task's start time</li>
+              </ul>
+              
+              <div className="divider"></div>
+              <p>Gaps</p>
+              <li>GScheduler now detects gaps between tasks of one minute or more and offers options for filling the time:</li>
+              <ul>
+                <li>Users can create a new task which will automatically set the start and stop time to fill the gap</li>
+                <li>Users can extend the previous tasks stop time</li>
+                <li>Users can extend the next tasks start time</li>
+              </ul>
+             
+              <div className="divider"></div>
+              <p>Non-Project</p>
+              <li>Non-Project tasks can now be selected while editting a task by clicking the 'Non-project?' checkbox and selecting from the dropdown</li>
+              
+              <div className="divider"></div>
+              <p>Backup Tasks</p>
+              <li>The last set of tasks saved to genome will now be set as a backup task list</li>
+              <li>When a backup is available, users can click a button to restore the previously saved tasks to GScheduler. These will be added to the task list and will not overwrite any new tasks</li>
+              
+              <div className="divider"></div>
+              <p>Options</p>
+              <li>Removed rounding option. All tasks now round down to the nearest minute to avoid conflicts when saving to genome</li>
+              <li>Added option to reverse the order of tasks (newest last) to match genome schedule if desired</li>
+              <li>Added option to show/hide the backup button after saving</li>
+              
+              <div className="divider"></div>
+              <p>Bug Fixes</p>
+              <li>Dates can no longer be in the future</li>
+              <li>Fixed a bug that showed the wrong duration for tasks that were left in GScheduler overnight</li>
+            </ul>
+          <a className="destroy" onClick={this.closeLog}>
+            <i className="fa fa-remove"></i>
+          </a>
+        </div>
+        : ""}
       </div>
     );
   }
