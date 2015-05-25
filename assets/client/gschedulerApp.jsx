@@ -12,6 +12,7 @@ var saveTask;
 var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var newestFirst = true;
+var showBackup = true;
 var nonBillables = { "Entries" : [] };
 
 var GSchedulerApp = React.createClass({
@@ -328,7 +329,7 @@ var GSchedulerApp = React.createClass({
         </span>
         : "" }
 
-        {this.props.model.backup.length > 0 ?
+        {this.props.model.backup.length > 0 && showBackup ?
         <span className="restore-tasks">
           <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
           <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
@@ -379,16 +380,20 @@ var GSchedulerApp = React.createClass({
 
 
 chrome.storage.sync.get({
-    newestFirst: true
+    newestFirst: true,
+    showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
+    showBackup = items.showBackup;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-    newestFirst: true
+    newestFirst: true,
+    showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
+    showBackup = items.showBackup;
   });
 });
 
