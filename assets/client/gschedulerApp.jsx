@@ -179,8 +179,11 @@ var GSchedulerApp = React.createClass({
     $("span.tooltip").remove();
     var value = "Restore the last set of tasks that were saved to Genome. This will not affect any new tasks.";
     var color = "rgba(73, 177, 252, 0.9)";
-    $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(".restore").offset().top + 20) + "px", "left": ($(".restore").offset().left - 50) + "px", "background": color});
+    var top = $(".restore").offset().top + 20
+    $("body").append("<span class='tooltip'>" + value + "</span>");    
+    if ($("body").height() < ($(".restore").offset().top + 20 + 69))
+      top = $(".restore").offset().top - 73
+    $("span.tooltip").css({"top": top + "px", "left": ($(".restore").offset().left - 47) + "px", "background": color});
   },
   removeTip: function(event){
     $("span.tooltip").remove();

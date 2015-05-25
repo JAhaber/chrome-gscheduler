@@ -21,15 +21,21 @@ var TaskItem = React.createClass({
     $("span.tooltip").remove();
     var value = "This task's end time is overlapping another task";
     var color = "rgba(237,49,99,0.9)";
+    var top = $(event.target).offset().top + 20
+    if ($("body").height() < ($(event.target).offset().top + 20 + 48))
+      top = $(event.target).offset().top - 52
     $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
+    $("span.tooltip").css({"top": top + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
   },
   appendZeroTip: function(event){
     $("span.tooltip").remove();
     var value = "Tasks with a duration of < 1 minute will not be saved";
     var color = "rgba(255,235,153,0.9)";
+    var top = $(event.target).offset().top + 20
+    if ($("body").height() < ($(event.target).offset().top + 20 + 48))
+      top = $(event.target).offset().top - 52
     $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(event.target).offset().top + 20) + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
+    $("span.tooltip").css({"top": top + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
 
   },
   componentDidMount: function() {
