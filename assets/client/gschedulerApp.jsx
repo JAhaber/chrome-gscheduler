@@ -12,6 +12,7 @@ var saveTask;
 var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var newestFirst = true;
+var showBackup = true;
 var nonBillables = { "Entries" : [] };
 
 var GSchedulerApp = React.createClass({
@@ -179,8 +180,11 @@ var GSchedulerApp = React.createClass({
     $("span.tooltip").remove();
     var value = "Restore the last set of tasks that were saved to Genome. This will not affect any new tasks.";
     var color = "rgba(73, 177, 252, 0.9)";
-    $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": ($(".restore").offset().top + 20) + "px", "left": ($(".restore").offset().left - 50) + "px", "background": color});
+    var top = $(".restore").offset().top + 20
+    $("body").append("<span class='tooltip'>" + value + "</span>");    
+    if ($("body").height() < ($(".restore").offset().top + 20 + 69))
+      top = $(".restore").offset().top - 73
+    $("span.tooltip").css({"top": top + "px", "left": ($(".restore").offset().left - 47) + "px", "background": color});
   },
   removeTip: function(event){
     $("span.tooltip").remove();
@@ -325,7 +329,7 @@ var GSchedulerApp = React.createClass({
         </span>
         : "" }
 
-        {this.props.model.backup.length > 0 ?
+        {this.props.model.backup.length > 0 && showBackup ?
         <span className="restore-tasks">
           <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
           <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
@@ -376,16 +380,20 @@ var GSchedulerApp = React.createClass({
 
 
 chrome.storage.sync.get({
-    newestFirst: true
+    newestFirst: true,
+    showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
+    showBackup = items.showBackup;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-    newestFirst: true
+    newestFirst: true,
+    showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
+    showBackup = items.showBackup;
   });
 });
 

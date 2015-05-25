@@ -2325,9 +2325,6 @@ dl {
       width: 95%; }
     #task-list .details div input[type="date"] {
       height: 28px; }
-    #task-list .details div input[type="date"]::-webkit-inner-spin-button {
-      display: none;
-      -webkit-appearance: none; }
     #task-list .details div input[type="checkbox"] {
       float: right; }
     #task-list .details div textarea {

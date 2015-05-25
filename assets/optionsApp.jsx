@@ -7,6 +7,7 @@ var OptionScript = React.createClass({
 
     chrome.storage.sync.set({
       newestFirst: $('#newestFirst').prop('checked'),
+      showBackup: $('#showBackup').prop('checked'),
       saveType: $('input[name=type]:checked').val(),
       autoRemind: $('#autoReminder').val(),
       startHour: $('#startHour').val(),
@@ -28,6 +29,7 @@ var OptionScript = React.createClass({
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
       newestFirst: true,
+      showBackup: true,
       saveType: 'Actual',
       autoRemind: 'Never',
       startHour: "9",
@@ -43,7 +45,8 @@ var OptionScript = React.createClass({
       $('#autoReminder').val(items.autoRemind);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
-      $('#newestFirst').prop('checked', newestFirst);
+      $('#newestFirst').prop('checked', items.newestFirst);
+      $('#showBackup').prop('checked', items.showBackup);
     });
   },
 
@@ -58,10 +61,12 @@ var OptionScript = React.createClass({
       <div className="option">
       <h2>Save tasks as:</h2>
         <div className="form-wrapper">
-            <span className="radio"><input type="radio" name="type" value="Sequenced" />Sequenced</span>
             <span className="radio"><input type="radio" name="type" value="Actual" defaultChecked />Actual</span>
+            <span className="radio"><input type="radio" name="type" value="Sequenced" />Sequenced</span>
         </div>
-        <p><span className="emph">Sequenced</span> - Save tasks in order using duration starting from <select id="startHour">
+        <p><span className="emph">Actual</span> - Save tasks using start and stop times.<br />
+        <span className="emph">Sequenced</span> - Save tasks in order using duration starting from<br />
+        <select id="startHour">
           <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -93,7 +98,7 @@ var OptionScript = React.createClass({
           <option value="30">30</option>
           <option value="45">45</option>
         </select><br />
-        <span className="emph">Actual</span> - Save tasks using start and stop times.</p>
+        </p>
       </div>
 
 
@@ -119,6 +124,9 @@ var OptionScript = React.createClass({
       </div>
       <div className="option">
         <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
+       </div>
+       <div className="option">
+        <input type="checkbox" id="showBackup" defaultChecked /> Allow me to restore the last set of saved tasks
        </div>
 
       
