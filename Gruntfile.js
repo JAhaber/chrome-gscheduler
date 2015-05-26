@@ -19,7 +19,8 @@ module.exports = function (grunt) {
   var config = {
     app: 'app',
     dist: 'dist',
-    assets: 'assets'
+    assets: 'assets',
+    package: 'package'
   };
 
   grunt.initConfig({
@@ -78,7 +79,7 @@ module.exports = function (grunt) {
       }
     },
 
-    browserify:     {
+    browserify: {
       options:      {
         transform:  [ require('grunt-react').browserify ]
       },
@@ -155,6 +156,7 @@ module.exports = function (grunt) {
         'test/spec/{,*/}*.js'
       ]
     },
+
     mocha: {
       all: {
         options: {
@@ -230,31 +232,6 @@ module.exports = function (grunt) {
       }
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/styles/main.css': [
-    //         '<%= config.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/scripts/scripts.js': [
-    //         '<%= config.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
-
     // Copies remaining files to places other tasks can use
     copy: {
       app: {
@@ -322,7 +299,7 @@ module.exports = function (grunt) {
         options: {
           archive: function() {
             var manifest = grunt.file.readJSON('app/manifest.json');
-            return 'package/gscheduler-' + manifest.version + '.zip';
+            return config.package + '/gscheduler-' + manifest.version + '.zip';
           }
         },
         files: [{
@@ -332,7 +309,30 @@ module.exports = function (grunt) {
           dest: ''
         }]
       }
+    },
+
+    webstore_upload: { // grunt-webstore-upload
+        "accounts": {
+            "default": {
+                //cli_auth: true,
+                publish: true, //publish item right after uploading. default false
+                client_id: process.env.GSCHEDULER_PUBLISH_CLIENTID,
+                client_secret: process.env.GSCHEDULER_PUBLISH_CLIENTSECRET,
+                //refresh_token: "4/gfSJ55WbmR5yEGzep4s1ZFuoDIDZb_mVRjugY3pGRxE.AnBZC-S7wSkeXmXvfARQvtj6Dr4hmwI"
+            }
+        },
+        "extensions": {
+            "extension1": {
+                account: "default",
+                appID: "plgnahdfabaahnjhenjbpfoocjfnfeai", // STAGING
+                //appID: "peikbeklmabkcahojdeiabbaglkahind", // PRODUCTION
+                //required, we can use dir name and upload most recent zip file
+                zip: "<%= config.package %>",
+                publishTarget: 'trustedTesters'   
+            }
+        }
     }
+
   });
 
   grunt.registerTask('debug', function () {
@@ -363,6 +363,10 @@ module.exports = function (grunt) {
     'copy:dist',
     'usemin',
     'compress'
+  ]);
+
+  grunt.registerTask('publish', [
+    'webstore_upload'
   ]);
 
   grunt.registerTask('default', [
