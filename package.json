@@ -32,6 +32,7 @@
     "grunt-react": "^0.10.0",
     "grunt-svgmin": "~0.4.0",
     "grunt-usemin": "~2.1.0",
+    "grunt-webstore-upload": "^0.8.3",
     "jshint-stylish": "~0.1.5",
     "load-grunt-tasks": "~0.4.0",
     "moment": "^2.9.0",
