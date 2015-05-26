@@ -11,8 +11,11 @@ var TaskModel = function (key) {
 		this.backup = loadData.backup;
 		this.tasks = loadData.tasks;
 	}
-	else
+	else{
 		this.tasks = loadData;
+		this.backup = {};
+	}
+		
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
 			chrome.runtime.sendMessage({running: true}, function(response) {});

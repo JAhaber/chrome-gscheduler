@@ -399,8 +399,8 @@ var GSchedulerApp = React.createClass({
               <li>GScheduler now detects gaps between tasks of one minute or more and offers options for filling the time:</li>
               <ul>
                 <li>Users can create a new task which will automatically set the start and stop time to fill the gap</li>
-                <li>Users can extend the previous tasks stop time</li>
-                <li>Users can extend the next tasks start time</li>
+                <li>Users can extend the previous task's stop time</li>
+                <li>Users can extend the next task's start time</li>
               </ul>
              
               <div className="divider"></div>
