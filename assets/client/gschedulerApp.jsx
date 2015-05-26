@@ -377,7 +377,7 @@ var GSchedulerApp = React.createClass({
             <i className="fa fa-cog"></i>
           </a>
           <a className="log" onClick={this.toggleLog}>
-            <i className="fa fa-tag"></i>
+            <i className="fa fa-info-circle"></i>
           </a>
           <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
           
