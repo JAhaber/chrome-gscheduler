@@ -324,8 +324,8 @@ module.exports = function (grunt) {
         "extensions": {
             "extension1": {
                 account: "default",
-                appID: "plgnahdfabaahnjhenjbpfoocjfnfeai", // STAGING
-                //appID: "peikbeklmabkcahojdeiabbaglkahind", // PRODUCTION
+                //appID: "plgnahdfabaahnjhenjbpfoocjfnfeai", // STAGING
+                appID: "peikbeklmabkcahojdeiabbaglkahind", // PRODUCTION
                 //required, we can use dir name and upload most recent zip file
                 zip: "<%= config.package %>",
                 publishTarget: 'trustedTesters'   
