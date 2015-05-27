@@ -23,6 +23,13 @@
             "description": "Show the GScheduler"
         }
     },
+    "content_scripts": [
+        {
+            "matches": ["http://genome.klick.com/tickets/*", "https://genome.klick.com/tickets/*"],
+            "js": ["scripts/genomeTasks-bundle.js"],
+            "run_at": "document_end"
+        }
+    ],
     "background": {
         "scripts": [
             "scripts/chromereload.js",
@@ -41,7 +48,8 @@
         "chrome_style": true
     },
     "web_accessible_resources": [
-        "images/genome.png"
+        "images/genome.png",
+        "images/icon-19.png"
     ],
     "content_security_policy": "script-src 'self' https://genome.klick.com; object-src 'self'"
 }

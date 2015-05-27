@@ -96,6 +96,10 @@ module.exports = function (grunt) {
           {
             src: ['<%= config.assets %>/options.jsx'],
             dest: '<%= config.app %>/scripts/options-bundle.js'
+          },
+          {
+            src: ['<%= config.assets %>/genomeTasks.jsx'],
+            dest: '<%= config.app %>/scripts/genomeTasks-bundle.js'
           }
         ]
       }

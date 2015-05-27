@@ -15,6 +15,7 @@ var newestFirst = true;
 var showBackup = true;
 var showLog = false;
 var nonBillables = { "Entries" : [] };
+var genomeTask = null;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -30,6 +31,12 @@ var GSchedulerApp = React.createClass({
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
+  },
+  componentDidUpdate: function(){
+    if(genomeTask) {
+      this.createTask(genomeTask);
+      genomeTask = null;
+    }
   },
   getNonBillables: function(){
       GenomeAPI.getNonBillableTasks().then(function(ticketData){
@@ -452,25 +459,13 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
   });
 });
 
-function getTabs (){
-  var genomeTask = [];
-  var taskUrl = "https://genome.klick.com/tickets/#/details/";
-  chrome.tabs.query({active: true}, function (tabs){
-  for (var i = 0; i < tabs.length; i++){
-    if (tabs[i].url.indexOf(taskUrl) === 0)
-      console.log("task " + tabs[i].url.slice(taskUrl.length) + " " + tabs[i].title);
-  }
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    var scope = this;
+    if ('newTask' in request){
+      genomeTask = request.newTask;
+    }
   });
-}
 
-chrome.tabs.onUpdated.addListener(function (callback){
-  getTabs();
-});
-
-chrome.tabs.onActivated.addListener(function (callback){
-  getTabs();
-});
-
-getTabs();
 
 module.exports = GSchedulerApp;       
