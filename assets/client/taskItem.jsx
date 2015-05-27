@@ -77,6 +77,12 @@ var TaskItem = React.createClass({
     else
       this.props.model.handleDateChange(this.props.task, event.target.value);
   },
+  dragStart: function(event){
+    var url = "https://genome.klick.com/tickets/#/details/" + this.props.task.ticketID;
+    event.dataTransfer.effectAllowed = "copy";
+    event.dataTransfer.setData("text/uri-list", url);
+    event.dataTransfer.setData("text/plain", url);
+  },
   durationBlur: function(event) {
       var task = this.props.task;
       if (Moment(this.state.timeElapsed, 'HH:mm:ss').isValid()){
@@ -257,7 +263,7 @@ var TaskItem = React.createClass({
    
     return (
         
-        <li className={task.stopTime ? 'task stopped' : 'task'}>
+        <li className={task.stopTime ? 'task stopped' : 'task'} draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart}>
           <div className={colorClass}>
             <div className="task-wrapper">
               <label className={task.expanded ? 'open' : 'closed'}>

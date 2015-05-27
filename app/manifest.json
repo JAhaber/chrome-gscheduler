@@ -1,6 +1,6 @@
 {
     "name": "GScheduler",
-    "version": "0.1.7",
+    "version": "0.1.10",
     "manifest_version": 2,
     "description": "Forgot to log your time...again? Genome locking you out...again? Perhaps you just need a faster, easier way to log it.",
     "icons": {
@@ -20,7 +20,7 @@
             "suggested_key": {
                 "default": "Ctrl+Shift+Comma"
             },
-            "description": "Show the gScheduler"
+            "description": "Show the GScheduler"
         }
     },
     "background": {
