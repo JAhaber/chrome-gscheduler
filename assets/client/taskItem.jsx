@@ -263,9 +263,9 @@ var TaskItem = React.createClass({
    
     return (
         
-        <li className={task.stopTime ? 'task stopped' : 'task'} draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart}>
+        <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
-            <div className="task-wrapper">
+            <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart}>
               <label className={task.expanded ? 'open' : 'closed'}>
                 <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
                 <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}

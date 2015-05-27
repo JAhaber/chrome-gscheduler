@@ -452,7 +452,25 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
   });
 });
 
-module.exports = GSchedulerApp;
+function getTabs (){
+  var genomeTask = [];
+  var taskUrl = "https://genome.klick.com/tickets/#/details/";
+  chrome.tabs.query({active: true}, function (tabs){
+  for (var i = 0; i < tabs.length; i++){
+    if (tabs[i].url.indexOf(taskUrl) === 0)
+      console.log("task " + tabs[i].url.slice(taskUrl.length) + " " + tabs[i].title);
+  }
+  });
+}
 
+chrome.tabs.onUpdated.addListener(function (callback){
+  getTabs();
+});
 
+chrome.tabs.onActivated.addListener(function (callback){
+  getTabs();
+});
 
+getTabs();
+
+module.exports = GSchedulerApp;       
