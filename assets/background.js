@@ -81,7 +81,17 @@ chrome.runtime.onMessage.addListener(
       taskRunning = request.running;
     if ('tick' in request)
       tick = request.tick;
-      
+    if ('newTask' in request){
+        var switcherWindowId = windowManager.getSwitcherWindowId();
+        switcherWindowId.then(function(id){
+          if (id === null){
+            runGScheduler();
+            setTimeout(function(){
+              chrome.runtime.sendMessage(request, function(response) {});
+            }, 500);
+          }
+        });
+    }
   });
 
 
