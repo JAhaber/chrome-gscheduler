@@ -6,8 +6,7 @@ var imgURL = chrome.extension.getURL("images/icon-19.png");
 var ticketID;
 var title;
 var projectID;
-var style="position:fixed;bottom:0;left:"+
-	($(window).width()/2 - 75) + "px;color:#fff;background-color:#2585b0;width:150px;text-align:center;padding:5px;cursor:pointer;border-radius: 10px 10px 0 0;";
+var style = "left:" + ($(window).width()/2 - 75) + "px;";
 
 function addGButton(){
 	ticketID = window.location.href.substring(window.location.href.lastIndexOf("/") + 1);
@@ -40,6 +39,10 @@ function addGButton(){
 				categoryID: null
 			}
 		}, function(response) {});
+	});
+
+	$( window ).resize(function(){
+		$("#gButton").css("left", ($(window).width()/2 - 75) + "px");
 	});
 }
 

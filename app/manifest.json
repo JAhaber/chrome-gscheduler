@@ -25,8 +25,16 @@
     },
     "content_scripts": [
         {
-            "matches": ["http://genome.klick.com/tickets/*", "https://genome.klick.com/tickets/*"],
-            "js": ["scripts/genomeTasks-bundle.js"],
+            "matches": [
+                "http://genome.klick.com/tickets/*",
+                "https://genome.klick.com/tickets/*"
+            ],
+            "js": [
+                "scripts/genomeTasks-bundle.js"
+            ],
+            "css": [
+                "styles/genomeTasks.css"
+            ],
             "run_at": "document_end"
         }
     ],
