@@ -2382,7 +2382,9 @@ footer {
   padding-left: 10px;
   padding-right: 10px; }
   .updateLog h1 {
-    margin-top: 5px; }
+    margin-top: 45px; }
+    .updateLog h1:first-child {
+      margin-top: 5px; }
   .updateLog p {
     font-weight: bold;
     margin: 15px 0 15px 0; }
