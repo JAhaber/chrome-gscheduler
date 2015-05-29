@@ -47,6 +47,9 @@ var TaskItem = React.createClass({
   },
   componentDidUpdate: function(){
    var task = this.props.task;
+   if (!task.ticketID){
+    $("#" + task.id + "-draggable").attr("draggable", "false");
+   }
    if (task.hasChanged){
     this.setState({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
@@ -265,7 +268,7 @@ var TaskItem = React.createClass({
         
         <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
-            <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart}>
+            <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} id={task.id + "-draggable"}>
               <label className={task.expanded ? 'open' : 'closed'}>
                 <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
                 <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}
