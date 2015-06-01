@@ -167,7 +167,6 @@ var GSchedulerApp = React.createClass({
   openOptions: function(){
     chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
   },
-
   closeScheduler: function() {
     window.close();
   },
@@ -399,8 +398,14 @@ var GSchedulerApp = React.createClass({
     );
   }
 });
-
-
+$("html").on("dragover", function(e){
+  e.preventDefault();
+  e.stopPropagation();
+});
+$("html").on("drop", function(e){
+  e.preventDefault();
+  e.stopPropagation();
+});
 chrome.storage.sync.get({
     newestFirst: true,
     showBackup: true
