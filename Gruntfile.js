@@ -331,8 +331,7 @@ module.exports = function (grunt) {
                 //appID: "plgnahdfabaahnjhenjbpfoocjfnfeai", // STAGING
                 appID: "peikbeklmabkcahojdeiabbaglkahind", // PRODUCTION
                 //required, we can use dir name and upload most recent zip file
-                zip: "<%= config.package %>",
-                publishTarget: 'trustedTesters'   
+                zip: "<%= config.package %>"
             }
         }
     }

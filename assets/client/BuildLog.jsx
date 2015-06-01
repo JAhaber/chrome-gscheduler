@@ -4,7 +4,7 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
-        <h1>GScheduler Version: 0.1.8 Changelog:</h1>
+        <h1>GScheduler Version: 0.1.9 Changelog:</h1>
         
         <ul>
           <p>Draggable Tasks</p>
@@ -28,6 +28,12 @@ var LogItem = React.createClass({
           <p>Change Log</p>
           <li>Updated change log icon</li>
           
+        </ul>
+        <h1>GScheduler Version: 0.1.8 Changelog:</h1>
+        
+        <ul>
+          <p>Auto-upload</p>
+          <li>Grunt task for uploading to webstore implemented to allow faster deploys of new versions</li>
         </ul>
 
         <h1>GScheduler Version: 0.1.7 Changelog:</h1>
