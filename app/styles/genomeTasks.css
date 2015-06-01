@@ -1,0 +1,15 @@
+#gButton {
+  position: fixed;
+  bottom: 0;
+  color: #fff;
+  background-color: #2585b0;
+  width: 150px;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 10px 10px 0 0;
+  z-index: 5000; }
+  #gButton:hover {
+    background-color: #49acd9; }
+
+/*# sourceMappingURL=genomeTasks.css.map */

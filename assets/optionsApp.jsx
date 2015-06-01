@@ -11,7 +11,8 @@ var OptionScript = React.createClass({
       saveType: $('input[name=type]:checked').val(),
       autoRemind: $('#autoReminder').val(),
       startHour: $('#startHour').val(),
-      startMin: $('#startMin').val()
+      startMin: $('#startMin').val(),
+      genomeTask: $('#showGenomeTask').prop('checked')
     }, function() {
       console.log("save");
       // Update status to let user know options were saved.
@@ -33,7 +34,8 @@ var OptionScript = React.createClass({
       saveType: 'Actual',
       autoRemind: 'Never',
       startHour: "9",
-      startMin: "0"
+      startMin: "0",
+      genomeTask: true
     }, function(items) {
       var radioType = $('input[name=type]');
       for (i = 0; i < radioType.length; i++) {
@@ -47,6 +49,7 @@ var OptionScript = React.createClass({
       $('#startMin').val(items.startMin);
       $('#newestFirst').prop('checked', items.newestFirst);
       $('#showBackup').prop('checked', items.showBackup);
+      $('#showGenomeTask').prop('checked', items.genomeTask);
     });
   },
 
@@ -124,6 +127,9 @@ var OptionScript = React.createClass({
       </div>
       <div className="option">
         <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
+       </div>
+       <div className="option">
+        <input type="checkbox" id="showGenomeTask" defaultChecked /> Show a button in Genome to add tasks to GScheduler
        </div>
        <div className="option">
         <input type="checkbox" id="showBackup" defaultChecked /> Allow me to restore the last set of saved tasks

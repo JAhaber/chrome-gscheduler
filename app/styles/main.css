@@ -2350,7 +2350,7 @@ footer {
     position: absolute;
     font-size: 20px;
     color: #fff;
-    top: 12px;
+    top: 11px;
     left: 40px; }
   footer button {
     margin: 10px;
@@ -2379,22 +2379,25 @@ footer {
   color: #000;
   overflow-y: scroll;
   padding-bottom: 10px;
-  padding-left: 10px; }
+  padding-left: 10px;
+  padding-right: 10px; }
   .updateLog h1 {
-    margin-top: 5px; }
+    margin-top: 45px; }
+    .updateLog h1:first-child {
+      margin-top: 5px; }
   .updateLog p {
     font-weight: bold;
     margin: 15px 0 15px 0; }
   .updateLog .divider {
     border-top: 1px dashed #aaaaaa;
-    margin: 15px 10px 15px 0; }
+    margin: 15px 0 15px 0; }
   .updateLog ul {
     list-style-type: disc; }
     .updateLog ul li {
       list-style-position: outside;
       list-style-type: disc;
       font-size: 13px;
-      margin-left: 15px; }
+      margin-left: 16px; }
     .updateLog ul ul {
       margin-left: 20px; }
       .updateLog ul ul li {

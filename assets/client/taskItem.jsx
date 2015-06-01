@@ -47,6 +47,9 @@ var TaskItem = React.createClass({
   },
   componentDidUpdate: function(){
    var task = this.props.task;
+   if (!task.ticketID){
+    $("#" + task.id + "-draggable").attr("draggable", "false");
+   }
    if (task.hasChanged){
     this.setState({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
@@ -76,6 +79,12 @@ var TaskItem = React.createClass({
       this.setState({date: Moment(this.props.task.startTime).format("YYYY-MM-DD")})
     else
       this.props.model.handleDateChange(this.props.task, event.target.value);
+  },
+  dragStart: function(event){
+    var url = "https://genome.klick.com/tickets/#/details/" + this.props.task.ticketID;
+    event.dataTransfer.effectAllowed = "copy";
+    event.dataTransfer.setData("text/uri-list", url);
+    event.dataTransfer.setData("text/plain", url);
   },
   durationBlur: function(event) {
       var task = this.props.task;
@@ -259,7 +268,7 @@ var TaskItem = React.createClass({
         
         <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
-            <div className="task-wrapper">
+            <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} id={task.id + "-draggable"}>
               <label className={task.expanded ? 'open' : 'closed'}>
                 <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
                 <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}
