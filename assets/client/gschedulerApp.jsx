@@ -163,7 +163,10 @@ var GSchedulerApp = React.createClass({
       }).then(function(){console.log(scope.props.model.backup);});
     }
   },
-  
+  openGenome: function(task){
+    var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
+    chrome.tabs.create({ url : 'https://genome.klick.com/scheduler/#/day/' + date});
+  },
   openOptions: function(){
     chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
   },
@@ -275,7 +278,7 @@ var GSchedulerApp = React.createClass({
         curDate = Moment(task.startTime);
         newDate = (
           <label className="date-label">
-          {Moment(curDate).format('MMMM D, YYYY')}
+            <span onClick={this.openGenome.bind(this,task)} title={"Open " + Moment(curDate).format('MMMM D, YYYY') + " in Genome"}>{Moment(curDate).format('MMMM D, YYYY')}</span>
           </label>
           );
       }
@@ -334,7 +337,7 @@ var GSchedulerApp = React.createClass({
       {taskItems.length ?
         <span>
         <dl>
-          <dt>Today</dt>
+          <dt onClick={this.openGenome} title="Open today in genome">Today</dt>
           <dd>{this.state.totalTaskTime}</dd>
         </dl>
         <ul id="task-list">
