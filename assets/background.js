@@ -1,6 +1,7 @@
 var Q = require('q');
 var moment = require('moment');
 var windowManager = require('./background/window_manager')(chrome);
+var GenomeAPI = require('./client/GenomeAPI.js');
 
 var PADDING_TOP = 150;
 var PADDING_BOTTOM = 300;
@@ -112,29 +113,41 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
 
 
 var runGScheduler = function(){
-    var currentWindow = windowManager.getCurrentWindow();
-    var switcherWindowId = windowManager.getSwitcherWindowId();
+    GenomeAPI.verifyUser()
+    .then(function(user){
+      if(user.Entries){
+        var currentWindow = windowManager.getCurrentWindow();
+        var switcherWindowId = windowManager.getSwitcherWindowId();
 
-    Q.all([currentWindow, switcherWindowId])
-    .spread(function(currentWindow, switcherWindowId) {
-      // Don't activate the switcher from an existing switcher window.
-      if (currentWindow.id == switcherWindowId) {
-        windowManager.hideSwitcher();
-        return;
-      };
-      if (switcherWindowId === null){
-        windowManager.setLastWindowId(currentWindow.id);
-        var left = currentWindow.left + Math.round((currentWindow.width - SWITCHER_WIDTH) / 2);
-        var top = currentWindow.top + PADDING_TOP;
-        var height = Math.max(currentWindow.height - PADDING_TOP - PADDING_BOTTOM, 600);
-        var width = SWITCHER_WIDTH;
-        clearInterval(ticker);
-        ticker = null;
-        windowManager.showSwitcher(width, height, left, top);
+        Q.all([currentWindow, switcherWindowId])
+        .spread(function(currentWindow, switcherWindowId) {
+          // Don't activate the switcher from an existing switcher window.
+          if (currentWindow.id == switcherWindowId) {
+            windowManager.hideSwitcher();
+            return;
+          };
+          if (switcherWindowId === null){
+            windowManager.setLastWindowId(currentWindow.id);
+            var left = currentWindow.left + Math.round((currentWindow.width - SWITCHER_WIDTH) / 2);
+            var top = currentWindow.top + PADDING_TOP;
+            var height = Math.max(currentWindow.height - PADDING_TOP - PADDING_BOTTOM, 600);
+            var width = SWITCHER_WIDTH;
+            clearInterval(ticker);
+            ticker = null;
+            windowManager.showSwitcher(width, height, left, top);
+          }
+          else
+            chrome.windows.update(switcherWindowId, {focused: true});
+        });
+
       }
       else
-        chrome.windows.update(switcherWindowId, {focused: true});
+        chrome.tabs.create({ url : 'http://genome.klick.com/login'});
+    }).fail(function(err){
+      chrome.tabs.create({ url : 'http://genome.klick.com/login'});
     });
+
+    
 };
 
 var startAutoReminder = function(){
