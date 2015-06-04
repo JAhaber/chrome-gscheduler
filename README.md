@@ -35,21 +35,17 @@ GScheduler was built to allow you to track your Genome tasks with ease. Replicat
 - Select the **Task name/ID** box at the top of the window
 - Type in any of the following:
 
-1. A task ID or the title of a task
-2. The title of a non-project task
-3. Any other random text
-
-1. When you type in a valid task ID or title of a task, GScheduler will use the Genome API to locate the task information and offer you a dropdown containing any tasks that match your input.
+1. **A task ID or the title of a task**: When you type in a valid task ID or title of a task, GScheduler will use the Genome API to locate the task information and offer you a dropdown containing any tasks that match your input.
 
     Selecting from the dropdown by clicking an option or highlighting an option and pressing enter will associate your new entry in GScheduler with the task in Genome.
 
     The **Note** field will be focused so you can enter any details you want to add about the task you are tracking. You can choose to fill this out or leave it blank (it can be editted later) and press **Enter** from this field to create the new entry. This entry will be tagged in Blue to indicate it is associated with a task.
 
-2. Similar to searching for a task in Genome, GScheduler will check if the content you are typing matches a non-project task.
+2. **The title of a non-project task**: Similar to searching for a task in Genome, GScheduler will check if the content you are typing matches a non-project task.
 
     Adding a non-project task follows the same procedure as a regular task (selecting from a dropdown, filling out the notes field) but will associate your entry with a non-project category (tagged in Grey) instead of a task ID when the entry is created.
 
-3. If you type in the **Task name/ID** field and do not find any matches, or choose not to select a match, you can still press **Enter** to create a new **Note** entry.
+3. **Any other random text**: If you type in the **Task name/ID** field and do not find any matches, or choose not to select a match, you can still press **Enter** to create a new **Note** entry.
 
     A **Note** entry is tagged in Yellow to indicate it is not associated with anything in Genome. When you save to Genome at the end of the day, the note will be entered in the schedule, but you will need to convert it to a task before you can confirm your schedule entries at the end of the day.
 
