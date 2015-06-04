@@ -47,7 +47,7 @@ GScheduler was built to allow you to track your Genome tasks with ease. Replicat
 
 3. **Any other random text**: If you type in the **Task name/ID** field and do not find any matches, or choose not to select a match, you can still press **Enter** to create a new **Note** entry.
 
-    A **Note** entry is tagged in Yellow to indicate it is not associated with anything in Genome. When you save to Genome at the end of the day, the note will be entered in the schedule, but you will need to convert it to a task before you can confirm your schedule entries at the end of the day.
+    A **Note** entry is tagged in Yellow to indicate it is not associated with anything in Genome. When you save to Genome at the end of the day, the note will be entered in the schedule, but you will need to convert it to a task before you can confirm your schedule entries.
 
 ### Stopping an Entry
 
