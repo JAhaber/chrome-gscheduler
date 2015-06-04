@@ -4,6 +4,32 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+        <h1>GScheduler Version: 0.1.10 Changelog:</h1>
+        
+        <ul>
+          <p>Verify Login</p>
+          <li>When opening GScheduler, it will now check if you are logged in to Genome</li>
+          <li>If you are not logged in, you will be redirected to the google login page</li>
+                   
+          <div className="divider"></div>
+          <p>Readme</p>
+          <li>The Readme file for GScheduler has been updated!</li>
+          <ul>
+            <li>Readme has a How To section that explains how to use most of the GScheduler functionality</li>
+            <li>A help button has been added to GScheduler that opens this page in the browser</li>
+          </ul>
+         
+          <div className="divider"></div>
+          <p>Genome Schedule</p>
+          <li>Clicking on "Today" or a date headline in GScheduler will now open the specified date in your Genome schedule</li>
+          
+          <div className="divider"></div>
+          <p>Bug Fixes</p>
+          <li>Dragging a URL onto GScheduler should no longer open the link in the GScheduler window</li>
+          <li>GScheduler should now always pop up when adding a new entry by clicking the "Add to GScheduler" button in Genome</li>
+
+        </ul>
+
         <h1>GScheduler Version: 0.1.9 Changelog:</h1>
         
         <ul>
