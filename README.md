@@ -34,6 +34,7 @@ GScheduler was built to allow you to track your Genome tasks with ease. Replicat
 
 - Select the **Task name/ID** box at the top of the window
 - Type in any of the following:
+
 1. A task ID or the title of a task
 2. The title of a non-project task
 3. Any other random text
