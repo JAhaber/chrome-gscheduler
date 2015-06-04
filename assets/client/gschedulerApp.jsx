@@ -163,11 +163,13 @@ var GSchedulerApp = React.createClass({
       }).then(function(){console.log(scope.props.model.backup);});
     }
   },
-  
+  openGenome: function(task){
+    var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
+    chrome.tabs.create({ url : 'https://genome.klick.com/scheduler/#/day/' + date});
+  },
   openOptions: function(){
     chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
   },
-
   closeScheduler: function() {
     window.close();
   },
@@ -197,6 +199,9 @@ var GSchedulerApp = React.createClass({
   },
   toggleLog: function(){
     showLog = !showLog;
+  },
+  toggleHelp: function(){
+    chrome.tabs.create({ url : 'https://github.com/iDVB/chrome-gscheduler/blob/master/README.md'});
   },
   closeLog: function(){
     showLog = false;
@@ -276,7 +281,7 @@ var GSchedulerApp = React.createClass({
         curDate = Moment(task.startTime);
         newDate = (
           <label className="date-label">
-          {Moment(curDate).format('MMMM D, YYYY')}
+            <span onClick={this.openGenome.bind(this,task)} title={"Open " + Moment(curDate).format('MMMM D, YYYY') + " in Genome"}>{Moment(curDate).format('MMMM D, YYYY')}</span>
           </label>
           );
       }
@@ -335,7 +340,7 @@ var GSchedulerApp = React.createClass({
       {taskItems.length ?
         <span>
         <dl>
-          <dt>Today</dt>
+          <dt onClick={this.openGenome} title="Open today in genome">Today</dt>
           <dd>{this.state.totalTaskTime}</dd>
         </dl>
         <ul id="task-list">
@@ -387,6 +392,9 @@ var GSchedulerApp = React.createClass({
           <a className="log" onClick={this.toggleLog} title="Change Log">
             <i className="fa fa-info-circle"></i>
           </a>
+          <a className="help" onClick={this.toggleHelp} title="Help">
+            <i className="fa fa-question-circle"></i>
+          </a>
           <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
           
         </footer>
@@ -399,8 +407,14 @@ var GSchedulerApp = React.createClass({
     );
   }
 });
-
-
+$("html").on("dragover", function(e){
+  e.preventDefault();
+  e.stopPropagation();
+});
+$("html").on("drop", function(e){
+  e.preventDefault();
+  e.stopPropagation();
+});
 chrome.storage.sync.get({
     newestFirst: true,
     showBackup: true

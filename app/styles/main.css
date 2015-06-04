@@ -2198,16 +2198,14 @@ dl {
   dl dt, dl dd {
     color: #fff;
     font: normal 20px Helvetica, Arial, sans-serif;
-    float: left;
-    display: block;
-    margin-right: 2.35765%;
-    width: 48.82117%;
     margin-top: 0.75em;
     margin: 0;
     padding-bottom: 5px; }
-    dl dt:last-child, dl dd:last-child {
-      margin-right: 0; }
+  dl dt {
+    float: left;
+    cursor: pointer; }
   dl dd {
+    float: right;
     text-align: right; }
 
 #task-list {
@@ -2218,6 +2216,8 @@ dl {
     margin: 25px 0 0 0;
     padding: 0 0 10px 20px;
     border-bottom: 1px solid #000; }
+    #task-list .date-label span {
+      cursor: pointer; }
   #task-list .border-left {
     line-height: 0;
     background-color: #ffdd57;
@@ -2346,12 +2346,24 @@ footer {
     color: #fff;
     top: 11px;
     left: 10px; }
+    footer .options:hover {
+      color: #000; }
   footer .log {
     position: absolute;
     font-size: 20px;
     color: #fff;
     top: 11px;
     left: 40px; }
+    footer .log:hover {
+      color: #000; }
+  footer .help {
+    position: absolute;
+    font-size: 20px;
+    color: #fff;
+    top: 11px;
+    left: 70px; }
+    footer .help:hover {
+      color: #000; }
   footer button {
     margin: 10px;
     margin-right: 20px;

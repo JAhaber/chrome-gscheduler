@@ -43,7 +43,11 @@ var GenomeAPI = {
 
     return GenomeAPI.request(url, options);
   },
+  verifyUser: function() {
+		var options = {};
 
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/User/Current.json', options);
+	},
   getUser: function() {
 		var options = {};
 		var deferred = Q.defer();

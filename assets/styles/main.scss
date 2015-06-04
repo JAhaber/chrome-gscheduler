@@ -197,12 +197,16 @@ dl {
   dt, dd {
     color:#fff;
     font: normal 20px Helvetica, Arial, sans-serif;
-    @include span-columns(6 of 12);
     margin-top: 0.75em;
     margin: 0;
     padding-bottom:5px;
   }
+  dt{
+    float:left;
+    cursor:pointer;
+  }
   dd {
+    float:right;
     text-align: right;
   }
 
@@ -217,6 +221,9 @@ dl {
     margin:25px 0 0 0;
     padding:0 0 10px 20px;
     border-bottom:1px solid #000;
+    & span{
+      cursor:pointer;
+    }
   }
   
   .border-left{
@@ -371,7 +378,10 @@ footer {
     color: #fff;
     top:11px;
     left:10px;
+    &:hover{
+      color:#000;
     }
+  }
 
   .log{
     position:absolute;
@@ -379,6 +389,20 @@ footer {
     color: #fff;
     top:11px;
     left:40px;
+    &:hover{
+      color:#000;
+    }
+  }
+
+  .help{
+    position:absolute;
+    font-size:20px;
+    color: #fff;
+    top:11px;
+    left:70px;
+    &:hover{
+      color: #000;
+    }
   }
 
   button{
@@ -398,7 +422,6 @@ footer {
     }
   }
 }
-
 
 .error{
   border: 1px solid #d21245 !important;
