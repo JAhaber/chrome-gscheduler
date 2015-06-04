@@ -1,5 +1,5 @@
 # GScheduler
-**Powered by Genome**
+*Powered by Genome*
 
 Rapidly track tasks to Genome without having to load your schedule.
 
@@ -47,7 +47,7 @@ GScheduler was built to allow you to track your Genome tasks with ease. Replicat
 
 3. **Any other random text**: If you type in the **Task name/ID** field and do not find any matches, or choose not to select a match, you can still press **Enter** to create a new **Note** entry.
 
-    A **Note** entry is tagged in Yellow to indicate it is not associated with anything in Genome. When you save to Genome at the end of the day, the note will be entered in the schedule, but you will need to convert it to a task before you can confirm your schedule entries.
+    A **Note** entry is tagged in Yellow to indicate it is not associated with anything in Genome. When you save to Genome at the end of the day, the note will be entered in the schedule, but you will need to convert it to a task before you can confirm your schedule.
 
 ### Stopping an Entry
 
@@ -91,7 +91,7 @@ Press the **Save** button at any time to send your list of entries to your Genom
 
 ### Gaps
 
-When there is a minute or more between two tasks that has not been tracked, a **Gap** will appear indicating how much time is missing between entries. This entry is not a task and can be ignored. It is meant provides options to help you fill out your schedule properly.
+When there is a minute or more between two tasks that has not been tracked, a **Gap** will appear indicating how much time is missing between entries. This entry is not a task and can be ignored. It is meant to provide options to help you fill out your schedule properly.
 
 Gaps allow you to:
 
