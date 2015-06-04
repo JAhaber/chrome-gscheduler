@@ -91,6 +91,8 @@ chrome.runtime.onMessage.addListener(
               chrome.runtime.sendMessage(request, function(response) {});
             }, 500);
           }
+          else
+            chrome.windows.update(id, {focused: true});
         });
     }
   });
