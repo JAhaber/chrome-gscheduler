@@ -378,7 +378,10 @@ footer {
     color: #fff;
     top:11px;
     left:10px;
+    &:hover{
+      color:#000;
     }
+  }
 
   .log{
     position:absolute;
@@ -386,6 +389,20 @@ footer {
     color: #fff;
     top:11px;
     left:40px;
+    &:hover{
+      color:#000;
+    }
+  }
+
+  .help{
+    position:absolute;
+    font-size:20px;
+    color: #fff;
+    top:11px;
+    left:70px;
+    &:hover{
+      color: #000;
+    }
   }
 
   button{
@@ -405,7 +422,6 @@ footer {
     }
   }
 }
-
 
 .error{
   border: 1px solid #d21245 !important;

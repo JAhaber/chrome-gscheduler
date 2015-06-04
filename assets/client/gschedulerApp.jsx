@@ -200,6 +200,9 @@ var GSchedulerApp = React.createClass({
   toggleLog: function(){
     showLog = !showLog;
   },
+  toggleHelp: function(){
+    chrome.tabs.create({ url : 'https://github.com/iDVB/chrome-gscheduler/blob/master/README.md'});
+  },
   closeLog: function(){
     showLog = false;
   },
@@ -388,6 +391,9 @@ var GSchedulerApp = React.createClass({
           </a>
           <a className="log" onClick={this.toggleLog} title="Change Log">
             <i className="fa fa-info-circle"></i>
+          </a>
+          <a className="help" onClick={this.toggleHelp} title="Help">
+            <i className="fa fa-question-circle"></i>
           </a>
           <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
           

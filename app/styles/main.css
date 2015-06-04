@@ -2346,12 +2346,24 @@ footer {
     color: #fff;
     top: 11px;
     left: 10px; }
+    footer .options:hover {
+      color: #000; }
   footer .log {
     position: absolute;
     font-size: 20px;
     color: #fff;
     top: 11px;
     left: 40px; }
+    footer .log:hover {
+      color: #000; }
+  footer .help {
+    position: absolute;
+    font-size: 20px;
+    color: #fff;
+    top: 11px;
+    left: 70px; }
+    footer .help:hover {
+      color: #000; }
   footer button {
     margin: 10px;
     margin-right: 20px;
