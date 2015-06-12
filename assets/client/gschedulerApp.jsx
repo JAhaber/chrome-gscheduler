@@ -6,6 +6,7 @@ var TaskItem = require('./taskItem.jsx');
 var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
+var RecentTasks = require('./RecentTasks.jsx');
 var $ = require('jquery');
 window.jQuery = $;
 var Moment = require('moment');
@@ -203,6 +204,7 @@ var GSchedulerApp = React.createClass({
   toggleHelp: function(){
     chrome.tabs.create({ url : 'https://github.com/iDVB/chrome-gscheduler/blob/master/README.md'});
   },
+  
   closeLog: function(){
     showLog = false;
   },
@@ -355,6 +357,7 @@ var GSchedulerApp = React.createClass({
           <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
         </span>
         : ""}
+        
       </section>
     );
    
@@ -385,7 +388,10 @@ var GSchedulerApp = React.createClass({
           
         {main}
 
+        <RecentTasks />
+
         <footer>
+          
           <a className="options" onClick={this.openOptions} title="Options">
             <i className="fa fa-cog"></i>
           </a>

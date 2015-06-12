@@ -62,6 +62,11 @@ var GenomeAPI = {
 
 		return deferred.promise;
 	},
+	getSchedule: function(user) {
+		var options = {};
+		var deferred = Q.defer();
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json?StartDate=' + Moment().subtract(7, 'days').format("YYYY-MM-DD") + '&EndDate=' + Moment().format("YYYY-MM-DD") + '&UserIDs=' + user, options);		
+	},
 	getProjectInfo: function(ticketid) {
 		var options = {};
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);

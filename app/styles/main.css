@@ -2162,7 +2162,7 @@ header {
       font-size: 14px; }
 
 #main {
-  height: calc(100% - 129px);
+  height: calc(100% - 153px);
   overflow-y: auto;
   /* the new scrollbar will have a flat appearance with the set background color */
   /* this will style the thumb, ignoring the track */
@@ -2333,19 +2333,54 @@ dl {
       width: 95%;
       margin-bottom: 5px; }
 
+#recent {
+  width: 100%;
+  height: 21px;
+  position: fixed;
+  bottom: 51px;
+  z-index: 1000;
+  background-color: #3f9dc7;
+  border-radius: 3px 3px 0 0;
+  border-top: 1px solid #2585b0;
+  overflow: hidden; }
+  #recent.open {
+    height: calc(70% - 153px);
+    overflow-y: auto; }
+    #recent.open .down {
+      display: inline; }
+    #recent.open .up {
+      display: none; }
+  #recent .down {
+    display: none; }
+  #recent .arrow {
+    padding-top: 3px;
+    background-color: #2585b0;
+    cursor: pointer;
+    font-size: 15px;
+    color: #fff;
+    display: block;
+    width: 100%;
+    height: 21px;
+    text-align: center;
+    line-height: 1em; }
+    #recent .arrow i {
+      padding-left: 5px; }
+    #recent .arrow:hover {
+      color: #000; }
+
 footer {
   position: fixed;
   width: 100%;
   bottom: 0;
   padding: 0;
   text-align: right;
-  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 17px left 115px, linear-gradient(#3f9dc7, #2585b0); }
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 17px left 50%, linear-gradient(#2585b0, #3f9dc7); }
   footer .options {
     position: absolute;
     font-size: 20px;
     color: #fff;
     top: 11px;
-    left: 10px; }
+    left: 20px; }
     footer .options:hover {
       color: #000; }
   footer .log {
@@ -2353,7 +2388,7 @@ footer {
     font-size: 20px;
     color: #fff;
     top: 11px;
-    left: 40px; }
+    left: 50px; }
     footer .log:hover {
       color: #000; }
   footer .help {
@@ -2361,7 +2396,7 @@ footer {
     font-size: 20px;
     color: #fff;
     top: 11px;
-    left: 70px; }
+    left: 80px; }
     footer .help:hover {
       color: #000; }
   footer button {
