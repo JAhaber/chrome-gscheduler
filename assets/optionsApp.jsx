@@ -12,6 +12,7 @@ var OptionScript = React.createClass({
       autoRemind: $('#autoReminder').val(),
       startHour: $('#startHour').val(),
       startMin: $('#startMin').val(),
+      recentTasks: $('#recentTasks').val(),
       genomeTask: $('#showGenomeTask').prop('checked')
     }, function() {
       console.log("save");
@@ -35,6 +36,7 @@ var OptionScript = React.createClass({
       autoRemind: 'Never',
       startHour: "9",
       startMin: "0",
+      recentTasks: "1",
       genomeTask: true
     }, function(items) {
       var radioType = $('input[name=type]');
@@ -47,6 +49,7 @@ var OptionScript = React.createClass({
       $('#autoReminder').val(items.autoRemind);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
+      $('#recentTasks').val(items.recentTasks),
       $('#newestFirst').prop('checked', items.newestFirst);
       $('#showBackup').prop('checked', items.showBackup);
       $('#showGenomeTask').prop('checked', items.genomeTask);
@@ -125,6 +128,19 @@ var OptionScript = React.createClass({
           </select>
         </p>
       </div>
+      
+      <div className="option">
+        <h2>Recent Tasks:</h2>
+        <p>Load recent tasks from the last:
+          <select id="recentTasks" className="long">
+            <option value="1">1 Week</option>
+            <option value="2">2 Weeks</option>
+            <option value="3">3 Weeks</option>
+            <option value="4">4 Weeks</option>
+          </select>
+        </p>
+      </div>
+
       <div className="option">
         <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
        </div>

@@ -1,6 +1,7 @@
 
 var React = require('react');
 var Moment = require('moment');
+var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var $ = require('jquery');
 var showRecent = false;
@@ -17,16 +18,9 @@ var RecentTasks = React.createClass({
         for (var i = 0; i < results.Entries.length; i++)
         {
           if (results.Entries[i].Type === "Project"){
-            var match = false;
-            for (var j = 0; j < tasks.length; j++)
-            {
-              if (results.Entries[i].TicketID === tasks[j].TicketID){
-                match = true;
-                break;
-              }
-            }
-            if (!match)
-              tasks.push(results.Entries[i]);
+              GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
+                tasks.push(ticket.Entries[0]);
+              });              
           }
         }
       }).fail(function(err){
@@ -41,8 +35,32 @@ var RecentTasks = React.createClass({
       
      
   },
+  onPlay: function(event){
+    var task = null;
+    for (var i = 0; i < tasks.length; i++)
+    {
+      if (tasks[i].TicketID === $(event.target).data("ticketid")){
+        task = {
+          title: tasks[i].Title,
+          ticketID: tasks[i].TicketID,
+          projectID: tasks[i].ProjectID
+        };
+        break;
+      }
+    }
+    if (task)
+      this.props.onPlay(task);
+  },
+  dragStart: function(event){
+    console.log($(event.target).data("ticketid"));
+    var url = "https://genome.klick.com/tickets/#/details/" + $(event.target).data("ticketid");
+    event.dataTransfer.effectAllowed = "copy";
+    event.dataTransfer.setData("text/uri-list", url);
+    event.dataTransfer.setData("text/plain", url);
+  },
 	render: function() {
     var taskList;
+    var scope = this;
     if (tasks === null)
       taskList = "Loading...";
     else if (tasks === "fail")
@@ -50,19 +68,23 @@ var RecentTasks = React.createClass({
     else if (tasks.length === 0)
       taskList = "No entries found";
     else{
+      tasks = _.sortBy(tasks, function(o){ return o.TicketID; });
+      tasks = _.uniq(tasks, true, function(o){ return o.TicketID; });
       taskList = tasks.map(function (task) {
         return (
           <li className='task'>
-            <div className="task-wrapper" draggable onDragStart={this.dragStart} id={task.id + "-draggable"}>
+            <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart} data-ticketid={task.TicketID}>
               <label>
-                {task.TicketID}
-              </label>
-              <label>
-                {task.TicketTitle}
+                {task.TicketStatusName === "closed" ?
+                  <i className="fa fa-lock" title="This task is closed in genome. You can still bill to it if the project is open."></i>
+                  : <i className="fa fa-unlock-alt" title="This task is open in genome."></i>
+                }
+                
+                {" " + task.TicketID + " - " + task.Title}
               </label>
            
               <div className="controls">
-                <a className="play"><i className="fa fa-play"></i></a>
+                <a className="play" onClick={scope.onPlay} data-ticketid={task.TicketID}><i className="fa fa-play" data-ticketid={task.TicketID}></i></a>
               </div>
             </div>
           </li>
@@ -78,9 +100,11 @@ var RecentTasks = React.createClass({
             <i className="fa up fa-arrow-circle-o-up"></i>
             <i className="fa down fa-arrow-circle-o-down"></i>
           </a>
-          <ul className="content">
-            {taskList}
-          </ul>
+          <div className="content-wrapper">
+            <ul className="content">
+              {taskList}
+            </ul>
+          </div>
         </section>
 
     );

@@ -7,6 +7,7 @@ var Moment = require('moment');
 var isSequenced;
 var sequenceHour = 9;
 var sequenceMin = 0;
+var recentTaskWeeks = 1;
 
 var GenomeAPI = {
 
@@ -65,7 +66,7 @@ var GenomeAPI = {
 	getSchedule: function(user) {
 		var options = {};
 		var deferred = Q.defer();
-		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json?StartDate=' + Moment().subtract(7, 'days').format("YYYY-MM-DD") + '&EndDate=' + Moment().format("YYYY-MM-DD") + '&UserIDs=' + user, options);		
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json?StartDate=' + Moment().subtract(7 * recentTaskWeeks, 'days').format("YYYY-MM-DD") + '&EndDate=' + Moment().format("YYYY-MM-DD") + '&UserIDs=' + user, options);		
 	},
 	getProjectInfo: function(ticketid) {
 		var options = {};
@@ -158,7 +159,8 @@ var GenomeAPI = {
 chrome.storage.sync.get({
     saveType: 'Actual',
     startHour: 9,
-    startMin: 0
+    startMin: 0,
+    recentTasks: 1
   }, function(items) {
    if(items.saveType === 'Sequenced')
    		isSequenced = true;
@@ -166,13 +168,15 @@ chrome.storage.sync.get({
    		isSequenced = false;
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
+   	recentTaskWeeks = items.recentTasks;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
     saveType: 'Actual',
     startHour: 9,
-    startMin: 0
+    startMin: 0,
+    recentTasks: 1
   }, function(items) {
     if(items.saveType === 'Sequenced')
    		isSequenced = true;
@@ -180,6 +184,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
    		isSequenced = false;
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
+   	recentTaskWeeks = items.recentTasks;
   });
 });
 

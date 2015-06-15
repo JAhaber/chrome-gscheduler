@@ -2162,7 +2162,7 @@ header {
       font-size: 14px; }
 
 #main {
-  height: calc(100% - 153px);
+  height: calc(100% - 141px);
   overflow-y: auto;
   /* the new scrollbar will have a flat appearance with the set background color */
   /* this will style the thumb, ignoring the track */
@@ -2208,58 +2208,58 @@ dl {
     float: right;
     text-align: right; }
 
-#task-list {
+#task-list, .task-list {
   font-size: 0.75em; }
-  #task-list .date-label {
+  #task-list .date-label, .task-list .date-label {
     font: normal 20px Helvetica, Arial, sans-serif;
     color: #585858;
     margin: 25px 0 0 0;
     padding: 0 0 10px 20px;
     border-bottom: 1px solid #000; }
-    #task-list .date-label span {
+    #task-list .date-label span, .task-list .date-label span {
       cursor: pointer; }
-  #task-list .border-left {
+  #task-list .border-left, .task-list .border-left {
     line-height: 0;
     background-color: #ffdd57;
     padding-left: 10px;
     border-bottom: 1px solid #000; }
-    #task-list .border-left.hasID {
+    #task-list .border-left.hasID, .task-list .border-left.hasID {
       background-color: #b6e5ff; }
-    #task-list .border-left.hasCategory {
+    #task-list .border-left.hasCategory, .task-list .border-left.hasCategory {
       background-color: #D3D3D3; }
-  #task-list .task-wrapper {
+  #task-list .task-wrapper, .task-list .task-wrapper {
     padding: 10px 5px 10px;
     display: inline-block;
     background-color: white;
     width: 100%;
     line-height: 18px; }
-  #task-list li.task {
+  #task-list li.task, .task-list li.task {
     background-color: #fff;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none; }
-    #task-list li.task::after {
+    #task-list li.task::after, .task-list li.task::after {
       clear: both;
       content: "";
       display: table; }
-    #task-list li.task label {
+    #task-list li.task label, .task-list li.task label {
       float: left;
       display: block;
       margin-right: 2.35765%;
       width: 48.82117%; }
-      #task-list li.task label:last-child {
+      #task-list li.task label:last-child, .task-list li.task label:last-child {
         margin-right: 0; }
-    #task-list li.task .controls {
+    #task-list li.task .controls, .task-list li.task .controls {
       float: left;
       display: block;
       margin-right: 2.35765%;
       width: 48.82117%; }
-      #task-list li.task .controls:last-child {
+      #task-list li.task .controls:last-child, .task-list li.task .controls:last-child {
         margin-right: 0; }
-    #task-list li.task .errors {
+    #task-list li.task .errors, .task-list li.task .errors {
       width: 5%; }
-    #task-list li.task label {
+    #task-list li.task label, .task-list li.task label {
       color: #084b68;
       font-size: 15px;
       padding-left: 10px;
@@ -2268,37 +2268,37 @@ dl {
       overflow: hidden;
       font-weight: normal;
       margin-bottom: 0em; }
-    #task-list li.task .timeElapsed {
+    #task-list li.task .timeElapsed, .task-list li.task .timeElapsed {
       color: #084b68;
       font-size: 12px;
       font-family: "Lucida Console", Monaco, monospace;
       margin-right: 15px; }
-      #task-list li.task .timeElapsed.flash {
+      #task-list li.task .timeElapsed.flash, .task-list li.task .timeElapsed.flash {
         background-color: rgba(0, 255, 236, 0.4);
         box-shadow: 0px 0px 6px rgba(0, 255, 236, 0.86); }
-    #task-list li.task .controls {
+    #task-list li.task .controls, .task-list li.task .controls {
       text-align: right; }
-      #task-list li.task .controls a.play {
+      #task-list li.task .controls a.play, .task-list li.task .controls a.play {
         display: none; }
-    #task-list li.task.stopped .controls a.stop {
+    #task-list li.task.stopped .controls a.stop, .task-list li.task.stopped .controls a.stop {
       display: none; }
-    #task-list li.task.stopped .controls a.play {
+    #task-list li.task.stopped .controls a.play, .task-list li.task.stopped .controls a.play {
       display: inline-block; }
-  #task-list .details {
+  #task-list .details, .task-list .details {
     display: none;
     height: 100%;
     margin: 0;
     padding: 15px 0 15px 15px;
     background-color: #f8f8f8;
     line-height: 1.5em; }
-    #task-list .details.on {
+    #task-list .details.on, .task-list .details.on {
       display: block; }
-    #task-list .details div .item-wrap {
+    #task-list .details div .item-wrap, .task-list .details div .item-wrap {
       display: inline-block;
       width: 50%; }
-      #task-list .details div .item-wrap.full {
+      #task-list .details div .item-wrap.full, .task-list .details div .item-wrap.full {
         width: 100%; }
-    #task-list .details div label {
+    #task-list .details div label, .task-list .details div label {
       font-size: 12px;
       color: #084b68;
       display: block;
@@ -2308,28 +2308,28 @@ dl {
       vertical-align: top;
       padding: 0;
       padding-top: 2px; }
-      #task-list .details div label.checkbox {
+      #task-list .details div label.checkbox, .task-list .details div label.checkbox {
         float: right;
         margin-right: 10%;
         width: auto;
         min-width: 0; }
-    #task-list .details div .full .checkbox {
+    #task-list .details div .full .checkbox, .task-list .details div .full .checkbox {
       margin-right: 5%; }
-    #task-list .details div input[type="text"], #task-list .details div input[type="date"], #task-list .details div textarea {
+    #task-list .details div input[type="text"], #task-list .details div input[type="date"], #task-list .details div textarea, .task-list .details div input[type="text"], .task-list .details div input[type="date"], .task-list .details div textarea {
       display: block;
       width: 90%;
       margin-bottom: 5px; }
-      #task-list .details div input[type="text"]:disabled, #task-list .details div input[type="date"]:disabled, #task-list .details div textarea:disabled {
+      #task-list .details div input[type="text"]:disabled, #task-list .details div input[type="date"]:disabled, #task-list .details div textarea:disabled, .task-list .details div input[type="text"]:disabled, .task-list .details div input[type="date"]:disabled, .task-list .details div textarea:disabled {
         background-color: #f8f8f8; }
-    #task-list .details div .full input[type="text"] {
+    #task-list .details div .full input[type="text"], .task-list .details div .full input[type="text"] {
       width: 95%; }
-    #task-list .details div input[type="date"] {
+    #task-list .details div input[type="date"], .task-list .details div input[type="date"] {
       height: 28px; }
-    #task-list .details div input[type="checkbox"] {
+    #task-list .details div input[type="checkbox"], .task-list .details div input[type="checkbox"] {
       float: right; }
-    #task-list .details div textarea {
+    #task-list .details div textarea, .task-list .details div textarea {
       width: 95%; }
-    #task-list .details div select {
+    #task-list .details div select, .task-list .details div select {
       width: 95%;
       margin-bottom: 5px; }
 
@@ -2337,14 +2337,14 @@ dl {
   width: 100%;
   height: 21px;
   position: fixed;
-  bottom: 51px;
-  z-index: 1000;
+  bottom: 39px;
+  z-index: 200;
   background-color: #3f9dc7;
   border-radius: 3px 3px 0 0;
   border-top: 1px solid #2585b0;
   overflow: hidden; }
   #recent.open {
-    height: calc(70% - 153px);
+    height: calc(65% - 141px);
     overflow-y: auto; }
     #recent.open .down {
       display: inline; }
@@ -2367,6 +2367,69 @@ dl {
       padding-left: 5px; }
     #recent .arrow:hover {
       color: #000; }
+  #recent .fa-lock {
+    color: #000;
+    cursor: default; }
+  #recent .fa-unlock-alt {
+    color: #084B68;
+    cursor: default; }
+  #recent .content-wrapper {
+    overflow: auto;
+    height: calc(100% - 21px);
+    /* the new scrollbar will have a flat appearance with the set background color */
+    /* this will style the thumb, ignoring the track */
+    /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */ }
+    #recent .content-wrapper::-webkit-scrollbar {
+      width: 8px; }
+    #recent .content-wrapper::-webkit-scrollbar-track {
+      background-color: #2585b0; }
+    #recent .content-wrapper::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.4); }
+    #recent .content-wrapper::-webkit-scrollbar-button {
+      height: 0px; }
+  #recent .content {
+    font-size: 0.75em;
+    color: #F4F4F4;
+    padding: 0 5px 0 5px; }
+    #recent .content .task-wrapper {
+      padding: 2px 0 2px;
+      display: inline-block;
+      background-color: #3f9dc7;
+      width: 100%;
+      line-height: 18px; }
+    #recent .content li.task {
+      background-color: #3f9dc7;
+      color: #F4F4F4;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
+      #recent .content li.task::after {
+        clear: both;
+        content: "";
+        display: table; }
+      #recent .content li.task label {
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 91.4702%;
+        font-weight: 400;
+        margin-bottom: 0em; }
+        #recent .content li.task label:last-child {
+          margin-right: 0; }
+      #recent .content li.task .controls {
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 6.17215%; }
+        #recent .content li.task .controls:last-child {
+          margin-right: 0; }
+        #recent .content li.task .controls a.play {
+          display: block; }
+          #recent .content li.task .controls a.play i {
+            color: #F4F4F4; }
+            #recent .content li.task .controls a.play i:hover {
+              color: #000; }
 
 footer {
   position: fixed;
@@ -2374,12 +2437,12 @@ footer {
   bottom: 0;
   padding: 0;
   text-align: right;
-  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 17px left 50%, linear-gradient(#2585b0, #3f9dc7); }
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 9px left 50%, linear-gradient(#2585b0, #3f9dc7); }
   footer .options {
     position: absolute;
     font-size: 20px;
     color: #fff;
-    top: 11px;
+    top: 7px;
     left: 20px; }
     footer .options:hover {
       color: #000; }
@@ -2387,7 +2450,7 @@ footer {
     position: absolute;
     font-size: 20px;
     color: #fff;
-    top: 11px;
+    top: 7px;
     left: 50px; }
     footer .log:hover {
       color: #000; }
@@ -2395,12 +2458,12 @@ footer {
     position: absolute;
     font-size: 20px;
     color: #fff;
-    top: 11px;
+    top: 7px;
     left: 80px; }
     footer .help:hover {
       color: #000; }
   footer button {
-    margin: 10px;
+    margin: 4px;
     margin-right: 20px;
     background-color: #459ec5;
     border: 1px solid #459ec5;
@@ -2417,11 +2480,12 @@ footer {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px #d21245 !important; }
 
 .updateLog {
+  z-index: 500;
   position: absolute;
   background-color: #fff;
   top: 0;
   left: 0;
-  height: calc(100% - 51px);
+  height: calc(100% - 39px);
   width: 100%;
   color: #000;
   overflow-y: scroll;

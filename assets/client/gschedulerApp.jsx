@@ -388,7 +388,8 @@ var GSchedulerApp = React.createClass({
           
         {main}
 
-        <RecentTasks />
+        <RecentTasks 
+        onPlay={this.createTask} />
 
         <footer>
           
