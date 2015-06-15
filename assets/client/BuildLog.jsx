@@ -4,6 +4,17 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+        <h1>GScheduler Version: 0.2.1 Changelog:</h1>
+        
+        <ul>
+          <p>Recent Tasks</p>
+          <li>Recent task pane added to the bottom of GScheduler (above the footer)</li>
+          <li>Lock symbol indicates whether a task is open or closed in genome</li>
+          <li>Play button beside each task to begin tracking to the task</li>
+          <li>Drag and drop features implemented for opening/sharing the genome link</li>
+          <li>Option added to change the number of weeks to load tasks from (up to 4 weeks)</li>          
+        </ul>
+
         <h1>GScheduler Version: 0.1.10 Changelog:</h1>
         
         <ul>

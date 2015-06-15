@@ -158,7 +158,7 @@ header {
 
 
 #main{
-  height: calc(100% - 129px);
+  height: calc(100% - 141px);
   overflow-y: auto;
   &::-webkit-scrollbar {
       width: 8px;
@@ -212,7 +212,7 @@ dl {
 
 }
 
-#task-list {
+#task-list, .task-list {
   font-size: em(12);
 
   .date-label{
@@ -364,20 +364,129 @@ dl {
 
 }
 
+#recent{
+  width: 100%;
+  height:21px;
+  position:fixed;
+  bottom:39px;
+  z-index:200;
+  background-color: #3f9dc7;
+  border-radius: 3px 3px 0 0;
+  border-top: 1px solid #2585b0;
+  overflow:hidden;
+  &.open{
+    height: calc(65% - 141px);
+    overflow-y: auto;
+    .down{
+      display:inline;
+    }
+    .up{
+      display:none;
+    }
+  }
+  .down{
+    display:none;
+  }    
+  .arrow{
+    padding-top: 3px;
+    background-color: #2585b0;
+    cursor: pointer;
+    font-size:15px;
+    color: #fff;
+    display: block;
+    width: 100%;
+    height: 21px;
+    text-align: center;
+    line-height: 1em;
+    i{
+      padding-left:5px;
+    }
+    &:hover{
+      color:#000;
+    }
+  }
+  .fa-lock{
+    color: #000;
+    cursor:default;
+  }
+  .fa-unlock-alt{
+    color: #084B68;
+    cursor:default;
+  }
+  .content-wrapper{
+    overflow:auto;
+    height: calc(100% - 21px);
+    &::-webkit-scrollbar {
+      width: 8px;
+    } 
+      &::-webkit-scrollbar-track {
+          background-color: #2585b0;
+    } /* the new scrollbar will have a flat appearance with the set background color */
+     
+    &::-webkit-scrollbar-thumb {
+          background-color: rgba(0, 0, 0, 0.4); 
+    } /* this will style the thumb, ignoring the track */
+     
+    &::-webkit-scrollbar-button {
+          height:0px;
+    } /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+
+  }
+  .content {
+    font-size: em(12);
+    color:#F4F4F4;
+    padding: 0 5px 0 5px;
+    .task-wrapper{
+      padding: 2px 0 2px;
+      display: inline-block;
+      background-color: #3f9dc7;
+      width: 100%;
+      line-height: 18px;
+    }
+
+    li.task {
+
+      background-color: #3f9dc7;
+      color:#F4F4F4;
+      @include user-select(none);
+      @include clearfix;
+      
+      label {
+        @include span-columns(11 of 12);
+        font-weight:400;
+        margin-bottom:0em;
+      }
+      .controls {
+        @include span-columns(1 of 12);
+
+        a.play{
+          i{
+            color:#F4F4F4;
+            &:hover{
+              color:#000;
+            }
+          }
+          display:block;
+        }
+      }
+    }
+  }
+}
+
 footer {
   position:fixed;
   width:100%;
   bottom:0;
   padding:0;
   text-align:right;
-  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat bottom 17px left 115px, linear-gradient(#3f9dc7, #2585b0);
+  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat bottom 9px left 50%, linear-gradient(#2585b0, #3f9dc7);
   
   .options{
     position:absolute;
     font-size:20px;
     color: #fff;
-    top:11px;
-    left:10px;
+    top:7px;
+    left:20px;
     &:hover{
       color:#000;
     }
@@ -387,8 +496,8 @@ footer {
     position:absolute;
     font-size:20px;
     color: #fff;
-    top:11px;
-    left:40px;
+    top:7px;
+    left:50px;
     &:hover{
       color:#000;
     }
@@ -398,15 +507,15 @@ footer {
     position:absolute;
     font-size:20px;
     color: #fff;
-    top:11px;
-    left:70px;
+    top:7px;
+    left:80px;
     &:hover{
       color: #000;
     }
   }
 
   button{
-    margin:10px;
+    margin:4px;
     margin-right:20px;
     background-color: #459ec5;
     border: 1px solid #459ec5;
@@ -429,11 +538,12 @@ footer {
 }
 
 .updateLog{
+  z-index:500;
   position:absolute;
   background-color:#fff;
   top:0;
   left:0;
-  height:calc(100% - 51px);
+  height:calc(100% - 39px);
   width:100%;
   color: #000;
   overflow-y:scroll;
