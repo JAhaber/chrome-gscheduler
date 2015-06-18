@@ -221,8 +221,19 @@ dl {
     margin:25px 0 0 0;
     padding:0 0 10px 20px;
     border-bottom:1px solid #000;
-    & span{
+    span{
       cursor:pointer;
+    }
+    .remove-day{
+      cursor:pointer;
+      float:right;
+      padding-right:13px;
+      font: 400 12px/18px 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+      margin-top:6px;
+      color: #d21245;
+      i{
+        font-size:14.4px;
+      }
     }
   }
   
