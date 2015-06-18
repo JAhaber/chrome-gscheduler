@@ -158,7 +158,8 @@ header {
 
 
 #main{
-  height: calc(100% - 141px);
+  height: calc(100% - 136px);
+  padding-bottom:5px;
   overflow-y: auto;
   &::-webkit-scrollbar {
       width: 8px;
