@@ -4,6 +4,13 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+        <h1>GScheduler Version: 0.2.2 Changelog:</h1>
+        
+        <ul>
+          <p>Deleting Old Tasks</p>
+          <li>Added 'Remove All' buttons to delete tasks from previous days</li>     
+        </ul>
+
         <h1>GScheduler Version: 0.2.1 Changelog:</h1>
         
         <ul>

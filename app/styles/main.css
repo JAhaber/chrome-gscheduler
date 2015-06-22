@@ -2162,7 +2162,8 @@ header {
       font-size: 14px; }
 
 #main {
-  height: calc(100% - 141px);
+  height: calc(100% - 136px);
+  padding-bottom: 5px;
   overflow-y: auto;
   /* the new scrollbar will have a flat appearance with the set background color */
   /* this will style the thumb, ignoring the track */
@@ -2218,6 +2219,15 @@ dl {
     border-bottom: 1px solid #000; }
     #task-list .date-label span, .task-list .date-label span {
       cursor: pointer; }
+    #task-list .date-label .remove-day, .task-list .date-label .remove-day {
+      cursor: pointer;
+      float: right;
+      padding-right: 13px;
+      font: 400 12px/18px 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+      margin-top: 6px;
+      color: #d21245; }
+      #task-list .date-label .remove-day i, .task-list .date-label .remove-day i {
+        font-size: 14.4px; }
   #task-list .border-left, .task-list .border-left {
     line-height: 0;
     background-color: #ffdd57;

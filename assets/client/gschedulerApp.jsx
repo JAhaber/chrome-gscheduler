@@ -168,6 +168,14 @@ var GSchedulerApp = React.createClass({
     var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
     chrome.tabs.create({ url : 'https://genome.klick.com/scheduler/#/day/' + date});
   },
+  clearTasksByDate: function(task){
+    var scope = this;
+    var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
+    _.each(this.props.model.tasks, function(l){
+      if(Moment(l.startTime).isSame(date, 'day' ))
+        scope.destroy(l);
+    });
+  },
   openOptions: function(){
     chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
   },
@@ -284,6 +292,7 @@ var GSchedulerApp = React.createClass({
         newDate = (
           <label className="date-label">
             <span onClick={this.openGenome.bind(this,task)} title={"Open " + Moment(curDate).format('MMMM D, YYYY') + " in Genome"}>{Moment(curDate).format('MMMM D, YYYY')}</span>
+            <a className="remove-day" onClick={this.clearTasksByDate.bind(this,task)} title={"Remove all entries from " + Moment(curDate).format('MMMM D, YYYY')}>Remove all&nbsp;&nbsp;<i className="fa fa-remove"></i></a>
           </label>
           );
       }
