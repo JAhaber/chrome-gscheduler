@@ -42,8 +42,6 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		startTime: start || Moment().format(),
 		ticketID: task.ticketID || null,
 		projectID: task.projectID || null,
-		isClientBillable: task.isClientBillable || null,
-		type: task.type || null,
 		note: task.note || null,
 		categoryID: task.categoryID,
 		gap: {}
@@ -70,8 +68,6 @@ TaskModel.prototype.addGap = function (start, stop) {
 		stopTime: stop,
 		ticketID: null,
 		projectID: null,
-		isClientBillable: null,
-		type: null,
 		note: null,
 		categoryID: null,
 		expanded: true
