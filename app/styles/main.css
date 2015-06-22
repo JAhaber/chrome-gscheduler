@@ -2162,7 +2162,8 @@ header {
       font-size: 14px; }
 
 #main {
-  height: calc(100% - 141px);
+  height: calc(100% - 136px);
+  padding-bottom: 5px;
   overflow-y: auto;
   /* the new scrollbar will have a flat appearance with the set background color */
   /* this will style the thumb, ignoring the track */
