@@ -29,7 +29,8 @@ var tickets = new Bloodhound({
 						projectID: ticket.ProjectID,
 						isClientBillable: ticket.IsClientBillable,
 						type: ticket.Type,
-						categoryID: null
+						categoryID: null,
+						projectName: ticket.ProjectName
 			    };
 				});
 			}
@@ -46,7 +47,8 @@ var tickets = new Bloodhound({
 						projectID: null,
 						isClientBillable: false,
 						type: "Non-Project",
-						categoryID: ticket.TimeSheetCategoryID
+						categoryID: ticket.TimeSheetCategoryID,
+						projectName: null
 			    };
 				});
 			}
@@ -71,8 +73,37 @@ var SearchBox = React.createClass({
 		},
 		{
 		  name: 'tickets',
-		  displayKey: 'titleAndID',
+		  display: 'titleAndID',
 		  source: tickets.ttAdapter(),
+		  templates:{
+		  	suggestion: function(data){
+		  		var displayID = null;
+		  		var displayProj = null;
+		  		var projClass = null;
+
+		  		if (data.ticketID)
+		  			displayID = data.ticketID;
+		  		else
+		  			displayID = "Non-Project";
+
+		  		if (data.projectName){
+		  			displayProj = data.projectName;
+		  			projClass = "project-row";
+		  		}
+		  		else{
+		  			displayProj = "";
+		  			projClass = "non-project-row";
+		  		}
+		  			
+      			return '<div class="id-box">'
+	      					+ displayID
+	      					+ '</div><div class="task-box"><div class="task-row" title="'+data.title+'">'
+		      					+ data.title
+		      				+ '</div><div class='+ projClass + ' title="'+displayProj+'">'
+		      					+ displayProj
+		      				+ '</div></div>';
+		  	}
+		  }
 		}).focus();
 		$element.on('typeahead:opened', function(e, task){
 			selected=false;

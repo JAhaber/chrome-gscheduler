@@ -60,3 +60,38 @@
 .tt-suggestion p {
   margin: 0;
 }
+
+.id-box{
+  display:inline-block;
+  width:80px;
+  font-weight:bold;
+  vertical-align:top;
+  height: auto;
+  margin-left:-5px;
+  cursor:pointer;
+}
+.task-box{
+  display:inline-block;
+  width: calc(100% - 80px);
+  cursor:pointer;
+}
+.task-row, .project-row{
+  display:block;
+  height:18px;
+  overflow:hidden;
+  white-space: nowrap;
+  width: 100%;
+  color:#2585b0;
+  text-overflow: ellipsis;
+}
+.project-row{
+  padding-left:30px;
+  color:#d21245;
+}
+
+.non-project-row{
+    display:block;
+    height:0px;
+    overflow:hidden;
+  }
+
