@@ -454,22 +454,33 @@ dl {
       background-color: #3f9dc7;
       width: 100%;
       line-height: 18px;
-    }
 
-    li.task {
-
-      background-color: #3f9dc7;
-      color:#F4F4F4;
-      @include user-select(none);
-      @include clearfix;
-      
-      label {
-        @include span-columns(11 of 12);
-        font-weight:400;
-        margin-bottom:0em;
+      .recent-ticketID-wrapper{
+        height: auto;
+        display: inline-block;
+        vertical-align: top;
+        width: 60px;
+      }
+      .recent-task-wrapper{
+        height: auto;
+        display: inline-block;
+        width: calc(93% - 60px);
+        span{
+          display:block;
+          width:100%;
+          overflow:hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .recent-project-wrapper{
+          color:red;
+        }
       }
       .controls {
-        @include span-columns(1 of 12);
+        width: 7%;
+        float:none;
+        display:inline-block;
+        vertical-align: top;
 
         a.play{
           i{
@@ -481,6 +492,21 @@ dl {
           display:block;
         }
       }
+    }
+
+    li.task {
+
+      background-color: #3f9dc7;
+      color:#F4F4F4;
+      @include user-select(none);
+      @include clearfix;
+      
+      label {
+        width:100%;
+        font-weight:400;
+        margin-bottom:0em;
+      }
+      
     }
   }
 }

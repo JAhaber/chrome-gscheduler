@@ -74,15 +74,22 @@ var RecentTasks = React.createClass({
         return (
           <li className='task'>
             <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart} data-ticketid={task.TicketID}>
-              <label>
-                {task.TicketStatusName === "closed" ?
-                  <i className="fa fa-lock" title="This task is closed in genome. You can still bill to it if the project is open."></i>
-                  : <i className="fa fa-unlock-alt" title="This task is open in genome."></i>
-                }
-                
-                {" " + task.TicketID + " - " + task.Title}
-              </label>
-           
+              <div className="recent-ticketID-wrapper">
+                <label>
+                  {task.TicketStatusName === "closed" ?
+                    <i className="fa fa-lock" title="This task is closed in genome. You can still bill to it if the project is open."></i>
+                    : <i className="fa fa-unlock-alt" title="This task is open in genome."></i>
+                  }
+                  
+                  {" " + task.TicketID}
+                </label>
+              </div>
+              <div className="recent-task-wrapper">
+                <label>
+                   <span>{task.Title}</span>
+                   <span className="recent-project-wrapper">{task.ProjectName}</span>
+                </label>
+              </div>
               <div className="controls">
                 <a className="play" onClick={scope.onPlay} data-ticketid={task.TicketID}><i className="fa fa-play" data-ticketid={task.TicketID}></i></a>
               </div>

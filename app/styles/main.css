@@ -2439,6 +2439,34 @@ dl {
       background-color: #3f9dc7;
       width: 100%;
       line-height: 18px; }
+      #recent .content .task-wrapper .recent-ticketID-wrapper {
+        height: auto;
+        display: inline-block;
+        vertical-align: top;
+        width: 60px; }
+      #recent .content .task-wrapper .recent-task-wrapper {
+        height: auto;
+        display: inline-block;
+        width: calc(93% - 60px); }
+        #recent .content .task-wrapper .recent-task-wrapper span {
+          display: block;
+          width: 100%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis; }
+        #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+          color: red; }
+      #recent .content .task-wrapper .controls {
+        width: 7%;
+        float: none;
+        display: inline-block;
+        vertical-align: top; }
+        #recent .content .task-wrapper .controls a.play {
+          display: block; }
+          #recent .content .task-wrapper .controls a.play i {
+            color: #F4F4F4; }
+            #recent .content .task-wrapper .controls a.play i:hover {
+              color: #000; }
     #recent .content li.task {
       background-color: #3f9dc7;
       color: #F4F4F4;
@@ -2451,27 +2479,9 @@ dl {
         content: "";
         display: table; }
       #recent .content li.task label {
-        float: left;
-        display: block;
-        margin-right: 2.35765%;
-        width: 91.4702%;
+        width: 100%;
         font-weight: 400;
         margin-bottom: 0em; }
-        #recent .content li.task label:last-child {
-          margin-right: 0; }
-      #recent .content li.task .controls {
-        float: left;
-        display: block;
-        margin-right: 2.35765%;
-        width: 6.17215%; }
-        #recent .content li.task .controls:last-child {
-          margin-right: 0; }
-        #recent .content li.task .controls a.play {
-          display: block; }
-          #recent .content li.task .controls a.play i {
-            color: #F4F4F4; }
-            #recent .content li.task .controls a.play i:hover {
-              color: #000; }
 
 footer {
   position: fixed;
