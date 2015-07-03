@@ -97,9 +97,9 @@ var SearchBox = React.createClass({
 		  			
       			return '<div class="id-box">'
 	      					+ displayID
-	      					+ '</div><div class="task-box"><div class="task-row" title="'+data.title+'">'
+	      					+ '</div><div class="task-box"><div class="task-row" title="Task: '+data.title+'">'
 		      					+ data.title
-		      				+ '</div><div class='+ projClass + ' title="'+displayProj+'">'
+		      				+ '</div><div class='+ projClass + ' title="Project: '+displayProj+'">'
 		      					+ displayProj
 		      				+ '</div></div>';
 		  	}
