@@ -2023,7 +2023,10 @@ html {
 .tt-suggestion {
   padding: 3px 20px;
   font-size: 12px;
-  line-height: 24px; }
+  line-height: 24px;
+  border-bottom: 1px solid #F2F2F2; }
+  .tt-suggestion:last-child {
+    border-bottom: none; }
   .tt-suggestion p {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2380,8 +2383,8 @@ dl {
   height: 21px;
   position: fixed;
   bottom: 39px;
-  z-index: 200;
-  background-color: #3f9dc7;
+  z-index: 99;
+  background-color: #fff;
   border-radius: 3px 3px 0 0;
   border-top: 1px solid #2585b0;
   overflow: hidden; }
@@ -2410,10 +2413,10 @@ dl {
     #recent .arrow:hover {
       color: #000; }
   #recent .fa-lock {
-    color: #000;
+    color: #d21245;
     cursor: default; }
   #recent .fa-unlock-alt {
-    color: #084B68;
+    color: #027B1F;
     cursor: default; }
   #recent .content-wrapper {
     overflow: auto;
@@ -2431,23 +2434,23 @@ dl {
       height: 0px; }
   #recent .content {
     font-size: 0.75em;
-    color: #F4F4F4;
     padding: 0 5px 0 5px; }
     #recent .content .task-wrapper {
       padding: 2px 0 2px;
       display: inline-block;
-      background-color: #3f9dc7;
       width: 100%;
       line-height: 18px; }
       #recent .content .task-wrapper .recent-ticketID-wrapper {
         height: auto;
         display: inline-block;
         vertical-align: top;
-        width: 60px; }
+        width: 60px;
+        color: #000; }
       #recent .content .task-wrapper .recent-task-wrapper {
         height: auto;
         display: inline-block;
-        width: calc(93% - 60px); }
+        width: calc(94% - 60px);
+        color: #2585b0; }
         #recent .content .task-wrapper .recent-task-wrapper span {
           display: block;
           width: 100%;
@@ -2455,25 +2458,27 @@ dl {
           white-space: nowrap;
           text-overflow: ellipsis; }
         #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
-          color: red; }
+          padding-left: 30px;
+          color: #d21245; }
       #recent .content .task-wrapper .controls {
-        width: 7%;
+        width: 6%;
         float: none;
         display: inline-block;
         vertical-align: top; }
         #recent .content .task-wrapper .controls a.play {
           display: block; }
           #recent .content .task-wrapper .controls a.play i {
-            color: #F4F4F4; }
+            color: #2585b0; }
             #recent .content .task-wrapper .controls a.play i:hover {
               color: #000; }
     #recent .content li.task {
-      background-color: #3f9dc7;
-      color: #F4F4F4;
+      border-bottom: 1px solid #BAD2DD;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none; }
+      #recent .content li.task:last-child {
+        border-bottom: none; }
       #recent .content li.task::after {
         clear: both;
         content: "";

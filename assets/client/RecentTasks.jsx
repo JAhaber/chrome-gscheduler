@@ -86,8 +86,8 @@ var RecentTasks = React.createClass({
               </div>
               <div className="recent-task-wrapper">
                 <label>
-                   <span>{task.Title}</span>
-                   <span className="recent-project-wrapper">{task.ProjectName}</span>
+                   <span title={task.Title}>{task.Title}</span>
+                   <span className="recent-project-wrapper" title={task.ProjectName}>{task.ProjectName}</span>
                 </label>
               </div>
               <div className="controls">

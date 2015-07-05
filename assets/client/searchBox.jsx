@@ -15,6 +15,7 @@ var tickets = new Bloodhound({
         return Bloodhound.tokenizers.whitespace(datum.titleAndID);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    limit: 7,
     remote: {
       url: apiEndpoint,
       rateLimitBy: 'throttle',
@@ -57,6 +58,7 @@ var tickets = new Bloodhound({
     
 });
 
+
 var SearchBox = React.createClass({
 	componentDidMount: function(){
 
@@ -95,13 +97,13 @@ var SearchBox = React.createClass({
 		  			projClass = "non-project-row";
 		  		}
 		  			
-      			return '<div class="id-box">'
+      			return '<div class="dd-list-item"><div class="id-box">'
 	      					+ displayID
 	      					+ '</div><div class="task-box"><div class="task-row" title="Task: '+data.title+'">'
 		      					+ data.title
 		      				+ '</div><div class='+ projClass + ' title="Project: '+displayProj+'">'
 		      					+ displayProj
-		      				+ '</div></div>';
+		      				+ '</div></div></div>';
 		  	}
 		  }
 		}).focus();

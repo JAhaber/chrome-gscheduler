@@ -381,8 +381,8 @@ dl {
   height:21px;
   position:fixed;
   bottom:39px;
-  z-index:200;
-  background-color: #3f9dc7;
+  z-index:99;
+  background-color: #fff;
   border-radius: 3px 3px 0 0;
   border-top: 1px solid #2585b0;
   overflow:hidden;
@@ -418,11 +418,11 @@ dl {
     }
   }
   .fa-lock{
-    color: #000;
+    color: #d21245;
     cursor:default;
   }
   .fa-unlock-alt{
-    color: #084B68;
+    color: #027B1F;
     cursor:default;
   }
   .content-wrapper{
@@ -446,12 +446,10 @@ dl {
   }
   .content {
     font-size: em(12);
-    color:#F4F4F4;
     padding: 0 5px 0 5px;
     .task-wrapper{
       padding: 2px 0 2px;
       display: inline-block;
-      background-color: #3f9dc7;
       width: 100%;
       line-height: 18px;
 
@@ -460,11 +458,13 @@ dl {
         display: inline-block;
         vertical-align: top;
         width: 60px;
+        color:#000;
       }
       .recent-task-wrapper{
         height: auto;
         display: inline-block;
-        width: calc(93% - 60px);
+        width: calc(94% - 60px);
+        color: #2585b0;
         span{
           display:block;
           width:100%;
@@ -473,18 +473,19 @@ dl {
           text-overflow: ellipsis;
         }
         .recent-project-wrapper{
-          color:red;
+          padding-left: 30px;
+          color:#d21245;
         }
       }
       .controls {
-        width: 7%;
+        width: 6%;
         float:none;
         display:inline-block;
         vertical-align: top;
 
         a.play{
           i{
-            color:#F4F4F4;
+            color:#2585b0;
             &:hover{
               color:#000;
             }
@@ -495,9 +496,10 @@ dl {
     }
 
     li.task {
-
-      background-color: #3f9dc7;
-      color:#F4F4F4;
+      border-bottom: 1px solid #BAD2DD;
+      &:last-child{
+        border-bottom:none;
+      }
       @include user-select(none);
       @include clearfix;
       
