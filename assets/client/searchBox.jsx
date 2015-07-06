@@ -15,6 +15,7 @@ var tickets = new Bloodhound({
         return Bloodhound.tokenizers.whitespace(datum.titleAndID);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    limit: 7,
     remote: {
       url: apiEndpoint,
       rateLimitBy: 'throttle',
@@ -29,7 +30,8 @@ var tickets = new Bloodhound({
 						projectID: ticket.ProjectID,
 						isClientBillable: ticket.IsClientBillable,
 						type: ticket.Type,
-						categoryID: null
+						categoryID: null,
+						projectName: ticket.ProjectName
 			    };
 				});
 			}
@@ -46,7 +48,8 @@ var tickets = new Bloodhound({
 						projectID: null,
 						isClientBillable: false,
 						type: "Non-Project",
-						categoryID: ticket.TimeSheetCategoryID
+						categoryID: ticket.TimeSheetCategoryID,
+						projectName: null
 			    };
 				});
 			}
@@ -54,6 +57,7 @@ var tickets = new Bloodhound({
 
     
 });
+
 
 var SearchBox = React.createClass({
 	componentDidMount: function(){
@@ -71,8 +75,37 @@ var SearchBox = React.createClass({
 		},
 		{
 		  name: 'tickets',
-		  displayKey: 'titleAndID',
+		  display: 'titleAndID',
 		  source: tickets.ttAdapter(),
+		  templates:{
+		  	suggestion: function(data){
+		  		var displayID = null;
+		  		var displayProj = null;
+		  		var projClass = null;
+
+		  		if (data.ticketID)
+		  			displayID = data.ticketID;
+		  		else
+		  			displayID = "Non-Project";
+
+		  		if (data.projectName){
+		  			displayProj = data.projectName;
+		  			projClass = "project-row";
+		  		}
+		  		else{
+		  			displayProj = "";
+		  			projClass = "non-project-row";
+		  		}
+		  			
+      			return '<div class="dd-list-item"><div class="id-box">'
+	      					+ displayID
+	      					+ '</div><div class="task-box"><div class="task-row" title="Task: '+data.title+'">'
+		      					+ data.title
+		      				+ '</div><div class='+ projClass + ' title="Project: '+displayProj+'">'
+		      					+ displayProj
+		      				+ '</div></div></div>';
+		  	}
+		  }
 		}).focus();
 		$element.on('typeahead:opened', function(e, task){
 			selected=false;

@@ -2011,7 +2011,7 @@ html {
   color: #999; }
 
 .tt-dropdown-menu {
-  width: 400px;
+  width: calc(208.3%);
   margin-top: 12px;
   padding: 8px 0;
   background-color: #fff;
@@ -2023,7 +2023,10 @@ html {
 .tt-suggestion {
   padding: 3px 20px;
   font-size: 12px;
-  line-height: 24px; }
+  line-height: 24px;
+  border-bottom: 1px solid #F2F2F2; }
+  .tt-suggestion:last-child {
+    border-bottom: none; }
   .tt-suggestion p {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2035,6 +2038,38 @@ html {
 
 .tt-suggestion p {
   margin: 0; }
+
+.id-box {
+  display: inline-block;
+  width: 80px;
+  font-weight: bold;
+  vertical-align: top;
+  height: auto;
+  margin-left: -5px;
+  cursor: pointer; }
+
+.task-box {
+  display: inline-block;
+  width: calc(100% - 80px);
+  cursor: pointer; }
+
+.task-row, .project-row {
+  display: block;
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  color: #2585b0;
+  text-overflow: ellipsis; }
+
+.project-row {
+  padding-left: 30px;
+  color: #d21245; }
+
+.non-project-row {
+  display: block;
+  height: 0px;
+  overflow: hidden; }
 
 html {
   height: 100%; }
@@ -2348,8 +2383,8 @@ dl {
   height: 21px;
   position: fixed;
   bottom: 39px;
-  z-index: 200;
-  background-color: #3f9dc7;
+  z-index: 99;
+  background-color: #fff;
   border-radius: 3px 3px 0 0;
   border-top: 1px solid #2585b0;
   overflow: hidden; }
@@ -2378,10 +2413,10 @@ dl {
     #recent .arrow:hover {
       color: #000; }
   #recent .fa-lock {
-    color: #000;
+    color: #d21245;
     cursor: default; }
   #recent .fa-unlock-alt {
-    color: #084B68;
+    color: #027B1F;
     cursor: default; }
   #recent .content-wrapper {
     overflow: auto;
@@ -2399,47 +2434,59 @@ dl {
       height: 0px; }
   #recent .content {
     font-size: 0.75em;
-    color: #F4F4F4;
     padding: 0 5px 0 5px; }
     #recent .content .task-wrapper {
       padding: 2px 0 2px;
       display: inline-block;
-      background-color: #3f9dc7;
       width: 100%;
       line-height: 18px; }
+      #recent .content .task-wrapper .recent-ticketID-wrapper {
+        height: auto;
+        display: inline-block;
+        vertical-align: top;
+        width: 60px;
+        color: #000; }
+      #recent .content .task-wrapper .recent-task-wrapper {
+        height: auto;
+        display: inline-block;
+        width: calc(94% - 60px);
+        color: #2585b0; }
+        #recent .content .task-wrapper .recent-task-wrapper span {
+          display: block;
+          width: 100%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis; }
+        #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+          padding-left: 30px;
+          color: #d21245; }
+      #recent .content .task-wrapper .controls {
+        width: 6%;
+        float: none;
+        display: inline-block;
+        vertical-align: top; }
+        #recent .content .task-wrapper .controls a.play {
+          display: block; }
+          #recent .content .task-wrapper .controls a.play i {
+            color: #2585b0; }
+            #recent .content .task-wrapper .controls a.play i:hover {
+              color: #000; }
     #recent .content li.task {
-      background-color: #3f9dc7;
-      color: #F4F4F4;
+      border-bottom: 1px solid #BAD2DD;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none; }
+      #recent .content li.task:last-child {
+        border-bottom: none; }
       #recent .content li.task::after {
         clear: both;
         content: "";
         display: table; }
       #recent .content li.task label {
-        float: left;
-        display: block;
-        margin-right: 2.35765%;
-        width: 91.4702%;
+        width: 100%;
         font-weight: 400;
         margin-bottom: 0em; }
-        #recent .content li.task label:last-child {
-          margin-right: 0; }
-      #recent .content li.task .controls {
-        float: left;
-        display: block;
-        margin-right: 2.35765%;
-        width: 6.17215%; }
-        #recent .content li.task .controls:last-child {
-          margin-right: 0; }
-        #recent .content li.task .controls a.play {
-          display: block; }
-          #recent .content li.task .controls a.play i {
-            color: #F4F4F4; }
-            #recent .content li.task .controls a.play i:hover {
-              color: #000; }
 
 footer {
   position: fixed;
