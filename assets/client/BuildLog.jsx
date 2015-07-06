@@ -4,6 +4,26 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+        <h1>GScheduler Version: 0.2.3 Changelog:</h1>
+        
+        <ul>
+          <p>Search Results</p>
+          <li>Projects have been added to the search results to differentiate tasks with similar names</li>
+          <li>Restyled the search results dropdown</li>
+          <ul>     
+            <li>Tasks will appear in blue</li>
+            <li>Projects will appear in red and indented slightly</li>
+            <li>Task/Project names will be limited to one line and overflow is hidden</li>
+            <li>Full Task/Project names can be seen by hovering over the text</li>
+          </ul>
+          <li>The dropdown will now resize to match the window size</li>
+
+          <div className="divider"></div>
+          <p>Recent Tasks</p>
+          <li>Recent tasks have been updated to show information and styles similar to the search results</li>
+
+        </ul>
+
         <h1>GScheduler Version: 0.2.2 Changelog:</h1>
         
         <ul>
