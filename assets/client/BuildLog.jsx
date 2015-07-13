@@ -4,6 +4,13 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.2.4 Changelog:</h1>
+        
+        <ul>
+          <p>Genome Tracking Button</p>
+          <li>Updated style of the button that appears on task pages to work with new Genome design</li>
+        </ul>
+
         <h1>GScheduler Version: 0.2.3 Changelog:</h1>
         
         <ul>
