@@ -92,7 +92,7 @@ var TaskItem = React.createClass({
         var duration = Moment(event.target.value, ["HH:mm:ss", "HHmm:ss", "HH:mmss", "HHmmss"] ).format("HH:mm:ss");
         var stop = Moment(this.state.startTime, "HH:mm:ss").add(Moment.duration(duration));
         
-        if (Moment(stop).diff(Moment().hour(23).minute(59).second(59), 's') > 0){
+        if (Moment(stop).diff(Moment().hour(23).minute(59).second(59), 's') >= 0){
           stop = Moment("23:59:59", "HH:mm:ss");
         }
 
