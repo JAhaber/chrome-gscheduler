@@ -139,20 +139,12 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
   		GenomeAPI.getProjectInfo(value).then(function(ticketData){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
-			
-		  			if (!(ticketData.Entries[0].TicketStatusName === "closed"))
-		  			{	
-		  	
-		  				itemScope.setState({title: ticketData.Entries[0].Title});
-		  				return Utils.extend({}, task,
-								{ticketID: value,
-								projectID: ticketData.Entries[0].ProjectID,
-						      	title: ticketData.Entries[0].Title,
-						      	categoryID: null});
-		  			}
-		  			else
-		  				return Utils.extend({}, task, {ticketID: value});	
-		  		
+					itemScope.setState({title: ticketData.Entries[0].Title});
+	  				return Utils.extend({}, task,
+							{ticketID: value,
+							projectID: ticketData.Entries[0].ProjectID,
+					      	title: ticketData.Entries[0].Title,
+					      	categoryID: null});
   				}
   				else
   					return task;

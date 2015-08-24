@@ -15,19 +15,15 @@ function addGButton(){
 		ticketID = window.location.href.substring(window.location.href.lastIndexOf("/") + 1);
 		
 		GenomeAPI.getProjectInfo(ticketID).then(function(ticketData){
-			
-		        if (!(ticketData.Entries[0].TicketStatusName === "closed"))
-		        { 
-		        	GButton = "<div id='gButton' style='"+ style + "'>" +
-		        	"<img src='" + imgURL + "'>"+
-		        	" Track in GScheduler</div>";
+		
+	        	GButton = "<div id='gButton' style='"+ style + "'>" +
+	        	"<img src='" + imgURL + "'>"+
+	        	" Track in GScheduler</div>";
 
-		        	$("body").append(GButton);
-		        	title = ticketData.Entries[0].Title;
-		        	projectID = ticketData.Entries[0].ProjectID;
-		        }
-		        else
-		        	console.log(ticketData.Entries[0].TicketStatusName);
+	        	$("body").append(GButton);
+	        	title = ticketData.Entries[0].Title;
+	        	projectID = ticketData.Entries[0].ProjectID;
+	      
 		      }).fail(function(error){
 		        console.log(error);
 		      });

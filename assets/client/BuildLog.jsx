@@ -4,6 +4,21 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.2.5 Changelog:</h1>
+        
+        <ul>
+          <p>Recent Tasks</p>
+          <li>Option added to reverse the order that tasks show up in the recent task list</li>
+        
+
+        <div className="divider"></div>
+
+        <p>Bug Fixes</p>
+        <li>GScheduler will no longer filter out closed tasks in any of it's search fields</li>
+        <li>The "Track in GScheduler" button will now appear on closed task pages in Genome</li>
+        <li>When the start time and duration would add up to exactly midnight, the duration will now properly adjust to total 11:59:59</li>
+       </ul>
+
       <h1>GScheduler Version: 0.2.4 Changelog:</h1>
         
         <ul>

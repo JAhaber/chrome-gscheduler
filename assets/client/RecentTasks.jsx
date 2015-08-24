@@ -6,6 +6,7 @@ var GenomeAPI = require('./GenomeAPI.js');
 var $ = require('jquery');
 var showRecent = false;
 var tasks = null;
+var recentNewestFirst = false;
 
 var RecentTasks = React.createClass({
   toggleRecent: function(){
@@ -70,6 +71,8 @@ var RecentTasks = React.createClass({
     else{
       tasks = _.sortBy(tasks, function(o){ return o.TicketID; });
       tasks = _.uniq(tasks, true, function(o){ return o.TicketID; });
+      if (recentNewestFirst === true)
+        tasks.reverse();
       taskList = tasks.map(function (task) {
         return (
           <li className='task'>
@@ -116,6 +119,21 @@ var RecentTasks = React.createClass({
 
     );
   }
+});
+
+
+chrome.storage.sync.get({
+    recentNewestFirst: false
+  }, function(items) {
+    recentNewestFirst = items.recentNewestFirst;
+  });
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+  chrome.storage.sync.get({
+     recentNewestFirst: false
+  }, function(items) {
+    recentNewestFirst = items.recentNewestFirst;
+  });
 });
 
 

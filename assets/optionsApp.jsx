@@ -7,6 +7,7 @@ var OptionScript = React.createClass({
 
     chrome.storage.sync.set({
       newestFirst: $('#newestFirst').prop('checked'),
+      recentNewestFirst: $('#recentNewestFirst').prop('checked'),
       showBackup: $('#showBackup').prop('checked'),
       saveType: $('input[name=type]:checked').val(),
       autoRemind: $('#autoReminder').val(),
@@ -31,6 +32,7 @@ var OptionScript = React.createClass({
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
       newestFirst: true,
+      recentNewestFirst: false,
       showBackup: true,
       saveType: 'Actual',
       autoRemind: 'Never',
@@ -51,6 +53,7 @@ var OptionScript = React.createClass({
       $('#startMin').val(items.startMin);
       $('#recentTasks').val(items.recentTasks),
       $('#newestFirst').prop('checked', items.newestFirst);
+      $('#recentNewestFirst').prop('checked', items.recentNewestFirst);
       $('#showBackup').prop('checked', items.showBackup);
       $('#showGenomeTask').prop('checked', items.genomeTask);
     });
@@ -143,6 +146,9 @@ var OptionScript = React.createClass({
 
       <div className="option">
         <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
+       </div>
+       <div className="option">
+        <input type="checkbox" id="recentNewestFirst" /> Sort recent tasks list by newest first
        </div>
        <div className="option">
         <input type="checkbox" id="showGenomeTask" defaultChecked /> Show a button in Genome to add tasks to GScheduler
