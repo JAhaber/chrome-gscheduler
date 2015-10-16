@@ -107,9 +107,9 @@ var SearchBox = React.createClass({
 		  	}
 		  }
 		}).focus();
-		$element.on('typeahead:opened', function(e, task){
-			selected=false;
-		});
+		// $element.on('typeahead:opened', function(e, task){
+		// 	selected=false;
+		// });
 		$element.on('typeahead:selected', function(e, task){
 			var el = $(e.target);
 			self.props.onSelect({
@@ -152,14 +152,18 @@ var SearchBox = React.createClass({
 	   			this.props.onCreate(title, event);
 			}
 			else{
-				selected = false;
 			  	$("#new-note").focus();
+			  	
+			  	
 			}
 		}
-		if (event.which === TAB_KEY){
+		else if (event.which === TAB_KEY){
 			if (title && !selected) {
 	   			this.props.onCreate(title, event);
 			}
+		}
+		else{
+			selected = false;
 		}
 		
 	},

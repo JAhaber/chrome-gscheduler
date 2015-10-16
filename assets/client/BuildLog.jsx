@@ -4,6 +4,14 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.2.6 Changelog:</h1>
+        
+        <ul>
+          <p>Bug Fixes</p>
+          <li>Selecting a task in the Task name/ID box, changing the focus away from the app without creating the task, then refocusing the box will no longer clear the task information and create a note. It will now properly create the task that was selected.</li>
+       
+       </ul>
+
       <h1>GScheduler Version: 0.2.5 Changelog:</h1>
         
         <ul>
