@@ -4,6 +4,14 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.2.7 Changelog:</h1>
+        
+        <ul>
+          <p>Task ID</p>
+          <li>Pasting a Genome Task url into the Task ID field of an entry will now find the proper task based on the number in the url</li>
+       
+       </ul>
+
       <h1>GScheduler Version: 0.2.6 Changelog:</h1>
         
         <ul>

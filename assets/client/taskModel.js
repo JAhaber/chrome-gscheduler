@@ -135,7 +135,10 @@ TaskModel.prototype.contract = function (taskToExpand) {
 TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 		var scope = this;
 		//		return Utils.extend({}, task, {ticketID: ticketid});
-		
+		if (value.indexOf("https://") > -1)
+		{
+			value = value.substring(value.lastIndexOf("/") + 1);
+		}
   		GenomeAPI.getProjectInfo(value).then(function(ticketData){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
@@ -144,7 +147,8 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 							{ticketID: value,
 							projectID: ticketData.Entries[0].ProjectID,
 					      	title: ticketData.Entries[0].Title,
-					      	categoryID: null});
+					      	categoryID: null,
+					      	hasChanged: true});
   				}
   				else
   					return task;
