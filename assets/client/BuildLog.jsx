@@ -4,6 +4,13 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.2.8 Changelog:</h1>
+        
+        <ul>
+          <p>Bug Fixes</p>
+          <li>Removed the Alert that appears when before taking you to the log in page for Genome when you are not logged in</li>
+       
+       </ul>
       <h1>GScheduler Version: 0.2.7 Changelog:</h1>
         
         <ul>
