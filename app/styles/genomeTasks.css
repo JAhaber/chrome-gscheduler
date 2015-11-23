@@ -8,7 +8,7 @@
   padding: 5px;
   cursor: pointer;
   border-radius: 10px 10px 0 0;
-  z-index: 5000;
+  z-index: 1025;
   font-size: 12px; }
   #gButton:hover {
     background-color: #49acd9; }

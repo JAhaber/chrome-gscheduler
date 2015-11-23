@@ -4,6 +4,13 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.2.9 Changelog:</h1>
+        
+        <ul>
+          <p>Bug Fixes</p>
+          <li>Fixed a bug where I broke everything fixing the last bug.../li>
+       
+       </ul>
       <h1>GScheduler Version: 0.2.8 Changelog:</h1>
         
         <ul>
