@@ -267,10 +267,10 @@ dl {
     @include clearfix;
     
     label {
-      @include span-columns(6 of 12);
+      width: calc(96% - 140px);
     }
     .controls {
-      @include span-columns(6 of 12);
+      width: 140px;
     }
     .errors{
       width:5%;
@@ -457,13 +457,13 @@ dl {
         height: auto;
         display: inline-block;
         vertical-align: top;
-        width: 60px;
+        width: 75px;
         color:#000;
       }
       .recent-task-wrapper{
         height: auto;
         display: inline-block;
-        width: calc(94% - 60px);
+        width: calc(94% - 75px);
         color: #2585b0;
         span{
           display:block;
