@@ -139,6 +139,9 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 		{
 			value = value.substring(value.lastIndexOf("/") + 1);
 		}
+		else if (value.indexOf("#") === 0){
+			value = value.substring(1);
+		}
   		GenomeAPI.getProjectInfo(value).then(function(ticketData){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){

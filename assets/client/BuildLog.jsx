@@ -8,7 +8,7 @@ var LogItem = React.createClass({
         
         <ul>
           <p>Bug Fixes</p>
-          <li>Fixed a bug where I broke everything fixing the last bug.../li>
+          <li>Fixed a bug where I broke everything fixing the last bug...</li>
        
        </ul>
       <h1>GScheduler Version: 0.2.8 Changelog:</h1>
