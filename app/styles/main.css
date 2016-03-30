@@ -2132,10 +2132,8 @@ header {
       font-size: 14px; }
 
 .TaskButtons {
-  height: auto;
+  height: 21px;
   background-color: #2585b0;
-  border-radius: 3px 3px 0 0;
-  border-top: 1px solid #2585b0;
   position: fixed;
   bottom: 39px;
   z-index: 99;
@@ -2144,93 +2142,103 @@ header {
   .TaskButtons.open {
     height: calc(65% - 141px); }
 
-#recent {
+#recent, #favorites, #genometasks {
   width: 100%;
-  margin-top: 1px;
-  height: 20px;
-  background-color: #fff; }
-  #recent.open {
-    height: 100%;
-    overflow-y: auto; }
-  #recent .arrow {
+  background-color: #fff;
+  height: 0; }
+  #recent .arrow, #favorites .arrow, #genometasks .arrow {
     padding-top: 3px;
     background-color: #2585b0;
     cursor: pointer;
     font-size: 15px;
     color: #fff;
     display: block;
-    width: 100%;
+    width: 33.3%;
     height: 21px;
     text-align: center;
-    line-height: 1em; }
-    #recent .arrow i {
+    line-height: 1em;
+    position: absolute;
+    top: 0; }
+    #recent .arrow i, #favorites .arrow i, #genometasks .arrow i {
       padding-left: 5px; }
-    #recent .arrow:hover {
-      color: #000; }
-  #recent .fa-lock {
+    #recent .arrow:hover, #favorites .arrow:hover, #genometasks .arrow:hover {
+      background: #3C9BC5; }
+  #recent.open, #favorites.open, #genometasks.open {
+    height: 100%;
+    overflow-y: auto;
+    margin-top: 20px; }
+    #recent.open .arrow, #favorites.open .arrow, #genometasks.open .arrow {
+      background: #3C9BC5; }
+  #recent .fa-lock, #favorites .fa-lock, #genometasks .fa-lock {
     color: #d21245;
     cursor: default; }
-  #recent .fa-unlock-alt {
+  #recent .fa-unlock-alt, #favorites .fa-unlock-alt, #genometasks .fa-unlock-alt {
     color: #027B1F;
     cursor: default; }
-  #recent .content-wrapper {
+  #recent .content-wrapper, #favorites .content-wrapper, #genometasks .content-wrapper {
     overflow: auto;
     height: calc(100% - 21px); }
-  #recent .content {
+  #recent .content, #favorites .content, #genometasks .content {
     font-size: 0.75em;
     padding: 0 5px 0 5px; }
-    #recent .content .task-wrapper {
+    #recent .content .task-wrapper, #favorites .content .task-wrapper, #genometasks .content .task-wrapper {
       padding: 2px 0 2px;
       display: inline-block;
       width: 100%;
       line-height: 18px; }
-      #recent .content .task-wrapper .recent-ticketID-wrapper {
+      #recent .content .task-wrapper .recent-ticketID-wrapper, #favorites .content .task-wrapper .recent-ticketID-wrapper, #genometasks .content .task-wrapper .recent-ticketID-wrapper {
         height: auto;
         display: inline-block;
         vertical-align: top;
         width: 75px;
         color: #000; }
-      #recent .content .task-wrapper .recent-task-wrapper {
+      #recent .content .task-wrapper .recent-task-wrapper, #favorites .content .task-wrapper .recent-task-wrapper, #genometasks .content .task-wrapper .recent-task-wrapper {
         height: auto;
         display: inline-block;
         width: calc(94% - 75px);
         color: #2585b0; }
-        #recent .content .task-wrapper .recent-task-wrapper span {
+        #recent .content .task-wrapper .recent-task-wrapper span, #favorites .content .task-wrapper .recent-task-wrapper span, #genometasks .content .task-wrapper .recent-task-wrapper span {
           display: block;
           width: 100%;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis; }
-        #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+        #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, #favorites .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
           padding-left: 30px;
           color: #d21245; }
-      #recent .content .task-wrapper .controls {
+      #recent .content .task-wrapper .controls, #favorites .content .task-wrapper .controls, #genometasks .content .task-wrapper .controls {
         width: 6%;
         float: none;
         display: inline-block;
         vertical-align: top; }
-        #recent .content .task-wrapper .controls a.play {
+        #recent .content .task-wrapper .controls a.play, #favorites .content .task-wrapper .controls a.play, #genometasks .content .task-wrapper .controls a.play {
           display: block; }
-          #recent .content .task-wrapper .controls a.play i {
+          #recent .content .task-wrapper .controls a.play i, #favorites .content .task-wrapper .controls a.play i, #genometasks .content .task-wrapper .controls a.play i {
             color: #2585b0; }
-            #recent .content .task-wrapper .controls a.play i:hover {
+            #recent .content .task-wrapper .controls a.play i:hover, #favorites .content .task-wrapper .controls a.play i:hover, #genometasks .content .task-wrapper .controls a.play i:hover {
               color: #000; }
-    #recent .content li.task {
+    #recent .content li.task, #favorites .content li.task, #genometasks .content li.task {
       border-bottom: 1px solid #BAD2DD;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none; }
-      #recent .content li.task:last-child {
+      #recent .content li.task:last-child, #favorites .content li.task:last-child, #genometasks .content li.task:last-child {
         border-bottom: none; }
-      #recent .content li.task::after {
+      #recent .content li.task::after, #favorites .content li.task::after, #genometasks .content li.task::after {
         clear: both;
         content: "";
         display: table; }
-      #recent .content li.task label {
+      #recent .content li.task label, #favorites .content li.task label, #genometasks .content li.task label {
         width: 100%;
         font-weight: 400;
         margin-bottom: 0em; }
+
+#favorites .arrow {
+  left: 33.3%; }
+
+#genometasks .arrow {
+  left: 66.6%; }
 
 .updateLog {
   z-index: 500;

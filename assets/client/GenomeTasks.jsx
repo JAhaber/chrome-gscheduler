@@ -7,15 +7,15 @@ var $ = require('jquery');
 var tasks = null;
 var recentNewestFirst = false;
 
-var RecentTasks = React.createClass({
+var GenomeTasks = React.createClass({
   getInitialState: function() {
     return {
-      showRecent: false
+      showGenome: false
     };
   },
-  toggleRecent: function(){
+  toggleGenome: function(){
     
-    if (!this.props.showRecent){
+    if (!this.props.showGenome){
       GenomeAPI.getUser().then(function(user){
         return GenomeAPI.getSchedule(user.UserID);
       }).then(function(results){
@@ -36,7 +36,7 @@ var RecentTasks = React.createClass({
       tasks = null;
     }
     
-    this.props.toggleRecent();
+    this.props.toggleGenome();
      
   },
   onPlay: function(event){
@@ -67,7 +67,7 @@ var RecentTasks = React.createClass({
     if (tasks === null)
       taskList = "Loading...";
     else if (tasks === "fail")
-      taskList = "Failed to load recent tasks from Genome."
+      taskList = "Failed to load current task list from Genome."
     else if (tasks.length === 0)
       taskList = "No entries found";
     else{
@@ -106,9 +106,9 @@ var RecentTasks = React.createClass({
      
    return (
 
-      <section id="recent" className={this.props.showRecent ? "open" : ""}>
-          <a className="arrow" onClick={this.toggleRecent} title="Recent Tasks">
-            Recent Tasks <i className="fa fa-history"></i>
+      <section id="genometasks" className={this.props.showGenome ? "open" : ""}>
+          <a className="arrow" onClick={this.toggleGenome} title="Genome Tasks">
+            Genome Tasks <i className="fa up fa-list"></i>
           </a>
           <div className="content-wrapper">
             <ul className="content">
@@ -122,19 +122,4 @@ var RecentTasks = React.createClass({
 });
 
 
-chrome.storage.sync.get({
-    recentNewestFirst: false
-  }, function(items) {
-    recentNewestFirst = items.recentNewestFirst;
-  });
-
-chrome.storage.onChanged.addListener(function(changes, namespace){
-  chrome.storage.sync.get({
-     recentNewestFirst: false
-  }, function(items) {
-    recentNewestFirst = items.recentNewestFirst;
-  });
-});
-
-
-module.exports = RecentTasks;
+module.exports = GenomeTasks;
