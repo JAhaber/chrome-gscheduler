@@ -269,9 +269,12 @@ var TaskItem = React.createClass({
         <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
             <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} id={task.id + "-draggable"}>
-              <label className={task.expanded ? 'open' : 'closed'}>
-                <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
-                <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a> {task.title}
+              <label>
+                { task.expanded ? <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a>
+                  : <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
+                }
+
+                &nbsp;{task.title}
               </label>
            
               <div className="controls">
@@ -282,13 +285,15 @@ var TaskItem = React.createClass({
                   <a className="overlap tip" onMouseEnter={this.appendOverlapTip} onMouseLeave={this.removeTip}><i className="fa fa-exclamation-triangle"></i></a>
                   : "" }
                 <span className="timeElapsed">{this.state.timeElapsed}</span>
-                <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-                <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
+                { task.stopTime ?
+                  <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
+                  : <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
+                }
                 <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
               </div>
               
             </div>
-          <div className={task.expanded ? 'details on' : 'details'}>
+          {task.expanded ? <div className='details'>
             <div>
 
              { $("#" + task.id + "-nonbillable").prop("checked") ? "" : 
@@ -418,7 +423,7 @@ var TaskItem = React.createClass({
                 onChange={this.noteChange}
               />
             </div>
-          </div>
+          </div> : ""}
         </div>
       </li>
     );

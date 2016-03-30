@@ -15,7 +15,7 @@ var GapItem = React.createClass({
 
    return (
 
-      <span className="gap">
+      <span className="gap clearfix">
         Gap Duration: {Moment().hour(0).minutes(0).second(gap.duration).format("HH:mm:ss")}
         <div className="controls">
           <a className="add" onClick={this.addTask}>Add Task <i className="fa fa-caret-square-o-right"></i></a>

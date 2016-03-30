@@ -21,7 +21,6 @@ var genomeTask = null;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
-    this.getNonBillables();
     return {
       tasks: [],
       totalTaskTime: ''
@@ -30,6 +29,7 @@ var GSchedulerApp = React.createClass({
   componentDidMount: function() {
     //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
+    this.getNonBillables();
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);

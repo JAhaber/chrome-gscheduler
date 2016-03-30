@@ -2081,6 +2081,11 @@ body {
   body div {
     height: 100%; }
 
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 h2 {
   margin: 14px 0 4px; }
 
@@ -2133,12 +2138,6 @@ i {
   .zero i {
     cursor: help;
     color: #ffdd57; }
-
-.open .expand {
-  display: none; }
-
-.closed .contract {
-  display: none; }
 
 header {
   padding: 20px 20px 0 20px;
@@ -2289,19 +2288,12 @@ dl {
       content: "";
       display: table; }
     #task-list li.task label, .task-list li.task label {
-      float: left;
-      display: block;
-      margin-right: 2.35765%;
-      width: 48.82117%; }
-      #task-list li.task label:last-child, .task-list li.task label:last-child {
-        margin-right: 0; }
+      width: calc(98% - 165px);
+      float: left; }
     #task-list li.task .controls, .task-list li.task .controls {
-      float: left;
-      display: block;
-      margin-right: 2.35765%;
-      width: 48.82117%; }
-      #task-list li.task .controls:last-child, .task-list li.task .controls:last-child {
-        margin-right: 0; }
+      width: 165px;
+      float: right;
+      text-align: right; }
     #task-list li.task .errors, .task-list li.task .errors {
       width: 5%; }
     #task-list li.task label, .task-list li.task label {
@@ -2321,23 +2313,13 @@ dl {
       #task-list li.task .timeElapsed.flash, .task-list li.task .timeElapsed.flash {
         background-color: rgba(0, 255, 236, 0.4);
         box-shadow: 0px 0px 6px rgba(0, 255, 236, 0.86); }
-    #task-list li.task .controls, .task-list li.task .controls {
-      text-align: right; }
-      #task-list li.task .controls a.play, .task-list li.task .controls a.play {
-        display: none; }
-    #task-list li.task.stopped .controls a.stop, .task-list li.task.stopped .controls a.stop {
-      display: none; }
-    #task-list li.task.stopped .controls a.play, .task-list li.task.stopped .controls a.play {
-      display: inline-block; }
   #task-list .details, .task-list .details {
-    display: none;
     height: 100%;
     margin: 0;
     padding: 15px 0 15px 15px;
     background-color: #f8f8f8;
-    line-height: 1.5em; }
-    #task-list .details.on, .task-list .details.on {
-      display: block; }
+    line-height: 1.5em;
+    display: block; }
     #task-list .details div .item-wrap, .task-list .details div .item-wrap {
       display: inline-block;
       width: 50%; }
@@ -2391,12 +2373,6 @@ dl {
   #recent.open {
     height: calc(65% - 141px);
     overflow-y: auto; }
-    #recent.open .down {
-      display: inline; }
-    #recent.open .up {
-      display: none; }
-  #recent .down {
-    display: none; }
   #recent .arrow {
     padding-top: 3px;
     background-color: #2585b0;
@@ -2444,12 +2420,12 @@ dl {
         height: auto;
         display: inline-block;
         vertical-align: top;
-        width: 60px;
+        width: 75px;
         color: #000; }
       #recent .content .task-wrapper .recent-task-wrapper {
         height: auto;
         display: inline-block;
-        width: calc(94% - 60px);
+        width: calc(94% - 75px);
         color: #2585b0; }
         #recent .content .task-wrapper .recent-task-wrapper span {
           display: block;

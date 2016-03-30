@@ -17,6 +17,12 @@ body{
   }
 }
 
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 h2 {
   margin: 14px 0 4px; 
 }
@@ -78,12 +84,7 @@ i{
     color:#ffdd57; 
   }
 }
- .open .expand {
-      display: none;
-    }
-  .closed .contract {
-      display: none;
-    }
+
 
 header {
   padding:20px 20px 0 20px;
@@ -267,10 +268,13 @@ dl {
     @include clearfix;
     
     label {
-      width: calc(96% - 140px);
+      width: calc(98% - 165px);
+      float:left;
     }
     .controls {
-      width: 140px;
+      width: 165px;
+      float:right;
+      text-align: right;
     }
     .errors{
       width:5%;
@@ -295,26 +299,15 @@ dl {
         box-shadow: 0px 0px 6px rgba(0, 255, 236, 0.86);
       }
     }
-    .controls {
-      text-align: right;
-      a.play {display: none}
-    }
-    &.stopped .controls {
-      a.stop {display: none}
-      a.play {display: inline-block}
-    }
-    
+        
   }
   .details{
-      display:none;
       height:100%;
       margin:0;
       padding:15px 0 15px 15px;
       background-color:#f8f8f8;
       line-height:1.5em;
-      &.on{
-        display:block;
-      }
+      display:block;
       div{
         .item-wrap{
           display: inline-block;
@@ -389,16 +382,8 @@ dl {
   &.open{
     height: calc(65% - 141px);
     overflow-y: auto;
-    .down{
-      display:inline;
-    }
-    .up{
-      display:none;
-    }
   }
-  .down{
-    display:none;
-  }    
+    
   .arrow{
     padding-top: 3px;
     background-color: #2585b0;

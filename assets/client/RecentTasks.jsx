@@ -4,14 +4,18 @@ var Moment = require('moment');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var $ = require('jquery');
-var showRecent = false;
 var tasks = null;
 var recentNewestFirst = false;
 
 var RecentTasks = React.createClass({
+  getInitialState: function() {
+    return {
+      showRecent: false
+    };
+  },
   toggleRecent: function(){
-    showRecent = !showRecent;
-    if (showRecent){
+    
+    if (!this.state.showRecent){
       GenomeAPI.getUser().then(function(user){
         return GenomeAPI.getSchedule(user.UserID);
       }).then(function(results){
@@ -27,13 +31,12 @@ var RecentTasks = React.createClass({
       }).fail(function(err){
         tasks = "fail";
       });
-      $("#recent").addClass("open");
     }
     else{
       tasks = null;
-      $("#recent").removeClass("open");
     }
-      
+    
+    this.setState({showRecent: !this.state.showRecent});
      
   },
   onPlay: function(event){
@@ -104,11 +107,12 @@ var RecentTasks = React.createClass({
      
    return (
 
-      <section id="recent">
+      <section id="recent" className={this.state.showRecent ? "open" : ""}>
           <a className="arrow" onClick={this.toggleRecent} title="Recent Tasks">
           Recent Tasks
-            <i className="fa up fa-arrow-circle-o-up"></i>
-            <i className="fa down fa-arrow-circle-o-down"></i>
+            {this.state.showRecent ? <i className="fa down fa-arrow-circle-o-down"></i>
+              : <i className="fa up fa-arrow-circle-o-up"></i>
+            }            
           </a>
           <div className="content-wrapper">
             <ul className="content">
