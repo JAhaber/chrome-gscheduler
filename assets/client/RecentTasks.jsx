@@ -56,7 +56,6 @@ var RecentTasks = React.createClass({
       this.props.onPlay(task);
   },
   dragStart: function(event){
-    console.log($(event.target).data("ticketid"));
     var url = "https://genome.klick.com/tickets/#/details/" + $(event.target).data("ticketid");
     event.dataTransfer.effectAllowed = "copy";
     event.dataTransfer.setData("text/uri-list", url);

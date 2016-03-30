@@ -6,14 +6,15 @@ var $ = require('jquery');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
-		return {timeElapsed: '',
-    date: Moment(task.startTime).format('YYYY-MM-DD'),
-    title: task.title,
-    ticketID: task.ticketID,
-    note: task.note,
-    startTime: Moment(task.startTime).format('HH:mm:ss'),
-    stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : ""
-    
+		return {
+      timeElapsed: '',
+      date: Moment(task.startTime).format('YYYY-MM-DD'),
+      title: task.title,
+      ticketID: task.ticketID,
+      note: task.note,
+      startTime: Moment(task.startTime).format('HH:mm:ss'),
+      stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
+      nonProjectActive: task.categoryID ? true : false
     };
 	},
   
@@ -105,6 +106,9 @@ var TaskItem = React.createClass({
   },
   durationChange: function(event) {
     this.setState({timeElapsed: event.target.value});
+  },
+  handleNonProjectCheck: function(event){
+    this.setState({nonProjectActive: !this.state.nonProjectActive});
   },
   idBlur: function(event) {
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
@@ -296,7 +300,7 @@ var TaskItem = React.createClass({
           {task.expanded ? <div className='details'>
             <div>
 
-             { $("#" + task.id + "-nonbillable").prop("checked") ? "" : 
+             { this.state.nonProjectActive ? "" : 
               <div className="item-wrap">
                 <label>
                   Title:
@@ -312,9 +316,9 @@ var TaskItem = React.createClass({
                 />
               </div> }
 
-              <div className={ $("#" + task.id + "-nonbillable").prop("checked") ? "item-wrap full" : "item-wrap"} >
+              <div className={ this.state.nonProjectActive ? "item-wrap full" : "item-wrap"} >
                 
-                { $("#" + task.id + "-nonbillable").prop("checked") ? 
+                { this.state.nonProjectActive ? 
                 <label>Non-Project Category</label>
                 : <label>Task ID:</label>}
 
@@ -322,10 +326,11 @@ var TaskItem = React.createClass({
                 <input
                   type="checkbox"
                   id={task.id +"-nonbillable"}
-                  defaultChecked={task.categoryID}
+                  defaultChecked={this.state.nonProjectActive}
+                  onChange={this.handleNonProjectCheck}
                 />
                 
-                { $("#" + task.id + "-nonbillable").prop("checked") ? 
+                { this.state.nonProjectActive ? 
                 <select value={task.categoryID} onChange={this.nonProjectChange}>
                   <option value=""></option>
                   {nonBillList}

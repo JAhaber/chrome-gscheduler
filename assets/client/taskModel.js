@@ -54,7 +54,6 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		});
 	}
 
-	console.log('addTask:', newTask)
 	chrome.runtime.sendMessage({running: true}, function(response) {});
 	this.tasks.unshift(newTask);
 	this.inform();
@@ -133,15 +132,26 @@ TaskModel.prototype.contract = function (taskToExpand) {
 };
 
 TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
-		var scope = this;
-		//		return Utils.extend({}, task, {ticketID: ticketid});
-		if (value.indexOf("https://") > -1)
-		{
-			value = value.substring(value.lastIndexOf("/") + 1);
+	var scope = this;
+	//		return Utils.extend({}, task, {ticketID: ticketid});
+	if (value.indexOf("https://") > -1)
+	{
+		value = value.substring(value.lastIndexOf("/") + 1);
+	}
+	else if (value.indexOf("#") === 0){
+		value = value.substring(1);
+	}
+
+	if (value === "") {
+			scope.tasks = scope.tasks.map(function (task) {
+			if (task === taskToChange)
+				return Utils.extend({}, task, {ticketID: value, projectID: null, hasChanged: true});
+			else
+					return task;
+			});
+			scope.inform();
 		}
-		else if (value.indexOf("#") === 0){
-			value = value.substring(1);
-		}
+		else{
   		GenomeAPI.getProjectInfo(value).then(function(ticketData){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
@@ -160,23 +170,13 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
   		}).fail(function(error){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange)
-					return Utils.extend({}, task, {ticketID: value, projectID: null});
+					return Utils.extend({}, task, {ticketID: value, projectID: null, hasChanged: true});
 				else
   					return task;
   			});
   			scope.inform();
   		});
-
-  		if (value === "") {
-  			scope.tasks = scope.tasks.map(function (task) {
-				if (task === taskToChange)
-					return Utils.extend({}, task, {ticketID: value, projectID: null});
-				else
-  					return task;
-  			});
-  			scope.inform();
-  		}
-  		
+  	}
 };
 
 TaskModel.prototype.handleTitleChange = function (taskToChange, value) {
@@ -244,18 +244,18 @@ TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop)
 			 	start = Moment(start, 'HH:mm:ss').format();
 			 	stop = Moment(stop, 'HH:mm:ss').format();
 		      	if (Moment(start).isValid() && Moment(stop).isValid() && task.stopTime){
-		      		start = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
-		      		stop = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
+		      		start = Moment(task.startTime, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
+		      		stop = Moment(task.startTime, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
 				 	
 				 	return Utils.extend({}, task, {startTime: start, stopTime: stop, hasChanged: true});
 		      		
 		      	}
 		      	else if (Moment(start).isValid()){
-		      		start = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
+		      		start = Moment(task.startTime, "YYYY-MM-DD").hour(Moment(start).hour()).minute(Moment(start).minute()).second(Moment(start).second()).format();
 		      		return Utils.extend({}, task, {startTime: start, hasChanged: true});
 		      	}
 			    else if (Moment(stop).isValid()){
-			    	stop = Moment($("#" + task.id + "-date-edit").val(), "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
+			    	stop = Moment(task.startTime, "YYYY-MM-DD").hour(Moment(stop).hour()).minute(Moment(stop).minute()).second(Moment(stop).second()).format();
 			    	return Utils.extend({}, task, {stopTime: stop, hasChanged: true});
 			    }
 				    
