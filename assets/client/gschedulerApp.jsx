@@ -6,7 +6,7 @@ var TaskItem = require('./taskItem.jsx');
 var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
-var RecentTasks = require('./RecentTasks.jsx');
+var TaskLists = require('./TaskLists.jsx');
 var $ = require('jquery');
 window.jQuery = $;
 var Moment = require('moment');
@@ -397,7 +397,7 @@ var GSchedulerApp = React.createClass({
           
         {main}
 
-        <RecentTasks 
+        <TaskLists 
         onPlay={this.createTask} />
 
         <footer>

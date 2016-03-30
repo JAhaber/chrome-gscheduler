@@ -15,7 +15,7 @@ var RecentTasks = React.createClass({
   },
   toggleRecent: function(){
     
-    if (!this.state.showRecent){
+    if (!this.props.showRecent){
       GenomeAPI.getUser().then(function(user){
         return GenomeAPI.getSchedule(user.UserID);
       }).then(function(results){
@@ -36,7 +36,7 @@ var RecentTasks = React.createClass({
       tasks = null;
     }
     
-    this.setState({showRecent: !this.state.showRecent});
+    this.props.toggleRecent();
      
   },
   onPlay: function(event){
@@ -106,10 +106,10 @@ var RecentTasks = React.createClass({
      
    return (
 
-      <section id="recent" className={this.state.showRecent ? "open" : ""}>
+      <section id="recent" className={this.props.showRecent ? "open" : ""}>
           <a className="arrow" onClick={this.toggleRecent} title="Recent Tasks">
           Recent Tasks
-            {this.state.showRecent ? <i className="fa down fa-arrow-circle-o-down"></i>
+            {this.props.showRecent ? <i className="fa down fa-arrow-circle-o-down"></i>
               : <i className="fa up fa-arrow-circle-o-up"></i>
             }            
           </a>

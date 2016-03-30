@@ -1,0 +1,53 @@
+.updateLog{
+  z-index:500;
+  position:absolute;
+  background-color:#fff;
+  top:0;
+  left:0;
+  height:calc(100% - 39px);
+  width:100%;
+  color: #000;
+  overflow-y:scroll;
+  padding-bottom:10px;
+  padding-left:10px;
+  padding-right:10px;
+  h1{
+    margin-top:45px;
+    &:first-child{
+      margin-top:5px;
+    }
+    
+  }
+  p{
+    font-weight: bold;
+    margin: 15px 0 15px 0;
+  }
+  .divider{
+    border-top:1px dashed #aaaaaa;
+    margin:15px 0 15px 0;
+  }
+
+  ul{
+    list-style-type: disc;
+    
+    li{
+      list-style-position: outside;
+      list-style-type: disc;
+      font-size:13px;
+      margin-left:16px;
+    }
+    ul{
+      margin-left:20px;
+      li{
+        list-style-type: circle;
+       }
+    }
+  }
+
+  .destroy{
+    i{color:#d21245;}
+    position:absolute;
+    top:0px;
+    right:2px;
+  }
+}

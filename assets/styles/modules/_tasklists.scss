@@ -1,0 +1,122 @@
+.TaskButtons {
+  height: auto;
+  background-color: #2585b0;
+  border-radius: 3px 3px 0 0;
+  border-top: 1px solid #2585b0;
+  position:fixed;
+  bottom:39px;
+  z-index:99;
+  overflow:hidden;
+  width:100%;
+  &.open{
+    height: calc(65% - 141px);
+  }
+}
+#recent{
+  width: 100%;
+  margin-top:1px;
+  height:20px;
+  background-color: #fff;
+  &.open{
+    height: 100%;
+    overflow-y: auto;
+  }
+  .arrow{
+    padding-top: 3px;
+    background-color: #2585b0;
+    cursor: pointer;
+    font-size:15px;
+    color: #fff;
+    display: block;
+    width: 100%;
+    height: 21px;
+    text-align: center;
+    line-height: 1em;
+    i{
+      padding-left:5px;
+    }
+    &:hover{
+      color:#000;
+    }
+  }
+  .fa-lock{
+    color: #d21245;
+    cursor:default;
+  }
+  .fa-unlock-alt{
+    color: #027B1F;
+    cursor:default;
+  }
+  .content-wrapper{
+    overflow:auto;
+    height: calc(100% - 21px);
+  }
+  
+  .content {
+    font-size: em(12);
+    padding: 0 5px 0 5px;
+    .task-wrapper{
+      padding: 2px 0 2px;
+      display: inline-block;
+      width: 100%;
+      line-height: 18px;
+
+      .recent-ticketID-wrapper{
+        height: auto;
+        display: inline-block;
+        vertical-align: top;
+        width: 75px;
+        color:#000;
+      }
+      .recent-task-wrapper{
+        height: auto;
+        display: inline-block;
+        width: calc(94% - 75px);
+        color: #2585b0;
+        span{
+          display:block;
+          width:100%;
+          overflow:hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .recent-project-wrapper{
+          padding-left: 30px;
+          color:#d21245;
+        }
+      }
+      .controls {
+        width: 6%;
+        float:none;
+        display:inline-block;
+        vertical-align: top;
+
+        a.play{
+          i{
+            color:#2585b0;
+            &:hover{
+              color:#000;
+            }
+          }
+          display:block;
+        }
+      }
+    }
+
+    li.task {
+      border-bottom: 1px solid #BAD2DD;
+      &:last-child{
+        border-bottom:none;
+      }
+      @include user-select(none);
+      @include clearfix;
+      
+      label {
+        width:100%;
+        font-weight:400;
+        margin-bottom:0em;
+      }
+      
+    }
+  }
+}
