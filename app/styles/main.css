@@ -2304,7 +2304,7 @@ body {
 /* this will style the thumb, ignoring the track */
 *::-webkit-scrollbar-button {
   background-color: #2585b0;
-  height: 28px; }
+  height: 0px; }
 
 /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
 h2 {
@@ -2364,6 +2364,8 @@ i {
   height: calc(100% - 136px);
   padding-bottom: 5px;
   overflow-y: auto; }
+  #main::-webkit-scrollbar-button:vertical:decrement {
+    height: 28px; }
   #main .restore-tasks {
     padding-top: 10px;
     text-align: center;
