@@ -17,15 +17,18 @@ var GenomeTasks = React.createClass({
     
     if (!this.props.showGenome){
       GenomeAPI.getUser().then(function(user){
-        return GenomeAPI.getSchedule(user.UserID);
+        return GenomeAPI.getAssignedTasks(user.UserID);
       }).then(function(results){
+        
         tasks = [];
         for (var i = 0; i < results.Entries.length; i++)
         {
-          if (results.Entries[i].Type === "Project"){
-              GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
-                tasks.push(ticket.Entries[0]);
-              });              
+          console.log(results.Entries[i]);
+          if (results.Entries[i].ProjectID){
+              //GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
+                //console.log(ticket.Entries[0]);
+                tasks.push(results.Entries[i]);
+              //});              
           }
         }
       }).fail(function(err){
@@ -81,12 +84,7 @@ var GenomeTasks = React.createClass({
             <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart} data-ticketid={task.TicketID}>
               <div className="recent-ticketID-wrapper">
                 <label>
-                  {task.TicketStatusName === "closed" ?
-                    <i className="fa fa-lock" title="This task is closed in genome. You can still bill to it if the project is open."></i>
-                    : <i className="fa fa-unlock-alt" title="This task is open in genome."></i>
-                  }
-                  
-                  {" " + task.TicketID}
+                  {task.TicketID}
                 </label>
               </div>
               <div className="recent-task-wrapper">
@@ -107,19 +105,34 @@ var GenomeTasks = React.createClass({
    return (
 
       <section id="genometasks" className={this.props.showGenome ? "open" : ""}>
-          <a className="arrow" onClick={this.toggleGenome} title="Genome Tasks">
+          <a className="arrow" onClick={this.toggleGenome} title="View tasks currently assigned to you in Genome">
             Genome Tasks <i className="fa up fa-list"></i>
           </a>
-          <div className="content-wrapper">
-            <ul className="content">
-              {taskList}
-            </ul>
-          </div>
+          {this.props.showGenome ?
+            <div className="content-wrapper">
+              <ul className="content">
+                {taskList}
+              </ul>
+            </div>
+          : "" }
         </section>
 
     );
   }
 });
 
+chrome.storage.sync.get({
+    recentNewestFirst: false
+  }, function(items) {
+    recentNewestFirst = items.recentNewestFirst;
+  });
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+  chrome.storage.sync.get({
+     recentNewestFirst: false
+  }, function(items) {
+    recentNewestFirst = items.recentNewestFirst;
+  });
+});
 
 module.exports = GenomeTasks;

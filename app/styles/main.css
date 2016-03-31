@@ -2102,6 +2102,44 @@ header {
     position: absolute;
     right: 0; }
 
+footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  padding: 0;
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, linear-gradient(#2585b0, #3f9dc7);
+  height: 39px; }
+  footer .options, footer .log, footer .help {
+    position: absolute;
+    font-size: 20px;
+    color: #fff;
+    top: 4px;
+    left: 20px; }
+    footer .options:hover, footer .log:hover, footer .help:hover {
+      color: #000; }
+  footer .log {
+    left: 50px; }
+  footer .help {
+    left: 80px; }
+  footer div.save-btn {
+    height: 29px;
+    width: 120px;
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    font: normal 12px/29px Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    text-align: center;
+    color: #fff; }
+    footer div.save-btn:hover {
+      background-color: #459ec5; }
+    footer div.save-btn.disabled {
+      cursor: default;
+      background-color: #A8C5DE;
+      opacity: 0.6; }
+
 .gap {
   display: block;
   padding: 5px 6px 5px 25px;
@@ -2132,7 +2170,7 @@ header {
       font-size: 14px; }
 
 .TaskButtons {
-  height: 21px;
+  height: 30px;
   background-color: #2585b0;
   position: fixed;
   bottom: 39px;
@@ -2147,16 +2185,15 @@ header {
   background-color: #fff;
   height: 0; }
   #recent .arrow, #favorites .arrow, #genometasks .arrow {
-    padding-top: 3px;
     background-color: #2585b0;
     cursor: pointer;
     font-size: 15px;
     color: #fff;
     display: block;
     width: 33.3%;
-    height: 21px;
+    height: 30px;
     text-align: center;
-    line-height: 1em;
+    line-height: 30px;
     position: absolute;
     top: 0; }
     #recent .arrow i, #favorites .arrow i, #genometasks .arrow i {
@@ -2164,9 +2201,9 @@ header {
     #recent .arrow:hover, #favorites .arrow:hover, #genometasks .arrow:hover {
       background: #3C9BC5; }
   #recent.open, #favorites.open, #genometasks.open {
-    height: 100%;
+    height: calc(100% - 30px);
     overflow-y: auto;
-    margin-top: 20px; }
+    margin-top: 30px; }
     #recent.open .arrow, #favorites.open .arrow, #genometasks.open .arrow {
       background: #3C9BC5; }
   #recent .fa-lock, #favorites .fa-lock, #genometasks .fa-lock {
@@ -2177,7 +2214,7 @@ header {
     cursor: default; }
   #recent .content-wrapper, #favorites .content-wrapper, #genometasks .content-wrapper {
     overflow: auto;
-    height: calc(100% - 21px); }
+    height: 100%; }
   #recent .content, #favorites .content, #genometasks .content {
     font-size: 0.75em;
     padding: 0 5px 0 5px; }
@@ -2239,6 +2276,10 @@ header {
 
 #genometasks .arrow {
   left: 66.6%; }
+#genometasks .content .task-wrapper .recent-ticketID-wrapper {
+  width: 60px; }
+#genometasks .content .task-wrapper .recent-task-wrapper {
+  width: calc(94% - 60px); }
 
 .updateLog {
   z-index: 500;
@@ -2361,7 +2402,7 @@ i {
     color: #ffdd57; }
 
 #main {
-  height: calc(100% - 136px);
+  height: calc(100% - 147px);
   padding-bottom: 5px;
   overflow-y: auto; }
   #main::-webkit-scrollbar-button:vertical:decrement {
@@ -2514,50 +2555,6 @@ dl {
     #task-list .details div select, .task-list .details div select {
       width: 95%;
       margin-bottom: 5px; }
-
-footer {
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  padding: 0;
-  text-align: right;
-  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 9px left 50%, linear-gradient(#2585b0, #3f9dc7); }
-  footer .options {
-    position: absolute;
-    font-size: 20px;
-    color: #fff;
-    top: 7px;
-    left: 20px; }
-    footer .options:hover {
-      color: #000; }
-  footer .log {
-    position: absolute;
-    font-size: 20px;
-    color: #fff;
-    top: 7px;
-    left: 50px; }
-    footer .log:hover {
-      color: #000; }
-  footer .help {
-    position: absolute;
-    font-size: 20px;
-    color: #fff;
-    top: 7px;
-    left: 80px; }
-    footer .help:hover {
-      color: #000; }
-  footer button {
-    margin: 4px;
-    margin-right: 20px;
-    background-color: #459ec5;
-    border: 1px solid #459ec5;
-    border-radius: 30px;
-    padding: 3px 20px 3px 20px;
-    font: normal 20px Helvetica, Arial, sans-serif; }
-  footer button:disabled {
-    cursor: default; }
-    footer button:disabled:hover {
-      background-color: #459ec5; }
 
 .error {
   border: 1px solid #d21245 !important;

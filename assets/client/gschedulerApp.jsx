@@ -370,9 +370,6 @@ var GSchedulerApp = React.createClass({
       </section>
     );
    
-   
-    
-
     return (
       <div>
         <header id="header">
@@ -411,7 +408,7 @@ var GSchedulerApp = React.createClass({
           <a className="help" onClick={this.toggleHelp} title="Help">
             <i className="fa fa-question-circle"></i>
           </a>
-          <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
+          <div className={taskItems.length ? "save-btn" : "save-btn disabled"} onClick={this.save}>Save to Genome</div>
           
         </footer>
         {showLog ? 

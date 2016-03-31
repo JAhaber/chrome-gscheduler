@@ -107,14 +107,16 @@ var RecentTasks = React.createClass({
    return (
 
       <section id="recent" className={this.props.showRecent ? "open" : ""}>
-          <a className="arrow" onClick={this.toggleRecent} title="Recent Tasks">
+          <a className="arrow" onClick={this.toggleRecent} title="View tasks you recently billed to">
             Recent Tasks <i className="fa fa-history"></i>
           </a>
-          <div className="content-wrapper">
-            <ul className="content">
-              {taskList}
-            </ul>
-          </div>
+          {this.props.showRecent ?
+            <div className="content-wrapper">
+              <ul className="content">
+                {taskList}
+              </ul>
+            </div>
+          : ""}
         </section>
 
     );

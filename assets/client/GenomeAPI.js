@@ -68,6 +68,11 @@ var GenomeAPI = {
 		var deferred = Q.defer();
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json?StartDate=' + Moment().subtract(7 * recentTaskWeeks, 'days').format("YYYY-MM-DD") + '&EndDate=' + Moment().format("YYYY-MM-DD") + '&UserIDs=' + user, options);		
 	},
+	getAssignedTasks: function(user) {
+		var options = {};
+		var deferred = Q.defer();
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket/Filter.json?TicketStatusIsOpen=true&AssignedToUserID=' + user, options);		
+	},
 	getProjectInfo: function(ticketid) {
 		var options = {};
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);

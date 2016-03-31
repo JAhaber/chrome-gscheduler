@@ -32,11 +32,11 @@ var TaskLists = React.createClass({
    return (
     <div className={this.state.showRecent || this.state.showFavorite || this.state.showGenome ? "TaskButtons open" : "TaskButtons"}>
       <RecentTasks 
-        onPlay={this.props.createTask} showRecent={this.state.showRecent} toggleRecent={this.toggleRecent}/>
+        onPlay={this.props.onPlay} showRecent={this.state.showRecent} toggleRecent={this.toggleRecent}/>
       <FavoriteTasks 
-        onPlay={this.props.createTask} showFavorite={this.state.showFavorite} toggleFavorite={this.toggleFavorite}/>
+        onPlay={this.props.onPlay} showFavorite={this.state.showFavorite} toggleFavorite={this.toggleFavorite}/>
       <GenomeTasks 
-        onPlay={this.props.createTask} showGenome={this.state.showGenome} toggleGenome={this.toggleGenome}/>
+        onPlay={this.props.onPlay} showGenome={this.state.showGenome} toggleGenome={this.toggleGenome}/>
       
     </div>
 

@@ -1,5 +1,5 @@
 .TaskButtons {
-  height: 21px;
+  height: 30px;
   background-color: #2585b0;
   position:fixed;
   bottom:39px;
@@ -16,16 +16,15 @@
   background-color: #fff;
   height:0;
   .arrow{
-    padding-top: 3px;
     background-color: #2585b0;
     cursor: pointer;
     font-size:15px;
     color: #fff;
     display: block;
     width: 33.3%;
-    height: 21px;
+    height: 30px;
     text-align: center;
-    line-height: 1em;
+    line-height: 30px;
     position:absolute;
     top:0;
     i{
@@ -36,9 +35,9 @@
     }
   }
   &.open{
-    height: 100%;
+    height: calc(100% - 30px);
     overflow-y: auto;
-    margin-top:20px;
+    margin-top:30px;
     .arrow{
       background:#3C9BC5;
     }
@@ -53,7 +52,7 @@
   }
   .content-wrapper{
     overflow:auto;
-    height: calc(100% - 21px);
+    height: 100%;
   }
   
   .content {
@@ -128,6 +127,20 @@
 #favorites .arrow{
   left: 33.3%;
 }
-#genometasks .arrow{
-  left: 66.6%;
+
+
+#genometasks{
+  .arrow{
+    left: 66.6%;
+  }
+  .content {
+    .task-wrapper{   
+      .recent-ticketID-wrapper{
+        width: 60px;
+      }
+      .recent-task-wrapper{
+        width: calc(94% - 60px);
+      }
+    }
+  }
 }
