@@ -228,7 +228,6 @@ var GSchedulerApp = React.createClass({
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
     if (nonBillables === "fail")
     {
-      console.log("fail");
       nonBillables = { "Entries" : [] };
       this.getNonBillables();
     }
@@ -395,7 +394,7 @@ var GSchedulerApp = React.createClass({
         {main}
 
         <TaskLists 
-        onPlay={this.createTask} />
+        onPlay={this.createTask} model={this.props.model} />
 
         <footer>
           

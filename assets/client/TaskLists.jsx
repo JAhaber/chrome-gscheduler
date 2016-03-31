@@ -34,7 +34,7 @@ var TaskLists = React.createClass({
       <RecentTasks 
         onPlay={this.props.onPlay} showRecent={this.state.showRecent} toggleRecent={this.toggleRecent}/>
       <FavoriteTasks 
-        onPlay={this.props.onPlay} showFavorite={this.state.showFavorite} toggleFavorite={this.toggleFavorite}/>
+        onPlay={this.props.onPlay} showFavorite={this.state.showFavorite} toggleFavorite={this.toggleFavorite} favorites={this.props.model.favorites} />
       <GenomeTasks 
         onPlay={this.props.onPlay} showGenome={this.state.showGenome} toggleGenome={this.toggleGenome}/>
       

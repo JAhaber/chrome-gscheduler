@@ -23,7 +23,6 @@ var GenomeTasks = React.createClass({
         tasks = [];
         for (var i = 0; i < results.Entries.length; i++)
         {
-          console.log(results.Entries[i]);
           if (results.Entries[i].ProjectID){
               //GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
                 //console.log(ticket.Entries[0]);
@@ -75,7 +74,6 @@ var GenomeTasks = React.createClass({
       taskList = "No entries found";
     else{
       tasks = _.sortBy(tasks, function(o){ return o.TicketID; });
-      tasks = _.uniq(tasks, true, function(o){ return o.TicketID; });
       if (recentNewestFirst === true)
         tasks.reverse();
       taskList = tasks.map(function (task) {

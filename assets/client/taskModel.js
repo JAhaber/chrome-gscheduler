@@ -1,18 +1,26 @@
 var Utils = require('../utils.js');
 var Moment = require('moment');
+var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
 var Q = require('q');
 
 var TaskModel = function (key) {
 	this.key = key;
 	var loadData = Utils.store(key);
-	if(loadData.backup){
+	if(loadData.favorites){
 		this.backup = loadData.backup;
 		this.tasks = loadData.tasks;
+		this.favorites = loadData.favorites;
+	}
+	else if(loadData.backup){
+		this.backup = loadData.backup;
+		this.tasks = loadData.tasks;
+		this.favorites = [];
 	}
 	else{
 		this.tasks = loadData;
 		this.backup = {};
+		this.favorites = [];
 	}
 		
 	this.tasks.forEach(function(task){
@@ -29,13 +37,12 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
 TaskModel.prototype.addTask = function (task, start, stop) {
-	console.log("test");
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -129,6 +136,84 @@ TaskModel.prototype.restoreBackUp = function () {
 };
 TaskModel.prototype.removeBackUp = function () {
 	this.backup = {};
+	this.inform();
+};
+
+TaskModel.prototype.addFavorite = function (task) {
+	var newTask = {
+		id: Utils.uuid(),
+		title: task.title,
+		ticketID: task.ticketID || null,
+		projectID: task.projectID || null,
+		categoryID: task.categoryID
+	};
+
+	if (newTask.projectID){
+		this.tasks = this.tasks.map(function (task) {
+			if (task.ticketID === newTask.ticketID)
+			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
+			return task;
+		});
+	}
+	else if (newTask.categoryID){
+		this.tasks = this.tasks.map(function (task) {
+			if (task.categoryID === newTask.categoryID)
+			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
+			return task;
+		});
+	}
+	else {
+		this.tasks = this.tasks.map(function (task) {
+			if (task.title === newTask.title)
+			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
+			return task;
+		});
+	}
+	
+	this.favorites.unshift(newTask);
+	this.inform();
+};
+
+TaskModel.prototype.clearFavorite = function () {
+	this.favorites = [];
+	this.inform();
+};
+
+TaskModel.prototype.removeFavorite = function (task) {
+	var index = null;
+	var that = this;
+	_.each(this.favorites, function (fav, i) {
+		if ((task.projectID && fav.ticketID === task.ticketID) || (task.categoryID && fav.categoryID === task.categoryID)){
+          index = i;
+	    }
+	    else if (fav.title === task.title){
+	      index = i;
+	    }
+	});
+
+	if (this.favorites[index].projectID){
+		this.tasks = this.tasks.map(function (task) {
+			if (task.ticketID === that.favorites[index].ticketID)
+			   	return Utils.extend({}, task, {isFavorite: false, hasChanged: true});
+			return task;
+		});
+	}
+	else if (this.favorites[index].categoryID){
+		this.tasks = this.tasks.map(function (task) {
+			if (task.categoryID === that.favorites[index].categoryID)
+			   	return Utils.extend({}, task, {isFavorite: false, hasChanged: true});
+			return task;
+		});
+	}
+	else {
+		this.tasks = this.tasks.map(function (task) {
+			if (task.title === that.favorites[index].title)
+			   	return Utils.extend({}, task, {isFavorite: false, hasChanged: true});
+			return task;
+		});
+	}
+
+	this.favorites.splice(index,1);
 	this.inform();
 };
 

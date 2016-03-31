@@ -6,7 +6,9 @@ var $ = require('jquery');
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
+    
 		return {
+      isFavorite: task.isFavorite || false,
       timeElapsed: '',
       date: Moment(task.startTime).format('YYYY-MM-DD'),
       title: task.title,
@@ -56,7 +58,8 @@ var TaskItem = React.createClass({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       title: task.title,
-      ticketID: task.ticketID
+      ticketID: task.ticketID,
+      isFavorite: task.isFavorite
     });
     this.updateDuration(Moment(task.stopTime).format('HH:mm:ss'), Moment(task.startTime).format('HH:mm:ss'));
     /*task.flash = true;
@@ -128,6 +131,16 @@ var TaskItem = React.createClass({
   onStop: function(event){
     this.setState({stopTime: Moment().format('HH:mm:ss')});
     this.props.onStop();
+  },
+  onFav: function(event){
+    var task = this.props.task;
+    if (!this.state.isFavorite){
+      this.props.model.addFavorite(task);
+    }
+    else{
+      this.props.model.removeFavorite(task);
+    }
+    
   },
   onSplit: function(event){
     var task = this.props.task;
@@ -250,16 +263,16 @@ var TaskItem = React.createClass({
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
       this.setState({timeElapsed: timeElapsed});
   },
-  
+ 
   render: function() {
     var task = this.props.task;
 
     var colorClass = "border-left";
     var isLessThanOne = false;
-          
-    if (this.props.task.projectID)
+    
+    if (task.projectID)
       colorClass = "border-left hasID";
-    else if (this.props.task.categoryID)
+    else if (task.categoryID)
       colorClass = "border-left hasCategory";
     
     if (task.stopTime){
@@ -303,7 +316,12 @@ var TaskItem = React.createClass({
                   : "" }
                 <span className="timeElapsed">{this.state.timeElapsed}</span>
                 <span className="icons-wrapper">
-                  <a className="fav" onClick={this.props.onFav} title="Add/remove this task from your favorites"><i className="fa fa-star-o"></i></a>
+                  <a className="fav" onClick={this.onFav} title="Add/remove this task from your favorites">
+                    {this.state.isFavorite ?
+                      <i className="fa fa-star"></i>
+                      : <i className="fa fa-star-o"></i>
+                    }
+                  </a>
                   { task.stopTime ?
                     <a className="split" onClick={this.onSplit} title="Split task into two even length tasks"><i className="fa fa-unlink"></i></a>
                     : ""
