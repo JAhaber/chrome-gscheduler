@@ -129,6 +129,19 @@ var TaskItem = React.createClass({
     this.setState({stopTime: Moment().format('HH:mm:ss')});
     this.props.onStop();
   },
+  onSplit: function(event){
+    var task = this.props.task;
+    var newStart;
+    var newStop;
+    var elapsedMilliseconds = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMilliseconds();
+
+    var newStop = Moment(task.startTime).add(elapsedMilliseconds / 2, 'ms');
+    var newStart = Moment(task.startTime).add(elapsedMilliseconds / 2, 'ms').add(1, 's');
+
+    this.props.model.handleStartStopChange(task, Moment(task.startTime).format('HH:mm:ss'), Moment(newStop).format('HH:mm:ss'));
+
+    this.props.model.splitTask(task, Moment(task.startTime, "YYYY-MM-DD").hour(Moment(newStart).hour()).minute(Moment(newStart).minute()).second(Moment(newStart).second()).format(), task.stopTime)
+  },
   removeTip: function(event){
     $("span.tooltip").remove();
   },
@@ -289,11 +302,18 @@ var TaskItem = React.createClass({
                   <a className="overlap tip" onMouseEnter={this.appendOverlapTip} onMouseLeave={this.removeTip}><i className="fa fa-exclamation-triangle"></i></a>
                   : "" }
                 <span className="timeElapsed">{this.state.timeElapsed}</span>
-                { task.stopTime ?
-                  <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-                  : <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
-                }
-                <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
+                <span className="icons-wrapper">
+                  <a className="fav" onClick={this.props.onFav} title="Add/remove this task from your favorites"><i className="fa fa-star-o"></i></a>
+                  { task.stopTime ?
+                    <a className="split" onClick={this.onSplit} title="Split task into two even length tasks"><i className="fa fa-unlink"></i></a>
+                    : ""
+                  }
+                  { task.stopTime ?
+                    <a className="play" onClick={this.props.onPlay} title="Begin tracking this task"><i className="fa fa-play"></i></a>
+                    : <a className="stop" onClick={this.onStop} title="Stop tracking this task"><i className="fa fa-stop"></i></a>
+                  }
+                  <a className="destroy" onClick={this.props.onDestroy} title="Remove this task"><i className="fa fa-remove"></i></a>
+                </span>
               </div>
               
             </div>

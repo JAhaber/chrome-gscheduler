@@ -2355,9 +2355,11 @@ a.overlap,
 a.zero,
 a.play,
 a.stop,
-a.destroy {
+a.destroy,
+a.split,
+a.fav {
   display: inline-block;
-  width: 1.9em;
+  width: 1.4em;
   font-size: 1.2em;
   color: white;
   text-align: center; }
@@ -2400,6 +2402,10 @@ i {
   .zero i {
     cursor: help;
     color: #ffdd57; }
+  .split i {
+    color: #547517; }
+  .fav i {
+    color: #FFDD57; }
 
 #main {
   height: calc(100% - 147px);
@@ -2484,10 +2490,10 @@ dl {
       content: "";
       display: table; }
     #task-list li.task label, .task-list li.task label {
-      width: calc(98% - 165px);
+      width: calc(100% - 186px);
       float: left; }
     #task-list li.task .controls, .task-list li.task .controls {
-      width: 165px;
+      width: 183px;
       float: right;
       text-align: right; }
     #task-list li.task .errors, .task-list li.task .errors {
@@ -2505,10 +2511,10 @@ dl {
       color: #084b68;
       font-size: 12px;
       font-family: "Lucida Console", Monaco, monospace;
-      margin-right: 15px; }
-      #task-list li.task .timeElapsed.flash, .task-list li.task .timeElapsed.flash {
-        background-color: rgba(0, 255, 236, 0.4);
-        box-shadow: 0px 0px 6px rgba(0, 255, 236, 0.86); }
+      margin-right: 3px; }
+    #task-list li.task .icons-wrapper, .task-list li.task .icons-wrapper {
+      width: 83px;
+      display: inline-block; }
   #task-list .details, .task-list .details {
     height: 100%;
     margin: 0;

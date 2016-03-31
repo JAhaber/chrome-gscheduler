@@ -1,7 +1,6 @@
 var Utils = require('../utils.js');
 var Moment = require('moment');
 var GenomeAPI = require('./GenomeAPI.js');
-var $ = require('jquery');
 var Q = require('q');
 
 var TaskModel = function (key) {
@@ -36,6 +35,7 @@ TaskModel.prototype.inform = function () {
 };
 
 TaskModel.prototype.addTask = function (task, start, stop) {
+	console.log("test");
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -55,6 +55,27 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	}
 
 	chrome.runtime.sendMessage({running: true}, function(response) {});
+	this.tasks.unshift(newTask);
+	this.inform();
+};
+
+TaskModel.prototype.splitTask = function (task, start, stop) {
+	var newTask = {
+		id: Utils.uuid(),
+		title: task.title,
+		startTime: start,
+		stopTime: stop,
+		ticketID: task.ticketID || null,
+		projectID: task.projectID || null,
+		note: task.note || null,
+		categoryID: task.categoryID,
+		gap: {}
+	};
+	this.tasks = this.tasks.map(function (taskExpanded) {
+		return taskExpanded.expanded ?
+			Utils.extend({}, taskExpanded, { expanded: false })
+			: taskExpanded;
+	});
 	this.tasks.unshift(newTask);
 	this.inform();
 };
