@@ -2406,6 +2406,8 @@ i {
     color: #547517; }
   .fav i {
     color: #FFDD57; }
+  .fav.disabled i {
+    color: #D2D2D2; }
 
 #main {
   height: calc(100% - 147px);

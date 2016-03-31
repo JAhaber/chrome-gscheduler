@@ -21,10 +21,6 @@ var FavoriteTasks = React.createClass({
   },
   updateFavorites: function(){
     tasks = this.props.favorites;
-    _.each($("#favorites .task"), function(el, i){
-      if($("#favorites .task").eq(i).find(".play").attr("data-ticketid") !== undefined)
-        $("#favorites .task").eq(i).find("task-wrapper").attr("draggable", true);
-    });
       // GenomeAPI.getUser().then(function(user){
       //   return GenomeAPI.getSchedule(user.UserID);
       // }).then(function(results){

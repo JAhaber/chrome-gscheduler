@@ -43,6 +43,7 @@ TaskModel.prototype.inform = function () {
 };
 
 TaskModel.prototype.addTask = function (task, start, stop) {
+	var isFavorite = this.checkIfFavorite(task.ticketID);
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -51,6 +52,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		projectID: task.projectID || null,
 		note: task.note || null,
 		categoryID: task.categoryID,
+		isFavorite: isFavorite,
 		gap: {}
 	};
 	if (stop){
@@ -76,6 +78,7 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 		projectID: task.projectID || null,
 		note: task.note || null,
 		categoryID: task.categoryID,
+		isFavorite: task.isFavorite,
 		gap: {}
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
@@ -144,8 +147,7 @@ TaskModel.prototype.addFavorite = function (task) {
 		id: Utils.uuid(),
 		title: task.title,
 		ticketID: task.ticketID || null,
-		projectID: task.projectID || null,
-		categoryID: task.categoryID
+		projectID: task.projectID || null
 	};
 
 	if (newTask.projectID){
@@ -155,21 +157,7 @@ TaskModel.prototype.addFavorite = function (task) {
 			return task;
 		});
 	}
-	else if (newTask.categoryID){
-		this.tasks = this.tasks.map(function (task) {
-			if (task.categoryID === newTask.categoryID)
-			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
-			return task;
-		});
-	}
-	else {
-		this.tasks = this.tasks.map(function (task) {
-			if (task.title === newTask.title)
-			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
-			return task;
-		});
-	}
-	
+		
 	this.favorites.unshift(newTask);
 	this.inform();
 };
@@ -183,11 +171,8 @@ TaskModel.prototype.removeFavorite = function (task) {
 	var index = null;
 	var that = this;
 	_.each(this.favorites, function (fav, i) {
-		if ((task.projectID && fav.ticketID === task.ticketID) || (task.categoryID && fav.categoryID === task.categoryID)){
+		if ((task.projectID && fav.ticketID === task.ticketID)){
           index = i;
-	    }
-	    else if (fav.title === task.title){
-	      index = i;
 	    }
 	});
 
@@ -198,21 +183,7 @@ TaskModel.prototype.removeFavorite = function (task) {
 			return task;
 		});
 	}
-	else if (this.favorites[index].categoryID){
-		this.tasks = this.tasks.map(function (task) {
-			if (task.categoryID === that.favorites[index].categoryID)
-			   	return Utils.extend({}, task, {isFavorite: false, hasChanged: true});
-			return task;
-		});
-	}
-	else {
-		this.tasks = this.tasks.map(function (task) {
-			if (task.title === that.favorites[index].title)
-			   	return Utils.extend({}, task, {isFavorite: false, hasChanged: true});
-			return task;
-		});
-	}
-
+	
 	this.favorites.splice(index,1);
 	this.inform();
 };
@@ -249,23 +220,26 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 	}
 
 	if (value === "") {
-			scope.tasks = scope.tasks.map(function (task) {
-			if (task === taskToChange)
-				return Utils.extend({}, task, {ticketID: value, projectID: null, hasChanged: true});
-			else
-					return task;
-			});
-			scope.inform();
-		}
-		else{
+		scope.tasks = scope.tasks.map(function (task) {
+		if (task === taskToChange)
+			return Utils.extend({}, task, {ticketID: value, projectID: null, isFavorite: false, hasChanged: true});
+		else
+				return task;
+		});
+		scope.inform();
+	}
+	else{
   		GenomeAPI.getProjectInfo(value).then(function(ticketData){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
 					itemScope.setState({title: ticketData.Entries[0].Title});
+					var isFavorite = scope.checkIfFavorite(value);
+					console.log(isFavorite);
 	  				return Utils.extend({}, task,
 							{ticketID: value,
 							projectID: ticketData.Entries[0].ProjectID,
 					      	title: ticketData.Entries[0].Title,
+					      	isFavorite: isFavorite,
 					      	categoryID: null,
 					      	hasChanged: true});
   				}
@@ -276,14 +250,28 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
   		}).fail(function(error){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange)
-					return Utils.extend({}, task, {ticketID: value, projectID: null, hasChanged: true});
+					return Utils.extend({}, task, {ticketID: value, projectID: null, isFavorite: false, hasChanged: true});
 				else
   					return task;
   			});
   			scope.inform();
   		});
   	}
+  	
 };
+
+TaskModel.prototype.checkIfFavorite = function(ticket){
+	var isFav = false;
+  	if (ticket){
+		this.favorites.forEach(function (fav) {
+			if (ticket === fav.ticketID){
+				isFav =  true;
+			}
+			   	
+		});
+	}
+	return isFav;
+}
 
 TaskModel.prototype.handleTitleChange = function (taskToChange, value) {
 		
@@ -334,9 +322,9 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 				for (var i = 0; i < nonBillables.Entries.length; i++)
 				{
 					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
-						return Utils.extend({}, task, {categoryID: value, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
+						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
 				}
-				return Utils.extend({}, task, {categoryID: value, title: "", projectID: null, ticketID: null, hasChanged: true});	
+				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true});	
 			}
 			return task;
 		});

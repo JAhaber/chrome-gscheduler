@@ -316,7 +316,7 @@ var TaskItem = React.createClass({
                   : "" }
                 <span className="timeElapsed">{this.state.timeElapsed}</span>
                 <span className="icons-wrapper">
-                  <a className="fav" onClick={this.onFav} title="Add/remove this task from your favorites">
+                  <a className={this.state.ticketID ? "fav" : "fav disabled"} onClick={this.state.ticketID ? this.onFav : ""} title="Add/remove this task from your favorites">
                     {this.state.isFavorite ?
                       <i className="fa fa-star"></i>
                       : <i className="fa fa-star-o"></i>
