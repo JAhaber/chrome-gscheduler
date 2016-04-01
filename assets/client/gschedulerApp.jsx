@@ -393,7 +393,7 @@ var GSchedulerApp = React.createClass({
           <a className="help" onClick={this.toggleHelp} title="Help">
             <i className="fa fa-question-circle"></i>
           </a>
-          <div className={taskItems.length ? "save-btn" : "save-btn disabled"} onClick={this.save}>Save to Genome</div>
+          <div className={taskItems.length ? "save-btn" : "save-btn disabled"} onClick={this.save} title="Click to send your tasks to your Genome Schedule">Save to Genome</div>
           
         </footer>
         {showLog ? 
