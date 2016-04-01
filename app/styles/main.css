@@ -2252,8 +2252,6 @@ footer {
           display: block; }
           #recent .content .task-wrapper .controls a.play i, #favorites .content .task-wrapper .controls a.play i, #genometasks .content .task-wrapper .controls a.play i {
             color: #2585b0; }
-            #recent .content .task-wrapper .controls a.play i:hover, #favorites .content .task-wrapper .controls a.play i:hover, #genometasks .content .task-wrapper .controls a.play i:hover {
-              color: #000; }
     #recent .content li.task, #favorites .content li.task, #genometasks .content li.task {
       border-bottom: 1px solid #BAD2DD;
       -webkit-user-select: none;
@@ -2273,6 +2271,15 @@ footer {
 
 #favorites .arrow {
   left: 33.3%; }
+#favorites .content .task-wrapper .recent-ticketID-wrapper {
+  width: 60px; }
+#favorites .content .task-wrapper .recent-task-wrapper {
+  width: calc(100% - 105px); }
+#favorites .content .task-wrapper .controls {
+  text-align: right;
+  width: 45px; }
+  #favorites .content .task-wrapper .controls a.play {
+    display: inline-block; }
 
 #genometasks .arrow {
   left: 66.6%; }
@@ -2355,7 +2362,9 @@ a.play,
 a.stop,
 a.destroy,
 a.split,
-a.fav {
+a.fav,
+a.zero,
+a.overlap {
   display: inline-block;
   width: 1.4em;
   font-size: 1.2em;

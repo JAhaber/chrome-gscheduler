@@ -97,9 +97,6 @@
         a.play{
           i{
             color:#2585b0;
-            &:hover{
-              color:#000;
-            }
           }
           display:block;
         }
@@ -124,8 +121,28 @@
   }
 }
 
-#favorites .arrow{
-  left: 33.3%;
+#favorites{
+  .arrow{
+    left: 33.3%;
+  }
+  .content {
+    .task-wrapper{   
+      .recent-ticketID-wrapper{
+        width: 60px;
+      }
+      .recent-task-wrapper{
+        width: calc(100% - 105px);
+      }
+      .controls {
+        text-align: right;
+        width: 45px;
+        a.play{
+          display:inline-block;
+        }
+      }
+    }
+
+  }
 }
 
 

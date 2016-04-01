@@ -19,36 +19,26 @@ var FavoriteTasks = React.createClass({
     this.updateFavorites();
   },
   updateFavorites: function(){
-    tasks = this.props.favorites;
-      // GenomeAPI.getUser().then(function(user){
-      //   return GenomeAPI.getSchedule(user.UserID);
-      // }).then(function(results){
-      //   tasks = [];
-      //   for (var i = 0; i < results.Entries.length; i++)
-      //   {
-      //     if (results.Entries[i].Type === "Project"){
-      //         GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
-      //           tasks.push(ticket.Entries[0]);
-      //         });              
-      //     }
-      //   }
-      // });
+    tasks = this.props.favorites;      
   },
   onPlay: function(ticketid, event){
     var task = null;
     for (var i = 0; i < tasks.length; i++)
     {
-      if (tasks[i].TicketID === ticketid){
+      if (tasks[i].ticketID === ticketid){
         task = {
-          title: tasks[i].Title,
-          ticketID: tasks[i].TicketID,
-          projectID: tasks[i].ProjectID
+          title: tasks[i].title,
+          ticketID: tasks[i].ticketID,
+          projectID: tasks[i].projectID
         };
         break;
       }
     }
     if (task)
       this.props.onPlay(task);
+  },
+  onDestroy: function(task, event){
+    this.props.model.removeFavorite(task);
   },
   dragStart: function(ticketid, event){
     var url = "https://genome.klick.com/tickets/#/details/" + ticketid;
@@ -71,7 +61,7 @@ var FavoriteTasks = React.createClass({
       taskList = tasks.map(function (task) {
         return (
           <li className='task'>
-            <div className="task-wrapper" draggable="false" onDragStart={scope.dragStart.bind(scope, task.TicketID)}>
+            <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart.bind(scope, task.ticketID)}>
               <div className="recent-ticketID-wrapper">
                 <label>
                   {task.ticketID}
@@ -84,7 +74,8 @@ var FavoriteTasks = React.createClass({
                 </label>
               </div>
               <div className="controls">
-                <a className="play" onClick={scope.onPlay.bind(scope, task.TicketID)}><i className="fa fa-play"></i></a>
+                <a className="play" onClick={scope.onPlay.bind(scope, task.ticketID)}><i className="fa fa-play"></i></a>
+                <a className="destroy" onClick={scope.onDestroy.bind(scope, task)} title="Remove this task from favorites"><i className="fa fa-remove"></i></a>
               </div>
             </div>
           </li>

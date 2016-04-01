@@ -143,6 +143,7 @@ TaskModel.prototype.removeBackUp = function () {
 };
 
 TaskModel.prototype.addFavorite = function (task) {
+	var scope = this;
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -156,10 +157,19 @@ TaskModel.prototype.addFavorite = function (task) {
 			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
 			return task;
 		});
+
+		GenomeAPI.getProjectInfo(newTask.ticketID).then(function(ticket){
+        	newTask.ProjectName = ticket.Entries[0].ProjectName;
+        	scope.favorites.unshift(newTask);
+			scope.inform();
+     	});
+	}
+	else{
+		this.favorites.unshift(newTask);
+		this.inform();
 	}
 		
-	this.favorites.unshift(newTask);
-	this.inform();
+	
 };
 
 TaskModel.prototype.clearFavorite = function () {
@@ -175,7 +185,6 @@ TaskModel.prototype.removeFavorite = function (task) {
           index = i;
 	    }
 	});
-
 	if (this.favorites[index].projectID){
 		this.tasks = this.tasks.map(function (task) {
 			if (task.ticketID === that.favorites[index].ticketID)
