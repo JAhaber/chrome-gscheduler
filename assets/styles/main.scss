@@ -44,8 +44,6 @@ h2 {
   margin: 14px 0 4px; 
 }
 
-a.overlap,
-a.zero,
 a.play, 
 a.stop,
 a.destroy,
@@ -56,31 +54,6 @@ a.fav {
   font-size: 1.2em;
   color: white;
   text-align: center;
-}
-
-a.overlap,
-a.zero{
-  width:1em;
-  margin-right: 4px;
-}
-a.tip {
-    border-bottom: 1px dashed;
-    text-decoration: none;
-}
-a.tip:hover {
-    cursor: help;
-    position: relative;
-}
-span.tooltip {
-    text-align: center;
-    border: #c0c0c0 1px dotted;
-    padding: 2px 10px 2px 10px;
-    display: block;
-    width: 250px;
-    position: absolute;
-    text-decoration: none;
-    font-size: 0.9em;
-    z-index:1000;
 }
 
 i{
@@ -110,6 +83,7 @@ i{
   }
   .fav.disabled &{
     color:#D2D2D2;
+    cursor:default;
   }
 }
 

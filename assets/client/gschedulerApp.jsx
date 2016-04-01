@@ -92,7 +92,6 @@ var GSchedulerApp = React.createClass({
     $('.typeahead').typeahead('val', '');
     $('#new-note').val('');
     saveTask = null;
-    console.log("Clear");
   },
   
   stopTask: function (task) {
@@ -196,16 +195,6 @@ var GSchedulerApp = React.createClass({
 
     this.setState({totalTaskTime: Moment().hour(0).minute(0).second(totalElapsedMilliseconds/1000).format('H[hrs] mm[mins]')});
   },
-  appendRestoreTip: function(event){
-    $("span.tooltip").remove();
-    var value = "Restore the last set of tasks that were saved to Genome. This will not affect any new tasks.";
-    var color = "rgba(73, 177, 252, 0.9)";
-    var top = $(".restore").offset().top + 20
-    $("body").append("<span class='tooltip'>" + value + "</span>");    
-    if ($("body").height() < ($(".restore").offset().top + 20 + 69))
-      top = $(".restore").offset().top - 73
-    $("span.tooltip").css({"top": top + "px", "left": ($(".restore").offset().left - 47) + "px", "background": color});
-  },
   toggleLog: function(){
     showLog = !showLog;
   },
@@ -215,9 +204,6 @@ var GSchedulerApp = React.createClass({
   
   closeLog: function(){
     showLog = false;
-  },
-  removeTip: function(event){
-    $("span.tooltip").remove();
   },
   render: function() {
     var main;
@@ -360,10 +346,10 @@ var GSchedulerApp = React.createClass({
         : "" }
 
         {this.props.model.backup.length > 0 && showBackup ?
-        <span className="restore-tasks">
-          <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
-          <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
-        </span>
+          <span className="restore-tasks">
+            <a className="restore" title="Restore the last set of tasks that were saved to Genome. This will not affect any new tasks." onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
+            <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
+          </span>
         : ""}
         
       </section>
