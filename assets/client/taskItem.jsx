@@ -242,7 +242,7 @@ var TaskItem = React.createClass({
 
     var colorClass = "border-left";
     var isLessThanOne = false;
-    
+
     if (task.projectID)
       colorClass = "border-left hasID";
     else if (task.categoryID)
@@ -266,6 +266,46 @@ var TaskItem = React.createClass({
         </option>
         );
     }, this);
+
+    var nonProjectSelector = (
+      <span>
+      <label className="checkbox">Non-project?</label>
+        <input
+          type="checkbox"
+          defaultChecked={this.state.nonProjectActive}
+          onChange={this.handleNonProjectCheck}
+        />
+      </span>
+    );
+
+    var renderTaskIDs = (<div className="item-row">
+        <div className="item-wrap">
+          <label>
+            Title:
+          </label>
+          <input 
+            type="text" 
+            name="title-edit" 
+            className="form-control" 
+            placeholder="Enter Title"
+            value={this.state.title}
+            onChange={this.titleChange}
+          />
+        </div>
+        <div className="item-wrap">
+          <label>Task ID:</label>
+          {nonProjectSelector}
+          <input
+            type="text"
+            placeholder="Enter Task ID"
+            name="ticketid-edit"
+            className="form-control" 
+            value={this.state.ticketID}
+            onChange={this.idChange}
+            onBlur={this.idBlur}
+          />
+        </div>
+      </div>);
    
     return (
         
@@ -273,8 +313,13 @@ var TaskItem = React.createClass({
           <div className={colorClass}>
             <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} ref="wrapper">
               <label>
-                { task.expanded ? <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a>
-                  : <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
+                { task.expanded ?
+                  <a className="contract" onClick={this.props.contractItems}>
+                    <i className="fa fa-minus"></i>
+                  </a>
+                  : <a className="expand" onClick={this.props.expandItems}>
+                    <i className="fa fa-plus"></i>
+                  </a>
                 }
 
                 &nbsp;{task.title}
@@ -282,12 +327,18 @@ var TaskItem = React.createClass({
            
               <div className="controls">
                 {isLessThanOne ? 
-                  <a className="zero tip" title="Tasks with a duration of < 1 minute will not be saved"><i className="fa fa-info-circle"></i></a>
-                  : "" }
+                  <a className="zero tip" title="Tasks with a duration of < 1 minute will not be saved">
+                    <i className="fa fa-info-circle"></i>
+                  </a>
+                : "" }
                 {task.overlap ? 
-                  <a className="overlap tip" title="This task's end time is overlapping another task"><i className="fa fa-exclamation-triangle"></i></a>
-                  : "" }
-                <span className="timeElapsed">{this.state.timeElapsed}</span>
+                  <a className="overlap tip" title="This task's end time is overlapping another task">
+                    <i className="fa fa-exclamation-triangle"></i>
+                  </a>
+                : "" }
+                <span className="timeElapsed">
+                  {this.state.timeElapsed}
+                </span>
                 <span className="icons-wrapper">
                   <a className={this.state.ticketID ? "fav" : "fav disabled"} onClick={this.state.ticketID ? this.onFav : ""} title={this.state.ticketID ? "Add/remove this task from your favorites" : "Only billable tasks can be added to favorites"}>
                     {this.state.isFavorite ?
@@ -296,67 +347,42 @@ var TaskItem = React.createClass({
                     }
                   </a>
                   { task.stopTime ?
-                    <a className="split" onClick={this.onSplit} title="Split task into two even length tasks"><i className="fa fa-unlink"></i></a>
-                    : ""
+                    <span>
+                      <a className="split" onClick={this.onSplit} title="Split task into two even length tasks">
+                        <i className="fa fa-unlink"></i>
+                      </a>
+                      <a className="play" onClick={this.props.onPlay} title="Begin tracking this task">
+                        <i className="fa fa-play"></i>
+                      </a>
+                    </span>
+                    : <a className="stop" onClick={this.onStop} title="Stop tracking this task">
+                      <i className="fa fa-stop"></i>
+                    </a>
                   }
-                  { task.stopTime ?
-                    <a className="play" onClick={this.props.onPlay} title="Begin tracking this task"><i className="fa fa-play"></i></a>
-                    : <a className="stop" onClick={this.onStop} title="Stop tracking this task"><i className="fa fa-stop"></i></a>
-                  }
-                  <a className="destroy" onClick={this.props.onDestroy} title="Remove this task"><i className="fa fa-remove"></i></a>
+                  <a className="destroy" onClick={this.props.onDestroy} title="Remove this task">
+                    <i className="fa fa-remove"></i>
+                  </a>
                 </span>
               </div>
               
             </div>
-          {task.expanded ? <div className='details'>
-            <div>
-
-             { this.state.nonProjectActive ? "" : 
-              <div className="item-wrap">
-                <label>
-                  Title:
-                </label>
-                <input 
-                  type="text" 
-                  name="title-edit" 
-                  className="form-control" 
-                  placeholder="Enter Title"
-                  value={this.state.title}
-                  onChange={this.titleChange}
-                />
-              </div> }
-
-              <div className={ this.state.nonProjectActive ? "item-wrap full" : "item-wrap"} >
-                
-                { this.state.nonProjectActive ? 
-                <label>Non-Project Category</label>
-                : <label>Task ID:</label>}
-
-                <label className="checkbox">Non-project?</label>
-                <input
-                  type="checkbox"
-                  defaultChecked={this.state.nonProjectActive}
-                  onChange={this.handleNonProjectCheck}
-                />
-                
-                { this.state.nonProjectActive ? 
-                <select value={task.categoryID} onChange={this.nonProjectChange}>
-                  <option value=""></option>
-                  {nonBillList}
-                </select>
-                : <input
-                  type="text"
-                  placeholder="Enter Task ID"
-                  name="ticketid-edit"
-                  className="form-control" 
-                  value={this.state.ticketID}
-                  onChange={this.idChange}
-                  onBlur={this.idBlur}
-                />}
-
+          {task.expanded ? 
+          <div className='details'>
+            { this.state.nonProjectActive ? 
+              <div className="item-row">
+                <div className="item-wrap full">
+                  <label>Non-Project Category</label>
+                  {nonProjectSelector}                
+                  <select value={task.categoryID} onChange={this.nonProjectChange}>
+                    <option value=""></option>
+                    {nonBillList}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div>
+            : 
+              {renderTaskIDs}
+            }
+            <div className="item-row">
               <div className="item-wrap">
                 <label>
                   Start:
@@ -387,7 +413,7 @@ var TaskItem = React.createClass({
                 />
               </div>
             </div>
-            <div>
+            <div className="item-row">
               <div className="item-wrap">
                 <label>
                   Date:
@@ -419,7 +445,7 @@ var TaskItem = React.createClass({
                 />
               </div>
             </div>
-            <div>
+            <div className="item-row">
               <label>
                 Note:
               </label>
