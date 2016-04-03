@@ -21,21 +21,12 @@ var FavoriteTasks = React.createClass({
   updateFavorites: function(){
     tasks = this.props.favorites;      
   },
-  onPlay: function(ticketid, event){
-    var task = null;
-    for (var i = 0; i < tasks.length; i++)
-    {
-      if (tasks[i].ticketID === ticketid){
-        task = {
-          title: tasks[i].title,
-          ticketID: tasks[i].ticketID,
-          projectID: tasks[i].projectID
-        };
-        break;
-      }
-    }
-    if (task)
-      this.props.onPlay(task);
+  onPlay: function(task, event){
+    this.props.onPlay({
+      title: task.title,
+      ticketID: task.ticketID,
+      projectID: task.projectID
+    });
   },
   onDestroy: function(task, event){
     this.props.model.removeFavorite(task);
@@ -74,7 +65,7 @@ var FavoriteTasks = React.createClass({
                 </label>
               </div>
               <div className="controls">
-                <a className="play" onClick={scope.onPlay.bind(scope, task.ticketID)}><i className="fa fa-play"></i></a>
+                <a className="play" onClick={scope.onPlay.bind(scope, task)}><i className="fa fa-play"></i></a>
                 <a className="destroy" onClick={scope.onDestroy.bind(scope, task)} title="Remove this task from favorites"><i className="fa fa-remove"></i></a>
               </div>
             </div>

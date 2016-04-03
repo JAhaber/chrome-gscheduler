@@ -40,21 +40,12 @@ var GenomeTasks = React.createClass({
     this.props.toggleGenome();
      
   },
-  onPlay: function(ticketid, event){
-    var task = null;
-    for (var i = 0; i < tasks.length; i++)
-    {
-      if (tasks[i].TicketID === ticketid){
-        task = {
-          title: tasks[i].Title,
-          ticketID: tasks[i].TicketID,
-          projectID: tasks[i].ProjectID
-        };
-        break;
-      }
-    }
-    if (task)
-      this.props.onPlay(task);
+  onPlay: function(task, event){
+    this.props.onPlay({
+      title: task.Title,
+      ticketID: task.TicketID,
+      projectID: task.ProjectID
+    });
   },
   dragStart: function(ticketid, event){
     var url = "https://genome.klick.com/tickets/#/details/" + ticketid;
@@ -91,7 +82,7 @@ var GenomeTasks = React.createClass({
                 </label>
               </div>
               <div className="controls">
-                <a className="play" onClick={scope.onPlay.bind(scope, task.TicketID)}><i className="fa fa-play"></i></a>
+                <a className="play" onClick={scope.onPlay.bind(scope, task)}><i className="fa fa-play"></i></a>
               </div>
             </div>
           </li>
