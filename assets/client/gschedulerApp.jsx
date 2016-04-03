@@ -7,6 +7,7 @@ var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
 var TaskLists = require('./TaskLists.jsx');
+var CustomStyles = require('./CustomStyles.jsx');
 var $ = require('jquery');
 window.jQuery = $;
 var Moment = require('moment');
@@ -401,6 +402,8 @@ var GSchedulerApp = React.createClass({
         closeLog={this.closeLog}
         />
         : ""}
+
+        <CustomStyles/>
       </div>
     );
   }

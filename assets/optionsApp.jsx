@@ -14,7 +14,9 @@ var OptionScript = React.createClass({
       startHour: $('#startHour').val(),
       startMin: $('#startMin').val(),
       recentTasks: $('#recentTasks').val(),
-      genomeTask: $('#showGenomeTask').prop('checked')
+      genomeTask: $('#showGenomeTask').prop('checked'),
+      customStyles: $('#customStyles').val()
+
     }, function() {
       console.log("save");
       // Update status to let user know options were saved.
@@ -39,7 +41,8 @@ var OptionScript = React.createClass({
       startHour: "9",
       startMin: "0",
       recentTasks: "1",
-      genomeTask: true
+      genomeTask: true,
+      customStyles: ""
     }, function(items) {
       var radioType = $('input[name=type]');
       for (i = 0; i < radioType.length; i++) {
@@ -51,7 +54,8 @@ var OptionScript = React.createClass({
       $('#autoReminder').val(items.autoRemind);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
-      $('#recentTasks').val(items.recentTasks),
+      $('#recentTasks').val(items.recentTasks);
+      $('#customStyles').val(items.customStyles);
       $('#newestFirst').prop('checked', items.newestFirst);
       $('#recentNewestFirst').prop('checked', items.recentNewestFirst);
       $('#showBackup').prop('checked', items.showBackup);
@@ -157,7 +161,12 @@ var OptionScript = React.createClass({
         <input type="checkbox" id="showBackup" defaultChecked /> Allow me to restore the last set of saved tasks
        </div>
 
-      
+      <div className="option">
+        <h2>Custom Css:</h2>
+        <p>Don't like how GScheduler looks? Enter your own css here to style it your way. Email me your custom skin to have it included as a theme in a future release! (jhaber@katalystadvantage.com)</p>
+        <textarea id="customStyles"/>
+       </div>
+
         <button id="save" onClick={this.saveOptions}>Save</button>
 
         <div id="status"></div>
