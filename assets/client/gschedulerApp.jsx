@@ -357,7 +357,7 @@ var GSchedulerApp = React.createClass({
     );
    
     return (
-      <div className={this.props.model.skin}>
+      <div className={this.props.model.skin === "custom" || this.props.model.skin === "" ? "" : "skin-" + this.props.model.skin}>
         <header id="header">
         <div className="input-wrap">
           <SearchBox
