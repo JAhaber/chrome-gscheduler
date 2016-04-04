@@ -21,15 +21,15 @@ var OptionScript = React.createClass({
     }, function() {
       // Update status to let user know options were saved.
       
-      $('#status').text('');
+      $('#status').removeClass("active");
       clearTimeout(timer);
       timer = null;
       setTimeout(function(){
 
-        $('#status').text('Options saved.');
+        $('#status').addClass("active");
         
         timer = setTimeout(function() {
-          $('#status').text('');
+          $('#status').removeClass("active");
         }, 1500);
 
       }, 200);
@@ -189,7 +189,7 @@ var OptionScript = React.createClass({
         <p>Don't like how GScheduler looks? Enter your own css here to style it your way. Email me your custom skin to have it included as a theme in a future release! (jhaber@katalystadvantage.com)</p>
        </div>
 
-        <div id="status"></div>
+        <div id="status">Options saved.</div>
       </div>
       );
 
