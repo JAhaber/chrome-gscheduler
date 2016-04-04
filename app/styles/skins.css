@@ -1,0 +1,25 @@
+.skin-black header {
+  background: linear-gradient(#1b1b1b, #868686); }
+.skin-black dl {
+  background-color: #868686; }
+.skin-black .TaskButtons {
+  background-color: #1b1b1b; }
+.skin-black #recent .arrow, .skin-black #favorites .arrow, .skin-black #genometasks .arrow {
+  background: #1b1b1b; }
+.skin-black #recent .arrow:hover, .skin-black #favorites .arrow:hover, .skin-black #genometasks .arrow:hover {
+  background: #868686; }
+.skin-black #recent.open .arrow, .skin-black #favorites.open .arrow, .skin-black #genometasks.open .arrow {
+  background: #868686; }
+.skin-black footer {
+  background: url("chrome-extension://odomkcbkhdfkmgfadgcngckijockpmkm/images/genome.png") no-repeat bottom 8px left 44%, linear-gradient(#1b1b1b, #868686); }
+.skin-black footer div.save-btn.disabled {
+  background-color: #cacaca; }
+.skin-black footer div.save-btn:hover {
+  background-color: #1b1b1b; }
+.skin-black *::-webkit-scrollbar-button {
+  background-color: #868686;
+  height: 0px; }
+.skin-black *::-webkit-scrollbar-track {
+  background-color: #868686; }
+
+/*# sourceMappingURL=skins.css.map */

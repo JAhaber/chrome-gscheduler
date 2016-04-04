@@ -1,17 +1,25 @@
 
 var React = require('react');
-var styles = "";
+var style = "";
+var skin = "";
 
 var customStyles = React.createClass({
   getInitialState: function() {
     return {
-      showRecent: false
+      style: this.props.model.customStyle
     };
+  },
+  componentDidUpdate: function(){
+    if (this.props.model.skin !== skin || this.props.model.customStyle !== style){
+      this.props.model.updateStyles(style, skin);
+      this.setState({style: style});
+    }
+    
   },
   render: function() {
     return (
       <style>
-        {styles}          
+        {this.state.style}          
       </style>
     );
   }
@@ -19,16 +27,20 @@ var customStyles = React.createClass({
 
 
 chrome.storage.sync.get({
-    customStyles: ""
+    customStyles: "",
+    skin: ""
   }, function(items) {
-    styles = items.customStyles;
+    style = items.customStyles;
+    skin = items.skin;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-     customStyles: ""
+     customStyles: "",
+     skin: "",
   }, function(items) {
-    styles = items.customStyles;
+    style = items.customStyles;
+    skin = items.skin;
   });
 });
 

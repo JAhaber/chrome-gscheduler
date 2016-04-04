@@ -357,7 +357,7 @@ var GSchedulerApp = React.createClass({
     );
    
     return (
-      <div>
+      <div className={this.props.model.skin}>
         <header id="header">
         <div className="input-wrap">
           <SearchBox
@@ -403,7 +403,7 @@ var GSchedulerApp = React.createClass({
         />
         : ""}
 
-        <CustomStyles/>
+        <CustomStyles model={this.props.model}/>
       </div>
     );
   }

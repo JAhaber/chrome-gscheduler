@@ -7,20 +7,37 @@ var Q = require('q');
 var TaskModel = function (key) {
 	this.key = key;
 	var loadData = Utils.store(key);
+
+	if(loadData.skin)
+	{
+		this.skin = loadData.skin;
+	}
+	else{
+		this.skin = "";
+	}
+
+	if(loadData.customStyle)
+	{
+		this.customStyle = loadData.customStyle;
+	}
+	else{
+		this.customStyle = "";
+	}
+
 	if(loadData.favorites){
-		this.backup = loadData.backup;
-		this.tasks = loadData.tasks;
 		this.favorites = loadData.favorites;
 	}
-	else if(loadData.backup){
+	else{
+		this.favorites = [];
+	}
+
+	if(loadData.backup){
 		this.backup = loadData.backup;
 		this.tasks = loadData.tasks;
-		this.favorites = [];
 	}
 	else{
 		this.tasks = loadData;
 		this.backup = {};
-		this.favorites = [];
 	}
 		
 	this.tasks.forEach(function(task){
@@ -37,7 +54,7 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
@@ -170,6 +187,12 @@ TaskModel.prototype.addFavorite = function (task) {
 	}
 		
 	
+};
+
+TaskModel.prototype.updateStyles = function (style, skin) {
+	this.skin = skin;
+	this.customStyle = style;
+	this.inform();
 };
 
 TaskModel.prototype.clearFavorite = function () {
