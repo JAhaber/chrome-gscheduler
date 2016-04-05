@@ -340,7 +340,7 @@ var TaskItem = React.createClass({
                   {this.state.timeElapsed}
                 </span>
                 <span className="icons-wrapper">
-                  <a className={this.state.ticketID ? "fav" : "fav disabled"} onClick={this.state.ticketID ? this.onFav : ""} title={this.state.ticketID ? "Add/remove this task from your favorites" : "Only billable tasks can be added to favorites"}>
+                  <a className={this.state.ticketID ? "fav" : "fav disabled"} onClick={this.state.ticketID ? this.onFav : ""} title={this.state.ticketID ? this.state.isFavorite ? "Remove this task from your favorites" : "Add this task to your favorites" : "Only billable tasks can be added to favorites"}>
                     {this.state.isFavorite ?
                       <i className="fa fa-star"></i>
                       : <i className="fa fa-star-o"></i>

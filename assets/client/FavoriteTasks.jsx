@@ -65,8 +65,8 @@ var FavoriteTasks = React.createClass({
                 </label>
               </div>
               <div className="controls">
-                <a className="play" onClick={scope.onPlay.bind(scope, task)}><i className="fa fa-play"></i></a>
-                <a className="destroy" onClick={scope.onDestroy.bind(scope, task)} title="Remove this task from favorites"><i className="fa fa-remove"></i></a>
+                <a className="play" onClick={scope.onPlay.bind(scope, task)} title="Begin tracking this task"><i className="fa fa-play"></i></a>
+                <a className="destroy" onClick={scope.onDestroy.bind(scope, task)} title="Remove this task from your favorites"><i className="fa fa-remove"></i></a>
               </div>
             </div>
           </li>
