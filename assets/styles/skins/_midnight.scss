@@ -1,0 +1,24 @@
+
+.skin-midnight{
+	header{background: linear-gradient(#1b1b1b, #002BFD);}
+	dl{background-color: #002BFD}
+	.TaskButtons{background-color:#1b1b1b;}
+	#recent .arrow, #favorites .arrow, #genometasks .arrow{background:#002BFD;}
+	#recent .arrow:hover, #favorites .arrow:hover, #genometasks .arrow:hover{background:#00188A;}
+	#recent.open .arrow, #favorites.open .arrow, #genometasks.open .arrow{background:#00188A;}
+	footer{background:url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%,linear-gradient(#002BFD, #00188A);}
+
+	footer div.save-btn.disabled{background-color:#cacaca;}
+	footer div.save-btn:hover{background-color:#0E0080;}
+
+	*::-webkit-scrollbar-button {
+	    background-color: #002BFF;
+	    height: 0px;
+	}
+	*::-webkit-scrollbar-track {
+	    background-color: #002BFF;
+	}
+	*::-webkit-scrollbar-thumb {
+	    background-color: #00188A;
+	}
+}
