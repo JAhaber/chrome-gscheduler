@@ -1988,7 +1988,7 @@ html {
 
 .skin-noir header {
   background: linear-gradient(#1b1b1b, #868686); }
-.skin-noir dl {
+.skin-noir .todayInfo {
   background-color: #868686; }
 .skin-noir .TaskButtons {
   background-color: #1b1b1b; }
@@ -2012,7 +2012,7 @@ html {
 
 .skin-midnight header {
   background: linear-gradient(#1b1b1b, #002BFD); }
-.skin-midnight dl {
+.skin-midnight .todayInfo {
   background-color: #002BFD; }
 .skin-midnight .TaskButtons {
   background-color: #1b1b1b; }
@@ -2036,30 +2036,30 @@ html {
 .skin-midnight *::-webkit-scrollbar-thumb {
   background-color: #00188A; }
 
-.skin-sunset header {
+.skin-fuzzy-peaches header {
   background: linear-gradient(#FF9900, #FFD251, #F66); }
-.skin-sunset dl {
+.skin-fuzzy-peaches .todayInfo {
   background-color: #F66; }
-.skin-sunset .TaskButtons {
+.skin-fuzzy-peaches .TaskButtons {
   background-color: #FF6666; }
-.skin-sunset #recent .arrow, .skin-sunset #favorites .arrow, .skin-sunset #genometasks .arrow {
+.skin-fuzzy-peaches #recent .arrow, .skin-fuzzy-peaches #favorites .arrow, .skin-fuzzy-peaches #genometasks .arrow {
   background: #FF6666; }
-.skin-sunset #recent .arrow:hover, .skin-sunset #favorites .arrow:hover, .skin-sunset #genometasks .arrow:hover {
+.skin-fuzzy-peaches #recent .arrow:hover, .skin-fuzzy-peaches #favorites .arrow:hover, .skin-fuzzy-peaches #genometasks .arrow:hover {
   background: #FF9900; }
-.skin-sunset #recent.open .arrow, .skin-sunset #favorites.open .arrow, .skin-sunset #genometasks.open .arrow {
+.skin-fuzzy-peaches #recent.open .arrow, .skin-fuzzy-peaches #favorites.open .arrow, .skin-fuzzy-peaches #genometasks.open .arrow {
   background: #FF9900; }
-.skin-sunset footer {
+.skin-fuzzy-peaches footer {
   background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, linear-gradient(#FF6666, #FFA714, #FFDD57); }
-.skin-sunset footer div.save-btn.disabled {
+.skin-fuzzy-peaches footer div.save-btn.disabled {
   background-color: #cacaca; }
-.skin-sunset footer div.save-btn:hover {
+.skin-fuzzy-peaches footer div.save-btn:hover {
   background-color: #FF893A; }
-.skin-sunset *::-webkit-scrollbar-button {
+.skin-fuzzy-peaches *::-webkit-scrollbar-button {
   background-color: #FF6666;
   height: 0px; }
-.skin-sunset *::-webkit-scrollbar-track {
+.skin-fuzzy-peaches *::-webkit-scrollbar-track {
   background-color: #FF6666; }
-.skin-sunset *::-webkit-scrollbar-thumb {
+.skin-fuzzy-peaches *::-webkit-scrollbar-thumb {
   background-color: #FF8343; }
 
 .typeahead,
@@ -2486,24 +2486,26 @@ i {
     #main .restore-tasks .remove {
       color: #C21F1F; }
 
-dl {
+.todayInfo {
+  height: auto;
   background-color: #2585b0;
   padding: 0px 20px 0 20px;
   margin: 0; }
-  dl::after {
+  .todayInfo::after {
     clear: both;
     content: "";
     display: table; }
-  dl dt, dl dd {
+  .todayInfo .today, .todayInfo .duration {
+    height: auto;
     color: #fff;
     font: normal 20px Helvetica, Arial, sans-serif;
     margin-top: 0.75em;
     margin: 0;
     padding-bottom: 5px; }
-  dl dt {
+  .todayInfo .today {
     float: left;
     cursor: pointer; }
-  dl dd {
+  .todayInfo .duration {
     float: right;
     text-align: right; }
 

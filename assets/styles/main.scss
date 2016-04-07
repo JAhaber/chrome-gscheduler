@@ -113,23 +113,25 @@ i{
   }
 }
 
-dl {
+.todayInfo {
+  height:auto;
   @include clearfix;
   background-color: #2585b0;
   padding:0px 20px 0 20px;
   margin: 0;
-  dt, dd {
+  .today, .duration {
+    height:auto;
     color:#fff;
     font: normal 20px Helvetica, Arial, sans-serif;
     margin-top: 0.75em;
     margin: 0;
     padding-bottom:5px;
   }
-  dt{
+  .today{
     float:left;
     cursor:pointer;
   }
-  dd {
+  .duration {
     float:right;
     text-align: right;
   }
