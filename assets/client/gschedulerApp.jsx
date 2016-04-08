@@ -195,6 +195,9 @@ var GSchedulerApp = React.createClass({
   },
   toggleLog: function(){
     this.setState({showLog: !this.state.showLog});
+    GenomeAPI.getTest().then(function(data){
+                console.log(data);
+              });
   },
   render: function() {
     var main;

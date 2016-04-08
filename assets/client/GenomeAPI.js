@@ -44,6 +44,11 @@ var GenomeAPI = {
 
     return GenomeAPI.request(url, options);
   },
+  getTest:function(){
+  	var options = {};
+
+  	return GenomeAPI.get("https://raw.githubusercontent.com/iDVB/chrome-gscheduler/master/URL.txt", options);
+  },
   verifyUser: function() {
 		var options = {};
 
