@@ -48,12 +48,13 @@ var GSchedulerApp = React.createClass({
     var scope = this;
     GenomeAPI.getMessage().then(function(data){
       message = JSON.parse(data);
-      console.log(scope.props.model.message.id);
-      console.log(message.id);
       if (scope.props.model.message.id < message.id){
         scope.props.model.updateMessage(message);
       }
     });
+  },
+  hideMessage: function(){
+    this.props.model.hideMessage();
   },
   getNonBillables: function(){
       GenomeAPI.getNonBillableTasks().then(function(ticketData){
@@ -338,17 +339,26 @@ var GSchedulerApp = React.createClass({
     
     main = (
       <section id="main">
-      {taskItems.length ?
-        <span>
-        <div className="todayInfo">
-          <div className="today" onClick={this.openGenome} title="Open today in genome">Today</div>
-          <div className="duration">{this.state.totalTaskTime}</div>
-        </div>
-        <ul id="task-list">
-          {taskItems}
-        </ul>
-        </span>
+        {taskItems.length ?
+          <div className="todayInfo">
+            <div className="today" onClick={this.openGenome} title="Open today in genome">Today</div>
+            <div className="duration">{this.state.totalTaskTime}</div>
+          </div>
         : "" }
+        {taskItems.length ?
+          <ul id="task-list">
+            {taskItems}
+          </ul>
+        : "" }
+
+        {this.props.model.message.show ? 
+          <div className="showMessage" onClick={this.hideMessage}>
+            {this.props.model.message.value}
+            <div className="close-msg">
+              Click to permanently hide this notification
+            </div>
+          </div> : ""
+        }
 
         {this.props.model.backup.length > 0 && showBackup ?
           <span className="restore-tasks">
@@ -363,11 +373,6 @@ var GSchedulerApp = React.createClass({
     return (
       <div className={this.props.model.skin === "custom" || this.props.model.skin === "" ? "" : "skin-" + this.props.model.skin}>
         <header id="header">
-          {this.props.model.message.show ? 
-            <div className="showMessage">
-              {this.props.model.message.value}
-            </div> : ""
-          }
           <div className="input-wrap">
             <SearchBox
               id="new-task"

@@ -153,6 +153,12 @@ TaskModel.prototype.updateMessage = function (message) {
 	this.message.id = message.id;
 	this.message.value = message.value;
 	this.message.show = true;
+
+	this.inform();
+};
+
+TaskModel.prototype.hideMessage = function () {
+	this.message.show = false;
 	
 	this.inform();
 };

@@ -12,6 +12,7 @@
 @import "modules/gapitem";
 @import "modules/tasklists";
 @import "modules/buildlog";
+@import "modules/messages";
 
 
 html{
@@ -21,7 +22,10 @@ body{
   height:100%;
   margin:0;
   padding:0;
-  div{
+}
+#gschedulerapp{
+  height:100%;
+  >div{
     height:100%;
   }
 }

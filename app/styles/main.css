@@ -2405,6 +2405,22 @@ footer {
     .updateLog .destroy i {
       color: #d21245; }
 
+.showMessage {
+  height: auto;
+  text-align: center;
+  padding: 5px;
+  font-size: 12px;
+  line-height: 14px;
+  border-top: 1px solid #FFDD57;
+  border-bottom: 1px solid #FFDD57;
+  margin-top: 5px;
+  cursor: pointer; }
+  .showMessage .close-msg {
+    font-weight: bold;
+    font-size: 10px;
+    margin-top: 5px;
+    color: #CD1F1F; }
+
 html {
   height: 100%; }
 
@@ -2412,7 +2428,10 @@ body {
   height: 100%;
   margin: 0;
   padding: 0; }
-  body div {
+
+#gschedulerapp {
+  height: 100%; }
+  #gschedulerapp > div {
     height: 100%; }
 
 *::-webkit-scrollbar {

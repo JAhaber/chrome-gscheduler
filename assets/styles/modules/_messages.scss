@@ -1,0 +1,17 @@
+.showMessage{
+	height: auto;
+    text-align: center;
+    padding: 5px;
+    font-size: 12px;
+    line-height: 14px;
+    border-top: 1px solid #FFDD57;
+    border-bottom: 1px solid #FFDD57;
+    margin-top: 5px;
+    cursor: pointer;
+    .close-msg{
+    	font-weight:bold;
+    	font-size: 10px;
+	    margin-top: 5px;
+	    color: #CD1F1F;
+    }
+}
