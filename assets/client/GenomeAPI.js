@@ -44,10 +44,10 @@ var GenomeAPI = {
 
     return GenomeAPI.request(url, options);
   },
-  getTest:function(){
+  getMessage:function(){
   	var options = {};
 
-  	return GenomeAPI.get("https://raw.githubusercontent.com/iDVB/chrome-gscheduler/master/URL.txt", options);
+  	return GenomeAPI.get("https://raw.githubusercontent.com/iDVB/chrome-gscheduler/dev/v2-features/sendMessage.json", options);
   },
   verifyUser: function() {
 		var options = {};

@@ -25,13 +25,14 @@ var GSchedulerApp = React.createClass({
     return {
       tasks: [],
       totalTaskTime: '',
-      showLog: false
+      showLog: false,
     };
   },
   componentDidMount: function() {
     //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
     this.getNonBillables();
+    this.checkMessage();
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
@@ -41,6 +42,18 @@ var GSchedulerApp = React.createClass({
       this.createTask(genomeTask);
       genomeTask = null;
     }
+  },
+  checkMessage: function(){
+    var message;
+    var scope = this;
+    GenomeAPI.getMessage().then(function(data){
+      message = JSON.parse(data);
+      console.log(scope.props.model.message.id);
+      console.log(message.id);
+      if (scope.props.model.message.id < message.id){
+        scope.props.model.updateMessage(message);
+      }
+    });
   },
   getNonBillables: function(){
       GenomeAPI.getNonBillableTasks().then(function(ticketData){
@@ -195,9 +208,7 @@ var GSchedulerApp = React.createClass({
   },
   toggleLog: function(){
     this.setState({showLog: !this.state.showLog});
-    GenomeAPI.getTest().then(function(data){
-                console.log(data);
-              });
+    
   },
   render: function() {
     var main;
@@ -352,22 +363,27 @@ var GSchedulerApp = React.createClass({
     return (
       <div className={this.props.model.skin === "custom" || this.props.model.skin === "" ? "" : "skin-" + this.props.model.skin}>
         <header id="header">
-        <div className="input-wrap">
-          <SearchBox
-            id="new-task"
-            name="search"
-            placeholder="Task name/ID"
-            onSelect={this.addTask} onCreate={this.saveTaskTitle}
-          />
-          <input 
-            id="new-note"
-            type="text" 
-            name="note" 
-            className="form-control note" 
-            placeholder="Note"
-            onKeyDown={this.handleNoteKeyDown}
+          {this.props.model.message.show ? 
+            <div className="showMessage">
+              {this.props.model.message.value}
+            </div> : ""
+          }
+          <div className="input-wrap">
+            <SearchBox
+              id="new-task"
+              name="search"
+              placeholder="Task name/ID"
+              onSelect={this.addTask} onCreate={this.saveTaskTitle}
             />
-        </div>
+            <input 
+              id="new-note"
+              type="text" 
+              name="note" 
+              className="form-control note" 
+              placeholder="Note"
+              onKeyDown={this.handleNoteKeyDown}
+              />
+          </div>
            
         </header>
           

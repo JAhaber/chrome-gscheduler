@@ -16,6 +16,14 @@ var TaskModel = function (key) {
 		this.skin = "";
 	}
 
+	if(loadData.message)
+	{
+		this.message = loadData.message;
+	}
+	else{
+		this.message = {id: 0, show: false, value: ""};
+	}
+
 	if(loadData.customStyle)
 	{
 		this.customStyle = loadData.customStyle;
@@ -54,7 +62,7 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
@@ -138,6 +146,14 @@ TaskModel.prototype.stop = function (taskToStop) {
 		}
 		return task;
 	});
+	this.inform();
+};
+
+TaskModel.prototype.updateMessage = function (message) {
+	this.message.id = message.id;
+	this.message.value = message.value;
+	this.message.show = true;
+	
 	this.inform();
 };
 
