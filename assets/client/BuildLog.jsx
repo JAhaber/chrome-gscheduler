@@ -4,6 +4,41 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.3.0 Changelog:</h1>
+        
+        <ul>
+          <p>Favorites</p>
+          <li>You can now store a list of favorite tasks for ease of use</li>
+          <li>Genome tasks can now be added or removed from your favorites list by clicking the star next to the task</li>
+          <li>A yellow outlined star means a task has not been favorited, a filled yellow star means it is a favorite, and a grey outline means the task cannot be favorited</li>
+          <li>Click the <em>Favorite Tasks</em> button in the footer to open your favorites list, where you can start tracking a task or remove it from the list</li>
+          <div className="divider"></div>
+          <p>Genome Tasks</p>
+          <li>Click the <em>Genome Tasks</em> button in the footer to bring up a list of tasks currently assigned to you in Genome</li>
+          <li>You can start tracking a new task directly from this menu, just like the Recent Tasks list</li>
+          <div className="divider"></div>
+          <p>Splitting Tasks</p>
+          <li>The new broken link icon can be used to quickly split a task in half</li>
+          <li>Clicking the broken link icon next to a task will divide the task into 2 parts with equal durations</li>
+          <li>You can only split tasks that have been stopped</li>
+          <div className="divider"></div>
+          <p>Tooltips</p>
+          <li>All the old mouseover tooltips have been removed and replaced with title text for simplicity</li>   
+          <div className="divider"></div>
+          <p>Notifications</p>
+          <li>GScheduler can now receive notifications. These will appear below your tasks and above the <em>Restore Tasks</em> button (when visible)</li>
+          <li>Notifications will show until either a new notification is received or you click to hide it, at which point the same notification will not appear again</li>
+          <li>Notifications may be used in future to provide information about updates or issues with GScheduler</li>
+          <div className="divider"></div>
+          <p>Skins</p>
+          <li>Custom skins have been added in the options menu</li>       
+          <li>You can now choose one of a few default skins, or select custom skin and enter your own css to style GScheduler to your preference</li>       
+          <li>Additional skins will be added in future updates and you can submit send in your own designs to have them added to the list</li>
+          <div className="divider"></div>
+          <p>Options</p>
+          <li>The save button on the options page has been removed. Any changes in options should now auto-save and GScheduler will immediately reflect the changes</li>       
+
+       </ul>
       <h1>GScheduler Version: 0.2.9 Changelog:</h1>
         
         <ul>

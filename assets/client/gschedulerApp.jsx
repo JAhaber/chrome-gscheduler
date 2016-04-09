@@ -19,6 +19,7 @@ var newestFirst = true;
 var showBackup = true;
 var nonBillables = { "Entries" : [] };
 var genomeTask = null;
+var messageInterval = null;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -31,11 +32,13 @@ var GSchedulerApp = React.createClass({
   componentDidMount: function() {
     //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
+    messageInterval = setInterval(this.checkMessage, 7200000);
     this.getNonBillables();
     this.checkMessage();
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
+    clearInterval(messageInterval);
   },
   componentDidUpdate: function(){
     if(genomeTask) {
@@ -44,6 +47,7 @@ var GSchedulerApp = React.createClass({
     }
   },
   checkMessage: function(){
+    console.log("check");
     var message;
     var scope = this;
     GenomeAPI.getMessage().then(function(data){
