@@ -379,8 +379,7 @@ var TaskItem = React.createClass({
                   </select>
                 </div>
               </div>
-            : 
-              {renderTaskIDs}
+            : <span>{renderTaskIDs}</span>
             }
             <div className="item-row">
               <div className="item-wrap">
