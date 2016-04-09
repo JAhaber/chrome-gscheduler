@@ -1,0 +1,77 @@
+.skin-noir header {
+  background: linear-gradient(#1b1b1b, #868686); }
+.skin-noir .todayInfo {
+  background-color: #868686; }
+.skin-noir .TaskButtons {
+  background-color: #1b1b1b; }
+.skin-noir #recent .arrow, .skin-noir #favorites .arrow, .skin-noir #genometasks .arrow {
+  background: #1b1b1b; }
+.skin-noir #recent .arrow:hover, .skin-noir #favorites .arrow:hover, .skin-noir #genometasks .arrow:hover {
+  background: #868686; }
+.skin-noir #recent.open .arrow, .skin-noir #favorites.open .arrow, .skin-noir #genometasks.open .arrow {
+  background: #868686; }
+.skin-noir footer {
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, linear-gradient(#1b1b1b, #868686); }
+.skin-noir footer div.save-btn.disabled {
+  background-color: #cacaca; }
+.skin-noir footer div.save-btn:hover {
+  background-color: #1b1b1b; }
+.skin-noir *::-webkit-scrollbar-button {
+  background-color: #868686;
+  height: 0px; }
+.skin-noir *::-webkit-scrollbar-track {
+  background-color: #868686; }
+
+.skin-midnight header {
+  background: linear-gradient(#1b1b1b, #002BFD); }
+.skin-midnight .todayInfo {
+  background-color: #002BFD; }
+.skin-midnight .TaskButtons {
+  background-color: #1b1b1b; }
+.skin-midnight #recent .arrow, .skin-midnight #favorites .arrow, .skin-midnight #genometasks .arrow {
+  background: #002BFD; }
+.skin-midnight #recent .arrow:hover, .skin-midnight #favorites .arrow:hover, .skin-midnight #genometasks .arrow:hover {
+  background: #00188A; }
+.skin-midnight #recent.open .arrow, .skin-midnight #favorites.open .arrow, .skin-midnight #genometasks.open .arrow {
+  background: #00188A; }
+.skin-midnight footer {
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, linear-gradient(#002BFD, #00188A); }
+.skin-midnight footer div.save-btn.disabled {
+  background-color: #cacaca; }
+.skin-midnight footer div.save-btn:hover {
+  background-color: #0E0080; }
+.skin-midnight *::-webkit-scrollbar-button {
+  background-color: #002BFF;
+  height: 0px; }
+.skin-midnight *::-webkit-scrollbar-track {
+  background-color: #002BFF; }
+.skin-midnight *::-webkit-scrollbar-thumb {
+  background-color: #00188A; }
+
+.skin-fuzzy-peaches header {
+  background: linear-gradient(#FF9900, #FFD251, #F66); }
+.skin-fuzzy-peaches .todayInfo {
+  background-color: #F66; }
+.skin-fuzzy-peaches .TaskButtons {
+  background-color: #FF6666; }
+.skin-fuzzy-peaches #recent .arrow, .skin-fuzzy-peaches #favorites .arrow, .skin-fuzzy-peaches #genometasks .arrow {
+  background: #FF6666; }
+.skin-fuzzy-peaches #recent .arrow:hover, .skin-fuzzy-peaches #favorites .arrow:hover, .skin-fuzzy-peaches #genometasks .arrow:hover {
+  background: #FF9900; }
+.skin-fuzzy-peaches #recent.open .arrow, .skin-fuzzy-peaches #favorites.open .arrow, .skin-fuzzy-peaches #genometasks.open .arrow {
+  background: #FF9900; }
+.skin-fuzzy-peaches footer {
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, linear-gradient(#FF6666, #FFA714, #FFDD57); }
+.skin-fuzzy-peaches footer div.save-btn.disabled {
+  background-color: #cacaca; }
+.skin-fuzzy-peaches footer div.save-btn:hover {
+  background-color: #FF893A; }
+.skin-fuzzy-peaches *::-webkit-scrollbar-button {
+  background-color: #FF6666;
+  height: 0px; }
+.skin-fuzzy-peaches *::-webkit-scrollbar-track {
+  background-color: #FF6666; }
+.skin-fuzzy-peaches *::-webkit-scrollbar-thumb {
+  background-color: #FF8343; }
+
+/*# sourceMappingURL=skins.css.map */

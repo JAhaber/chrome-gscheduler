@@ -1,0 +1,51 @@
+footer {
+  position:fixed;
+  width:100%;
+  bottom:0;
+  padding:0;
+  background: url('chrome-extension://__MSG_@@extension_id__/images/genome.png') no-repeat bottom 8px left 44%, linear-gradient(#2585b0, #3f9dc7);
+  height:39px;
+
+  .options, .log, .help{
+    position:absolute;
+    font-size:20px;
+    color: #fff;
+    top:4px;
+    left:20px;
+    &:hover{
+      color:#000;
+    }
+  }
+
+  .log{
+    left:50px;
+  }
+
+  .help{
+    left:80px;
+  }
+
+  div.save-btn{
+    height:29px;
+    width:120px;
+    position:absolute;
+    right:10px;
+    bottom:5px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    font: normal 12px/29px Helvetica, Arial, sans-serif;
+    cursor:pointer;
+    text-align:center;
+    color:#fff;
+    &:hover{
+      background-color: #459ec5;
+    }
+    &.disabled{
+      cursor:default;
+      background-color:#A8C5DE;
+      opacity:0.6;
+    }
+
+  }
+  
+}

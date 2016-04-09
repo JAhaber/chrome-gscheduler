@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var React = require('react');
-
+var timer = null;
 // Saves options to chrome.storage.sync.
 var OptionScript = React.createClass({
   saveOptions: function () {
@@ -14,15 +14,25 @@ var OptionScript = React.createClass({
       startHour: $('#startHour').val(),
       startMin: $('#startMin').val(),
       recentTasks: $('#recentTasks').val(),
-      genomeTask: $('#showGenomeTask').prop('checked')
+      genomeTask: $('#showGenomeTask').prop('checked'),
+      customStyles: $('input[name=skin]:checked').val() === "custom" ? $('#customStyles').val() : "",
+      skin: $('input[name=skin]:checked').val()
+
     }, function() {
-      console.log("save");
       // Update status to let user know options were saved.
       
-      $('#status').text('  Options saved.');
-      setTimeout(function() {
-        $('#status').text('');
-      }, 1500);
+      $('#status').removeClass("active");
+      clearTimeout(timer);
+      timer = null;
+      setTimeout(function(){
+
+        $('#status').addClass("active");
+        
+        timer = setTimeout(function() {
+          $('#status').removeClass("active");
+        }, 1500);
+
+      }, 200);
     });
   },
 
@@ -39,7 +49,9 @@ var OptionScript = React.createClass({
       startHour: "9",
       startMin: "0",
       recentTasks: "1",
-      genomeTask: true
+      genomeTask: true,
+      customStyles: "",
+      skin: ""
     }, function(items) {
       var radioType = $('input[name=type]');
       for (i = 0; i < radioType.length; i++) {
@@ -48,10 +60,20 @@ var OptionScript = React.createClass({
           break;
         }
       }
+
+      var radioType = $('input[name=skin]');
+      for (i = 0; i < radioType.length; i++) {
+        if ( radioType[i].value === items.skin ) {
+          radioType[i].checked = true;
+          break;
+        }
+      }
+
       $('#autoReminder').val(items.autoRemind);
       $('#startHour').val(items.startHour);
       $('#startMin').val(items.startMin);
-      $('#recentTasks').val(items.recentTasks),
+      $('#recentTasks').val(items.recentTasks);
+      $('#customStyles').val(items.customStyles);
       $('#newestFirst').prop('checked', items.newestFirst);
       $('#recentNewestFirst').prop('checked', items.recentNewestFirst);
       $('#showBackup').prop('checked', items.showBackup);
@@ -70,12 +92,12 @@ var OptionScript = React.createClass({
       <div className="option">
       <h2>Save tasks as:</h2>
         <div className="form-wrapper">
-            <span className="radio"><input type="radio" name="type" value="Actual" defaultChecked />Actual</span>
-            <span className="radio"><input type="radio" name="type" value="Sequenced" />Sequenced</span>
+            <span className="radio"><input type="radio" name="type" value="Actual" defaultChecked onClick={this.saveOptions}/>Actual</span>
+            <span className="radio"><input type="radio" name="type" value="Sequenced" onClick={this.saveOptions}/>Sequenced</span>
         </div>
         <p><span className="emph">Actual</span> - Save tasks using start and stop times.<br />
         <span className="emph">Sequenced</span> - Save tasks in order using duration starting from<br />
-        <select id="startHour">
+        <select id="startHour" onChange={this.saveOptions}>
           <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -101,7 +123,7 @@ var OptionScript = React.createClass({
           <option value="22">22</option>
           <option value="23">23</option>
         </select><b> :</b>
-        <select id="startMin">
+        <select id="startMin" onChange={this.saveOptions}>
           <option value="0">00</option>
           <option value="15">15</option>
           <option value="30">30</option>
@@ -119,7 +141,7 @@ var OptionScript = React.createClass({
       <div className="option">
         <h2>Auto-reminder:</h2>
         <p>Remind me that I have a task running every: 
-          <select id="autoReminder" className="long">
+          <select id="autoReminder" className="long" onChange={this.saveOptions}>
             <option value="Never">Never</option>
             <option value="15">15 Mins</option>
             <option value="30">30 Mins</option>
@@ -135,7 +157,7 @@ var OptionScript = React.createClass({
       <div className="option">
         <h2>Recent Tasks:</h2>
         <p>Load recent tasks from the last:
-          <select id="recentTasks" className="long">
+          <select id="recentTasks" className="long" onChange={this.saveOptions}>
             <option value="1">1 Week</option>
             <option value="2">2 Weeks</option>
             <option value="3">3 Weeks</option>
@@ -145,22 +167,31 @@ var OptionScript = React.createClass({
       </div>
 
       <div className="option">
-        <input type="checkbox" id="newestFirst" defaultChecked /> Sort tasks by newest first
+        <input type="checkbox" id="newestFirst" defaultChecked onClick={this.saveOptions}/> Sort tasks by newest first
        </div>
        <div className="option">
-        <input type="checkbox" id="recentNewestFirst" /> Sort recent tasks list by newest first
+        <input type="checkbox" id="recentNewestFirst" onClick={this.saveOptions}/> Sort recent tasks list by newest first
        </div>
        <div className="option">
-        <input type="checkbox" id="showGenomeTask" defaultChecked /> Show a button in Genome to add tasks to GScheduler
+        <input type="checkbox" id="showGenomeTask" defaultChecked onClick={this.saveOptions}/> Show a button in Genome to add tasks to GScheduler
        </div>
        <div className="option">
-        <input type="checkbox" id="showBackup" defaultChecked /> Allow me to restore the last set of saved tasks
+        <input type="checkbox" id="showBackup" defaultChecked onClick={this.saveOptions}/> Allow me to restore the last set of saved tasks
        </div>
 
-      
-        <button id="save" onClick={this.saveOptions}>Save</button>
+      <div className="option">
+        <h2>Skins:</h2>
+        <span className="radio"><input type="radio" name="skin" value="" defaultChecked onClick={this.saveOptions}/>Default</span>
+        <span className="radio"><input type="radio" name="skin" value="noir" onClick={this.saveOptions}/>Noir</span>
+        <span className="radio"><input type="radio" name="skin" value="midnight" onClick={this.saveOptions}/>Midnight</span>
+        <span className="radio"><input type="radio" name="skin" value="fuzzy-peaches" onClick={this.saveOptions}/>Fuzzy Peaches</span>
+        <br/>
+        <br/><span className="radio"><input type="radio" name="skin" value="custom" onClick={this.saveOptions}/>Custom (uses styles below)</span>
+        <textarea id="customStyles" onChange={this.saveOptions}/>
+        <p>Don't like how GScheduler looks? Enter your own css here to style it your way. Email me your custom skin to have it included as a theme in a future release! (jhaber@katalystadvantage.com)</p>
+       </div>
 
-        <div id="status"></div>
+        <div id="status">Options saved.</div>
       </div>
       );
 

@@ -44,6 +44,11 @@ var GenomeAPI = {
 
     return GenomeAPI.request(url, options);
   },
+  getMessage:function(){
+  	var options = {};
+
+  	return GenomeAPI.get("https://raw.githubusercontent.com/iDVB/chrome-gscheduler/master/sendMessage.json", options);
+  },
   verifyUser: function() {
 		var options = {};
 
@@ -67,6 +72,11 @@ var GenomeAPI = {
 		var options = {};
 		var deferred = Q.defer();
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json?StartDate=' + Moment().subtract(7 * recentTaskWeeks, 'days').format("YYYY-MM-DD") + '&EndDate=' + Moment().format("YYYY-MM-DD") + '&UserIDs=' + user, options);		
+	},
+	getAssignedTasks: function(user) {
+		var options = {};
+		var deferred = Q.defer();
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket/Filter.json?TicketStatusIsOpen=true&AssignedToUserID=' + user, options);		
 	},
 	getProjectInfo: function(ticketid) {
 		var options = {};

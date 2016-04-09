@@ -3,7 +3,6 @@ var React = require('react');
 var Moment = require('moment');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
-var $ = require('jquery');
 var tasks = null;
 var recentNewestFirst = false;
 
@@ -17,15 +16,17 @@ var GenomeTasks = React.createClass({
     
     if (!this.props.showGenome){
       GenomeAPI.getUser().then(function(user){
-        return GenomeAPI.getSchedule(user.UserID);
+        return GenomeAPI.getAssignedTasks(user.UserID);
       }).then(function(results){
+        
         tasks = [];
         for (var i = 0; i < results.Entries.length; i++)
         {
-          if (results.Entries[i].Type === "Project"){
-              GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
-                tasks.push(ticket.Entries[0]);
-              });              
+          if (results.Entries[i].ProjectID){
+              //GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
+                //console.log(ticket.Entries[0]);
+                tasks.push(results.Entries[i]);
+              //});              
           }
         }
       }).fail(function(err){
@@ -39,24 +40,15 @@ var GenomeTasks = React.createClass({
     this.props.toggleGenome();
      
   },
-  onPlay: function(event){
-    var task = null;
-    for (var i = 0; i < tasks.length; i++)
-    {
-      if (tasks[i].TicketID === $(event.target).data("ticketid")){
-        task = {
-          title: tasks[i].Title,
-          ticketID: tasks[i].TicketID,
-          projectID: tasks[i].ProjectID
-        };
-        break;
-      }
-    }
-    if (task)
-      this.props.onPlay(task);
+  onPlay: function(task, event){
+    this.props.onPlay({
+      title: task.Title,
+      ticketID: task.TicketID,
+      projectID: task.ProjectID
+    });
   },
-  dragStart: function(event){
-    var url = "https://genome.klick.com/tickets/#/details/" + $(event.target).data("ticketid");
+  dragStart: function(ticketid, event){
+    var url = "https://genome.klick.com/tickets/#/details/" + ticketid;
     event.dataTransfer.effectAllowed = "copy";
     event.dataTransfer.setData("text/uri-list", url);
     event.dataTransfer.setData("text/plain", url);
@@ -72,21 +64,15 @@ var GenomeTasks = React.createClass({
       taskList = "No entries found";
     else{
       tasks = _.sortBy(tasks, function(o){ return o.TicketID; });
-      tasks = _.uniq(tasks, true, function(o){ return o.TicketID; });
       if (recentNewestFirst === true)
         tasks.reverse();
       taskList = tasks.map(function (task) {
         return (
           <li className='task'>
-            <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart} data-ticketid={task.TicketID}>
+            <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart.bind(scope, task.TicketID)}>
               <div className="recent-ticketID-wrapper">
                 <label>
-                  {task.TicketStatusName === "closed" ?
-                    <i className="fa fa-lock" title="This task is closed in genome. You can still bill to it if the project is open."></i>
-                    : <i className="fa fa-unlock-alt" title="This task is open in genome."></i>
-                  }
-                  
-                  {" " + task.TicketID}
+                  {task.TicketID}
                 </label>
               </div>
               <div className="recent-task-wrapper">
@@ -96,7 +82,7 @@ var GenomeTasks = React.createClass({
                 </label>
               </div>
               <div className="controls">
-                <a className="play" onClick={scope.onPlay} data-ticketid={task.TicketID}><i className="fa fa-play" data-ticketid={task.TicketID}></i></a>
+                <a className="play" onClick={scope.onPlay.bind(scope, task)}><i className="fa fa-play"></i></a>
               </div>
             </div>
           </li>
@@ -107,19 +93,34 @@ var GenomeTasks = React.createClass({
    return (
 
       <section id="genometasks" className={this.props.showGenome ? "open" : ""}>
-          <a className="arrow" onClick={this.toggleGenome} title="Genome Tasks">
+          <a className="arrow" onClick={this.toggleGenome} title="View tasks currently assigned to you in Genome">
             Genome Tasks <i className="fa up fa-list"></i>
           </a>
-          <div className="content-wrapper">
-            <ul className="content">
-              {taskList}
-            </ul>
-          </div>
+          {this.props.showGenome ?
+            <div className="content-wrapper">
+              <ul className="content">
+                {taskList}
+              </ul>
+            </div>
+          : "" }
         </section>
 
     );
   }
 });
 
+chrome.storage.sync.get({
+    recentNewestFirst: false
+  }, function(items) {
+    recentNewestFirst = items.recentNewestFirst;
+  });
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+  chrome.storage.sync.get({
+     recentNewestFirst: false
+  }, function(items) {
+    recentNewestFirst = items.recentNewestFirst;
+  });
+});
 
 module.exports = GenomeTasks;

@@ -1,12 +1,44 @@
 var Utils = require('../utils.js');
 var Moment = require('moment');
+var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
-var $ = require('jquery');
 var Q = require('q');
 
 var TaskModel = function (key) {
 	this.key = key;
 	var loadData = Utils.store(key);
+
+	if(loadData.skin)
+	{
+		this.skin = loadData.skin;
+	}
+	else{
+		this.skin = "";
+	}
+
+	if(loadData.message)
+	{
+		this.message = loadData.message;
+	}
+	else{
+		this.message = {id: 0, show: false, value: ""};
+	}
+
+	if(loadData.customStyle)
+	{
+		this.customStyle = loadData.customStyle;
+	}
+	else{
+		this.customStyle = "";
+	}
+
+	if(loadData.favorites){
+		this.favorites = loadData.favorites;
+	}
+	else{
+		this.favorites = [];
+	}
+
 	if(loadData.backup){
 		this.backup = loadData.backup;
 		this.tasks = loadData.tasks;
@@ -30,12 +62,13 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
 
 TaskModel.prototype.addTask = function (task, start, stop) {
+	var isFavorite = this.checkIfFavorite(task.ticketID);
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -44,6 +77,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		projectID: task.projectID || null,
 		note: task.note || null,
 		categoryID: task.categoryID,
+		isFavorite: isFavorite,
 		gap: {}
 	};
 	if (stop){
@@ -55,6 +89,28 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	}
 
 	chrome.runtime.sendMessage({running: true}, function(response) {});
+	this.tasks.unshift(newTask);
+	this.inform();
+};
+
+TaskModel.prototype.splitTask = function (task, start, stop) {
+	var newTask = {
+		id: Utils.uuid(),
+		title: task.title,
+		startTime: start,
+		stopTime: stop,
+		ticketID: task.ticketID || null,
+		projectID: task.projectID || null,
+		note: task.note || null,
+		categoryID: task.categoryID,
+		isFavorite: task.isFavorite,
+		gap: {}
+	};
+	this.tasks = this.tasks.map(function (taskExpanded) {
+		return taskExpanded.expanded ?
+			Utils.extend({}, taskExpanded, { expanded: false })
+			: taskExpanded;
+	});
 	this.tasks.unshift(newTask);
 	this.inform();
 };
@@ -93,6 +149,20 @@ TaskModel.prototype.stop = function (taskToStop) {
 	this.inform();
 };
 
+TaskModel.prototype.updateMessage = function (message) {
+	this.message.id = message.id;
+	this.message.value = message.value;
+	this.message.show = true;
+
+	this.inform();
+};
+
+TaskModel.prototype.hideMessage = function () {
+	this.message.show = false;
+	
+	this.inform();
+};
+
 TaskModel.prototype.backUp = function (taskList) {
 	this.backup = taskList;
 	this.inform();
@@ -108,6 +178,67 @@ TaskModel.prototype.restoreBackUp = function () {
 };
 TaskModel.prototype.removeBackUp = function () {
 	this.backup = {};
+	this.inform();
+};
+
+TaskModel.prototype.addFavorite = function (task) {
+	var scope = this;
+	var newTask = {
+		id: Utils.uuid(),
+		title: task.title,
+		ticketID: task.ticketID || null,
+		projectID: task.projectID || null
+	};
+
+	if (newTask.projectID){
+		this.tasks = this.tasks.map(function (task) {
+			if (task.ticketID === newTask.ticketID)
+			   	return Utils.extend({}, task, {isFavorite: true, hasChanged: true});
+			return task;
+		});
+
+		GenomeAPI.getProjectInfo(newTask.ticketID).then(function(ticket){
+        	newTask.ProjectName = ticket.Entries[0].ProjectName;
+        	scope.favorites.unshift(newTask);
+			scope.inform();
+     	});
+	}
+	else{
+		this.favorites.unshift(newTask);
+		this.inform();
+	}
+		
+	
+};
+
+TaskModel.prototype.updateStyles = function (style, skin) {
+	this.skin = skin;
+	this.customStyle = style;
+	this.inform();
+};
+
+TaskModel.prototype.clearFavorite = function () {
+	this.favorites = [];
+	this.inform();
+};
+
+TaskModel.prototype.removeFavorite = function (task) {
+	var index = null;
+	var that = this;
+	_.each(this.favorites, function (fav, i) {
+		if ((task.projectID && fav.ticketID === task.ticketID)){
+          index = i;
+	    }
+	});
+	if (this.favorites[index].projectID){
+		this.tasks = this.tasks.map(function (task) {
+			if (task.ticketID === that.favorites[index].ticketID)
+			   	return Utils.extend({}, task, {isFavorite: false, hasChanged: true});
+			return task;
+		});
+	}
+	
+	this.favorites.splice(index,1);
 	this.inform();
 };
 
@@ -143,23 +274,26 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 	}
 
 	if (value === "") {
-			scope.tasks = scope.tasks.map(function (task) {
-			if (task === taskToChange)
-				return Utils.extend({}, task, {ticketID: value, projectID: null, hasChanged: true});
-			else
-					return task;
-			});
-			scope.inform();
-		}
-		else{
+		scope.tasks = scope.tasks.map(function (task) {
+		if (task === taskToChange)
+			return Utils.extend({}, task, {ticketID: value, projectID: null, isFavorite: false, hasChanged: true});
+		else
+				return task;
+		});
+		scope.inform();
+	}
+	else{
   		GenomeAPI.getProjectInfo(value).then(function(ticketData){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange){
 					itemScope.setState({title: ticketData.Entries[0].Title});
+					var isFavorite = scope.checkIfFavorite(value);
+					console.log(isFavorite);
 	  				return Utils.extend({}, task,
 							{ticketID: value,
 							projectID: ticketData.Entries[0].ProjectID,
 					      	title: ticketData.Entries[0].Title,
+					      	isFavorite: isFavorite,
 					      	categoryID: null,
 					      	hasChanged: true});
   				}
@@ -170,14 +304,28 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
   		}).fail(function(error){
 			scope.tasks = scope.tasks.map(function (task) {
 				if (task === taskToChange)
-					return Utils.extend({}, task, {ticketID: value, projectID: null, hasChanged: true});
+					return Utils.extend({}, task, {ticketID: value, projectID: null, isFavorite: false, hasChanged: true});
 				else
   					return task;
   			});
   			scope.inform();
   		});
   	}
+  	
 };
+
+TaskModel.prototype.checkIfFavorite = function(ticket){
+	var isFav = false;
+  	if (ticket){
+		this.favorites.forEach(function (fav) {
+			if (ticket === fav.ticketID){
+				isFav =  true;
+			}
+			   	
+		});
+	}
+	return isFav;
+}
 
 TaskModel.prototype.handleTitleChange = function (taskToChange, value) {
 		
@@ -228,9 +376,9 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 				for (var i = 0; i < nonBillables.Entries.length; i++)
 				{
 					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
-						return Utils.extend({}, task, {categoryID: value, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
+						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
 				}
-				return Utils.extend({}, task, {categoryID: value, title: "", projectID: null, ticketID: null, hasChanged: true});	
+				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true});	
 			}
 			return task;
 		});

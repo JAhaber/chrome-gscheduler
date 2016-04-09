@@ -1,0 +1,9 @@
+{"tasks":[{"id":"c705a80b-a2cc-4e86-8207-2af06883bbbf","title":"Process Improvements","startTime":"2016-04-04T11:30:20-04:00","ticketID":null,"projectID":null,"note":null,"categoryID":"44","isFavorite":false,"gap":{"hasGap":false},"overlap":false},{"id":"6e316ebe-ed84-4864-b3db-59b4609e3777","title":"Applicant: Abdul Mir","startTime":"2016-04-04T11:19:52-04:00","ticketID":998413,"projectID":17506,"note":null,"isFavorite":false,"gap":{"hasGap":false},"overlap":false,"stopTime":"2016-04-04T11:30:20-04:00","hasChanged":true}],
+
+"backup":[{"id":"a8cebd5d-2813-4f53-8fec-55dc9d05f467","title":"Process Improvements","startTime":"2016-04-01T16:05:05-04:00","ticketID":null,"projectID":null,"note":null,"categoryID":"44","isFavorite":false,"gap":{"hasGap":false},"overlap":false,"hasChanged":false,"expanded":false,"stopTime":"2016-04-01T17:16:53-04:00"},{"id":"ffb9d5e1-a346-4d14-b89a-c199d4ad3002","title":"Klick Labs Non-Specified Project Work - JJ","startTime":"2016-04-01T14:57:57-04:00","ticketID":"666247","projectID":16897,"note":"Veeva Cert Meeting","isFavorite":false,"gap":{"hasGap":false},"overlap":false,"hasChanged":false,"expanded":false,"stopTime":"2016-04-01T16:05:05-04:00","categoryID":null}],
+
+"favorites":[{"id":"f1d57ce4-3152-4d5f-8889-8dc9e4fbb966","title":"Daily Standups (Time Tracking)","ticketID":964281,"projectID":21212,"ProjectName":"2016 - Account Stewardship & Strategy Support"},{"id":"7ac222a9-5e03-420f-bdcd-024916b0a060","title":"Klick Labs Non-Specified Project Work - JJ","ticketID":666247,"projectID":16897,"ProjectName":"Operations"},{"id":"008655cd-29e7-48c1-af5d-044948e78bdf","title":"QA|iPad Air+iPad 4|There is a image glitch during the ISI+Reference slide transition","ticketID":"1006413","projectID":20509,"ProjectName":"2015 - IVA Development - Ultane"}],
+
+"skin":"black",
+
+"customStyle":""}

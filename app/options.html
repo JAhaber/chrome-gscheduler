@@ -31,7 +31,14 @@
    select.long{
       width:70px;
    }
-    #status{display:inline-block; color:#01b73b; font: bold 12px Times New Roman, Times, serif; padding-left:15px;}
+    #status{position:fixed; bottom:0; left:0; background: #fff; display:inline-block; color:#01b73b; font: bold 16px Times New Roman, Times, serif; padding: 10px; display:none;}
+    #status.active{
+      display:block;
+    }
+
+    textarea{
+      width:100%;
+    }
   </style>
 </head>
 

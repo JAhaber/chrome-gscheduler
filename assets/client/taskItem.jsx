@@ -1,12 +1,13 @@
 
 var React = require('react');
 var Moment = require('moment');
-var $ = require('jquery');
 
 var TaskItem = React.createClass({
 	getInitialState: function () {
     var task = this.props.task;
+    
 		return {
+      isFavorite: task.isFavorite || false,
       timeElapsed: '',
       date: Moment(task.startTime).format('YYYY-MM-DD'),
       title: task.title,
@@ -17,28 +18,6 @@ var TaskItem = React.createClass({
       nonProjectActive: task.categoryID ? true : false
     };
 	},
-  
-  appendOverlapTip: function(event){
-    $("span.tooltip").remove();
-    var value = "This task's end time is overlapping another task";
-    var color = "rgba(237,49,99,0.9)";
-    var top = $(event.target).offset().top + 20
-    if ($("body").height() < ($(event.target).offset().top + 20 + 48))
-      top = $(event.target).offset().top - 52
-    $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": top + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
-  },
-  appendZeroTip: function(event){
-    $("span.tooltip").remove();
-    var value = "Tasks with a duration of < 1 minute will not be saved";
-    var color = "rgba(255,235,153,0.9)";
-    var top = $(event.target).offset().top + 20
-    if ($("body").height() < ($(event.target).offset().top + 20 + 48))
-      top = $(event.target).offset().top - 52
-    $("body").append("<span class='tooltip'>" + value + "</span>");
-    $("span.tooltip").css({"top": top + "px", "left": ($(event.target).offset().left - 100) + "px", "background": color});
-
-  },
   componentDidMount: function() {
     if (!this.props.task.stopTime)
       this.interval = setInterval(this.tick, 500);
@@ -49,14 +28,15 @@ var TaskItem = React.createClass({
   componentDidUpdate: function(){
    var task = this.props.task;
    if (!task.ticketID){
-    $("#" + task.id + "-draggable").attr("draggable", "false");
+    this.refs.wrapper.getDOMNode().setAttribute('draggable', 'false');
    }
    if (task.hasChanged){
     this.setState({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       title: task.title,
-      ticketID: task.ticketID
+      ticketID: task.ticketID,
+      isFavorite: task.isFavorite
     });
     this.updateDuration(Moment(task.stopTime).format('HH:mm:ss'), Moment(task.startTime).format('HH:mm:ss'));
     /*task.flash = true;
@@ -123,14 +103,33 @@ var TaskItem = React.createClass({
   noteChange: function(event) {
     this.setState({note: event.target.value});
     this.props.model.handleNoteChange(this.props.task, event.target.value);
-
   },
   onStop: function(event){
     this.setState({stopTime: Moment().format('HH:mm:ss')});
     this.props.onStop();
   },
-  removeTip: function(event){
-    $("span.tooltip").remove();
+  onFav: function(event){
+    var task = this.props.task;
+    if (!this.state.isFavorite){
+      this.props.model.addFavorite(task);
+    }
+    else{
+      this.props.model.removeFavorite(task);
+    }
+    
+  },
+  onSplit: function(event){
+    var task = this.props.task;
+    var newStart;
+    var newStop;
+    var elapsedMilliseconds = Moment.duration(Moment(task.stopTime).diff(Moment(task.startTime))).asMilliseconds();
+
+    var newStop = Moment(task.startTime).add(elapsedMilliseconds / 2, 'ms');
+    var newStart = Moment(task.startTime).add(elapsedMilliseconds / 2, 'ms').add(1, 's');
+
+    this.props.model.handleStartStopChange(task, Moment(task.startTime).format('HH:mm:ss'), Moment(newStop).format('HH:mm:ss'));
+
+    this.props.model.splitTask(task, Moment(task.startTime, "YYYY-MM-DD").hour(Moment(newStart).hour()).minute(Moment(newStart).minute()).second(Moment(newStart).second()).format(), task.stopTime)
   },
   startBlur: function(event) {
     var task = this.props.task;
@@ -142,7 +141,7 @@ var TaskItem = React.createClass({
         
         if (Moment(start, "HH:mm:ss").isAfter(Moment(stop, "HH:mm:ss")))
          {
-          duration = Moment.duration($("#"+task.id + "-duration-edit").val());
+          duration = Moment.duration(this.state.timeElapsed);
           stop = Moment(start, "HH:mm:ss").add(duration);
 
           if (Moment(stop).diff(Moment().hour(23).minute(59).second(59), 's') > 0){
@@ -175,7 +174,7 @@ var TaskItem = React.createClass({
         
       if (Moment(start, "HH:mm:ss").isAfter(Moment(stop, "HH:mm:ss")))
        {
-        duration = Moment.duration($("#"+task.id + "-duration-edit").val());
+        duration = Moment.duration(this.state.timeElapsed);
         start = Moment(stop, "HH:mm:ss").subtract(duration);
 
         if (Moment(start).diff(Moment(task.stop).hour(0).minute(0).second(0), 's') < 0)
@@ -237,16 +236,16 @@ var TaskItem = React.createClass({
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
       this.setState({timeElapsed: timeElapsed});
   },
-  
+ 
   render: function() {
     var task = this.props.task;
 
     var colorClass = "border-left";
     var isLessThanOne = false;
-          
-    if (this.props.task.projectID)
+
+    if (task.projectID)
       colorClass = "border-left hasID";
-    else if (this.props.task.categoryID)
+    else if (task.categoryID)
       colorClass = "border-left hasCategory";
     
     if (task.stopTime){
@@ -267,15 +266,60 @@ var TaskItem = React.createClass({
         </option>
         );
     }, this);
+
+    var nonProjectSelector = (
+      <span>
+      <label className="checkbox">Non-project?</label>
+        <input
+          type="checkbox"
+          defaultChecked={this.state.nonProjectActive}
+          onChange={this.handleNonProjectCheck}
+        />
+      </span>
+    );
+
+    var renderTaskIDs = (<div className="item-row">
+        <div className="item-wrap">
+          <label>
+            Title:
+          </label>
+          <input 
+            type="text" 
+            name="title-edit" 
+            className="form-control" 
+            placeholder="Enter Title"
+            value={this.state.title}
+            onChange={this.titleChange}
+          />
+        </div>
+        <div className="item-wrap">
+          <label>Task ID:</label>
+          {nonProjectSelector}
+          <input
+            type="text"
+            placeholder="Enter Task ID"
+            name="ticketid-edit"
+            className="form-control" 
+            value={this.state.ticketID}
+            onChange={this.idChange}
+            onBlur={this.idBlur}
+          />
+        </div>
+      </div>);
    
     return (
         
         <li className={task.stopTime ? 'task stopped' : 'task'}>
           <div className={colorClass}>
-            <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} id={task.id + "-draggable"}>
+            <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} ref="wrapper">
               <label>
-                { task.expanded ? <a className="contract" onClick={this.props.contractItems}><i className="fa fa-minus"></i></a>
-                  : <a className="expand" onClick={this.props.expandItems}><i className="fa fa-plus"></i></a>
+                { task.expanded ?
+                  <a className="contract" onClick={this.props.contractItems}>
+                    <i className="fa fa-minus"></i>
+                  </a>
+                  : <a className="expand" onClick={this.props.expandItems}>
+                    <i className="fa fa-plus"></i>
+                  </a>
                 }
 
                 &nbsp;{task.title}
@@ -283,78 +327,67 @@ var TaskItem = React.createClass({
            
               <div className="controls">
                 {isLessThanOne ? 
-                  <a className="zero tip" onMouseEnter={this.appendZeroTip} onMouseLeave={this.removeTip}><i className="fa fa-info-circle"></i></a>
-                  : "" }
+                  <a className="zero tip" title="Tasks with a duration of < 1 minute will not be saved">
+                    <i className="fa fa-info-circle"></i>
+                  </a>
+                : "" }
                 {task.overlap ? 
-                  <a className="overlap tip" onMouseEnter={this.appendOverlapTip} onMouseLeave={this.removeTip}><i className="fa fa-exclamation-triangle"></i></a>
-                  : "" }
-                <span className="timeElapsed">{this.state.timeElapsed}</span>
-                { task.stopTime ?
-                  <a className="play" onClick={this.props.onPlay}><i className="fa fa-play"></i></a>
-                  : <a className="stop" onClick={this.onStop}><i className="fa fa-stop"></i></a>
-                }
-                <a className="destroy" onClick={this.props.onDestroy}><i className="fa fa-remove"></i></a>
+                  <a className="overlap tip" title="This task's end time is overlapping another task">
+                    <i className="fa fa-exclamation-triangle"></i>
+                  </a>
+                : "" }
+                <span className="timeElapsed">
+                  {this.state.timeElapsed}
+                </span>
+                <span className="icons-wrapper">
+                  <a className={this.state.ticketID ? "fav" : "fav disabled"} onClick={this.state.ticketID ? this.onFav : ""} title={this.state.ticketID ? this.state.isFavorite ? "Remove this task from your favorites" : "Add this task to your favorites" : "Only billable tasks can be added to favorites"}>
+                    {this.state.isFavorite ?
+                      <i className="fa fa-star"></i>
+                      : <i className="fa fa-star-o"></i>
+                    }
+                  </a>
+                  { task.stopTime ?
+                    <span>
+                      <a className="split" onClick={this.onSplit} title="Split task into two even length tasks">
+                        <i className="fa fa-unlink"></i>
+                      </a>
+                      <a className="play" onClick={this.props.onPlay} title="Begin tracking this task">
+                        <i className="fa fa-play"></i>
+                      </a>
+                    </span>
+                    : <a className="stop" onClick={this.onStop} title="Stop tracking this task">
+                      <i className="fa fa-stop"></i>
+                    </a>
+                  }
+                  <a className="destroy" onClick={this.props.onDestroy} title="Remove this task">
+                    <i className="fa fa-remove"></i>
+                  </a>
+                </span>
               </div>
               
             </div>
-          {task.expanded ? <div className='details'>
-            <div>
-
-             { this.state.nonProjectActive ? "" : 
-              <div className="item-wrap">
-                <label>
-                  Title:
-                </label>
-                <input 
-                  id={task.id + "-title-edit"}
-                  type="text" 
-                  name="title-edit" 
-                  className="form-control" 
-                  placeholder="Enter Title"
-                  value={this.state.title}
-                  onChange={this.titleChange}
-                />
-              </div> }
-
-              <div className={ this.state.nonProjectActive ? "item-wrap full" : "item-wrap"} >
-                
-                { this.state.nonProjectActive ? 
-                <label>Non-Project Category</label>
-                : <label>Task ID:</label>}
-
-                <label className="checkbox">Non-project?</label>
-                <input
-                  type="checkbox"
-                  id={task.id +"-nonbillable"}
-                  defaultChecked={this.state.nonProjectActive}
-                  onChange={this.handleNonProjectCheck}
-                />
-                
-                { this.state.nonProjectActive ? 
-                <select value={task.categoryID} onChange={this.nonProjectChange}>
-                  <option value=""></option>
-                  {nonBillList}
-                </select>
-                : <input
-                  type="text"
-                  id={task.id +"-ticketid-edit"}
-                  placeholder="Enter Task ID"
-                  name="ticketid-edit"
-                  className="form-control" 
-                  value={this.state.ticketID}
-                  onChange={this.idChange}
-                  onBlur={this.idBlur}
-                />}
-
+          {task.expanded ? 
+          <div className='details'>
+            { this.state.nonProjectActive ? 
+              <div className="item-row">
+                <div className="item-wrap full">
+                  <label>Non-Project Category</label>
+                  {nonProjectSelector}                
+                  <select value={task.categoryID} onChange={this.nonProjectChange}>
+                    <option value=""></option>
+                    {nonBillList}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div>
+            : 
+              {renderTaskIDs}
+            }
+            <div className="item-row">
               <div className="item-wrap">
                 <label>
                   Start:
                 </label>
                 <input 
-                  id={task.id +"-start-time-edit"}
                   type="text" 
                   name="start-time-edit" 
                   className="form-control"
@@ -369,7 +402,6 @@ var TaskItem = React.createClass({
                   Stop:
                 </label>
                 <input 
-                  id={task.id +"-stop-time-edit"}
                   type="text" 
                   name="stop-time-edit" 
                   className="form-control"
@@ -381,13 +413,12 @@ var TaskItem = React.createClass({
                 />
               </div>
             </div>
-            <div>
+            <div className="item-row">
               <div className="item-wrap">
                 <label>
                   Date:
                 </label>
                 <input 
-                  id={task.id +"-date-edit"}
                   type="date" 
                   name="date-edit" 
                   className="form-control"
@@ -403,7 +434,6 @@ var TaskItem = React.createClass({
                   Duration:
                 </label>
                 <input 
-                  id={task.id +"-duration-edit"}
                   type="text" 
                   name="duration-edit" 
                   className="form-control"
@@ -415,12 +445,11 @@ var TaskItem = React.createClass({
                 />
               </div>
             </div>
-            <div>
+            <div className="item-row">
               <label>
                 Note:
               </label>
               <textarea 
-                id={task.id +"-note-edit"}
                 name="note-edit" 
                 className="form-control" 
                 placeholder=""

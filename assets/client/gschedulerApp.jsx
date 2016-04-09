@@ -7,6 +7,8 @@ var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
 var TaskLists = require('./TaskLists.jsx');
+var CustomStyles = require('./CustomStyles.jsx');
+var Footer = require('./Footer.jsx');
 var $ = require('jquery');
 window.jQuery = $;
 var Moment = require('moment');
@@ -15,30 +17,48 @@ var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var newestFirst = true;
 var showBackup = true;
-var showLog = false;
 var nonBillables = { "Entries" : [] };
 var genomeTask = null;
+var messageInterval = null;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
     return {
       tasks: [],
-      totalTaskTime: ''
+      totalTaskTime: '',
+      showLog: false,
     };
   },
   componentDidMount: function() {
     //window.onblur = this.closeScheduler;
     this.interval = setInterval(this.tick, 1000);
+    messageInterval = setInterval(this.checkMessage, 7200000);
     this.getNonBillables();
+    this.checkMessage();
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
+    clearInterval(messageInterval);
   },
   componentDidUpdate: function(){
     if(genomeTask) {
       this.createTask(genomeTask);
       genomeTask = null;
     }
+  },
+  checkMessage: function(){
+    console.log("check");
+    var message;
+    var scope = this;
+    GenomeAPI.getMessage().then(function(data){
+      message = JSON.parse(data);
+      if (scope.props.model.message.id < message.id){
+        scope.props.model.updateMessage(message);
+      }
+    });
+  },
+  hideMessage: function(){
+    this.props.model.hideMessage();
   },
   getNonBillables: function(){
       GenomeAPI.getNonBillableTasks().then(function(ticketData){
@@ -92,7 +112,6 @@ var GSchedulerApp = React.createClass({
     $('.typeahead').typeahead('val', '');
     $('#new-note').val('');
     saveTask = null;
-    console.log("Clear");
   },
   
   stopTask: function (task) {
@@ -145,11 +164,9 @@ var GSchedulerApp = React.createClass({
   },
   restoreTasks: function(){
     this.props.model.restoreBackUp();
-    this.removeTip();
   },
   removeBackup: function(){
     this.props.model.removeBackUp();
-    this.removeTip();
   },
   save: function () {
     var scope = this;
@@ -176,9 +193,7 @@ var GSchedulerApp = React.createClass({
         scope.destroy(l);
     });
   },
-  openOptions: function(){
-    chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
-  },
+  
   closeScheduler: function() {
     window.close();
   },
@@ -196,28 +211,9 @@ var GSchedulerApp = React.createClass({
 
     this.setState({totalTaskTime: Moment().hour(0).minute(0).second(totalElapsedMilliseconds/1000).format('H[hrs] mm[mins]')});
   },
-  appendRestoreTip: function(event){
-    $("span.tooltip").remove();
-    var value = "Restore the last set of tasks that were saved to Genome. This will not affect any new tasks.";
-    var color = "rgba(73, 177, 252, 0.9)";
-    var top = $(".restore").offset().top + 20
-    $("body").append("<span class='tooltip'>" + value + "</span>");    
-    if ($("body").height() < ($(".restore").offset().top + 20 + 69))
-      top = $(".restore").offset().top - 73
-    $("span.tooltip").css({"top": top + "px", "left": ($(".restore").offset().left - 47) + "px", "background": color});
-  },
   toggleLog: function(){
-    showLog = !showLog;
-  },
-  toggleHelp: function(){
-    chrome.tabs.create({ url : 'https://github.com/iDVB/chrome-gscheduler/blob/master/README.md'});
-  },
-  
-  closeLog: function(){
-    showLog = false;
-  },
-  removeTip: function(event){
-    $("span.tooltip").remove();
+    this.setState({showLog: !this.state.showLog});
+    
   },
   render: function() {
     var main;
@@ -228,7 +224,6 @@ var GSchedulerApp = React.createClass({
     var sortedList = _.sortBy(tasks, function(o){ return o.startTime; });
     if (nonBillables === "fail")
     {
-      console.log("fail");
       nonBillables = { "Entries" : [] };
       this.getNonBillables();
     }
@@ -348,81 +343,73 @@ var GSchedulerApp = React.createClass({
     
     main = (
       <section id="main">
-      {taskItems.length ?
-        <span>
-        <dl>
-          <dt onClick={this.openGenome} title="Open today in genome">Today</dt>
-          <dd>{this.state.totalTaskTime}</dd>
-        </dl>
-        <ul id="task-list">
-          {taskItems}
-        </ul>
-        </span>
+        {taskItems.length ?
+          <div className="todayInfo">
+            <div className="today" onClick={this.openGenome} title="Open today in genome">Today</div>
+            <div className="duration">{this.state.totalTaskTime}</div>
+          </div>
+        : "" }
+        {taskItems.length ?
+          <ul id="task-list">
+            {taskItems}
+          </ul>
         : "" }
 
+        {this.props.model.message.show ? 
+          <div className="showMessage" onClick={this.hideMessage}>
+            {this.props.model.message.value}
+            <div className="close-msg">
+              Click to permanently hide this notification
+            </div>
+          </div> : ""
+        }
+
         {this.props.model.backup.length > 0 && showBackup ?
-        <span className="restore-tasks">
-          <a className="restore" onMouseEnter={this.appendRestoreTip} onMouseLeave={this.removeTip} onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
-          <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
-        </span>
+          <span className="restore-tasks">
+            <a className="restore" title="Restore the last set of tasks that were saved to Genome. This will not affect any new tasks." onClick={this.restoreTasks}>Restore from Backup <i className="fa fa-undo"></i></a>
+            <br /><a className="remove" onClick={this.removeBackup}>Remove Backup <i className="fa fa-trash"></i></a>
+          </span>
         : ""}
         
       </section>
     );
    
-   
-    
-
     return (
-      <div>
+      <div className={this.props.model.skin === "custom" || this.props.model.skin === "" ? "" : "skin-" + this.props.model.skin}>
         <header id="header">
-        <div className="input-wrap">
-          <SearchBox
-            id="new-task"
-            name="search"
-            placeholder="Task name/ID"
-            onSelect={this.addTask} onCreate={this.saveTaskTitle}
-          />
-          <input 
-            id="new-note"
-            type="text" 
-            name="note" 
-            className="form-control note" 
-            placeholder="Note"
-            onKeyDown={this.handleNoteKeyDown}
+          <div className="input-wrap">
+            <SearchBox
+              id="new-task"
+              name="search"
+              placeholder="Task name/ID"
+              onSelect={this.addTask} onCreate={this.saveTaskTitle}
             />
-        </div>
+            <input 
+              id="new-note"
+              type="text" 
+              name="note" 
+              className="form-control note" 
+              placeholder="Note"
+              onKeyDown={this.handleNoteKeyDown}
+              />
+          </div>
            
         </header>
           
         {main}
 
-        <TaskLists 
-        onPlay={this.createTask} />
-
-        <footer>
-          
-          <a className="options" onClick={this.openOptions} title="Options">
-            <i className="fa fa-cog"></i>
-          </a>
-          <a className="log" onClick={this.toggleLog} title="Change Log">
-            <i className="fa fa-info-circle"></i>
-          </a>
-          <a className="help" onClick={this.toggleHelp} title="Help">
-            <i className="fa fa-question-circle"></i>
-          </a>
-          <button disabled={taskItems.length ? "" : "disabled"} type="button" onClick={this.save}>Save</button>
-          
-        </footer>
-        {showLog ? 
-        <BuildLog 
-        closeLog={this.closeLog}
-        />
+        <TaskLists onPlay={this.createTask} model={this.props.model} />
+        <Footer toggleLog={this.toggleLog} length={taskItems.length} save={this.save} />        
+        {this.state.showLog ? 
+        <BuildLog closeLog={this.toggleLog} />
         : ""}
+
+        <CustomStyles model={this.props.model}/>
       </div>
     );
   }
 });
+
 $("html").on("dragover", function(e){
   e.preventDefault();
   e.stopPropagation();
