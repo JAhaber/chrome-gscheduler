@@ -186,6 +186,7 @@ var OptionScript = React.createClass({
         <span className="radio"><input type="radio" name="skin" value="midnight" onClick={this.saveOptions}/>Midnight</span>
         <span className="radio"><input type="radio" name="skin" value="fuzzy-peaches" onClick={this.saveOptions}/>Fuzzy Peaches</span>
         <span className="radio"><input type="radio" name="skin" value="raphael" onClick={this.saveOptions}/>Raphael</span>
+        <span className="radio"><input type="radio" name="skin" value="michaelangelo" onClick={this.saveOptions}/>Michaelangelo</span>
         <br/>
         <br/><span className="radio"><input type="radio" name="skin" value="custom" onClick={this.saveOptions}/>Custom (uses styles below)</span>
         <textarea id="customStyles" onChange={this.saveOptions}/>

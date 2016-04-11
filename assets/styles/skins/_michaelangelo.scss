@@ -1,4 +1,4 @@
-.skin-raphael{
+.skin-michaelangelo{
 	a{
 	color: #33BFFF;
 	}
@@ -10,7 +10,7 @@
 	}
 
 	header{
-	    background: linear-gradient(#C73F3F, #00867F);
+	    background: linear-gradient(#FF9C08, #00867F);
 	}
 	.todayInfo{    background-color: #00867F;}
 	.todayInfo .today, .todayInfo .duration{ color:#E6E6E6; }
@@ -27,26 +27,26 @@
 	}
 
 	#recent, #favorites, #genometasks{ background-color: #00867F; }
-	#recent .arrow, #favorites .arrow, #genometasks .arrow{ background-color: #C73F3F; }
-	#recent.open .arrow, #favorites.open .arrow, #genometasks.open .arrow{ background-color: #D07373; }
-	#recent .arrow:hover, #favorites .arrow:hover, #genometasks .arrow:hover{ background-color: #D07373; }
+	#recent .arrow, #favorites .arrow, #genometasks .arrow{ background-color: #FF9C08; }
+	#recent.open .arrow, #favorites.open .arrow, #genometasks.open .arrow{ background-color: #FFC671; }
+	#recent .arrow:hover, #favorites .arrow:hover, #genometasks .arrow:hover{ background-color: #FFC671; }
 
 	#recent .content li.task label, #favorites .content li.task label, #genometasks .content li.task label {
 	color:#E6E6E6;
 	}
 	#genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
-	    color: #EC87A2;
+	    color: #D29012;
 	}
 	#recent .fa-unlock-alt {
 	    color: #07AF2F;
 	}
 
 	footer{
-	background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, #C73F3F;
+	background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, #FF9C08;
 	}
 
 	footer div.save-btn:hover {
-	    background-color: #D07373;
+	    background-color: #FFC671;
 	}
 
 	*::-webkit-scrollbar-button {
@@ -54,10 +54,10 @@
 	}
 
 	*::-webkit-scrollbar-thumb {
-	    background-color: #B4615F;
+	    background-color: #FFC46C;
 	}
 
 	*::-webkit-scrollbar-track {
-	    background-color: #BF9C9C;
+	    background-color: #CEBE99;
 	}
 }
