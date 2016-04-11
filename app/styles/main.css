@@ -2062,6 +2062,55 @@ html {
 .skin-fuzzy-peaches *::-webkit-scrollbar-thumb {
   background-color: #FF8343; }
 
+.skin-raphael a {
+  color: #33BFFF; }
+.skin-raphael .play i {
+  color: #33BFFF !important; }
+.skin-raphael .split i {
+  color: #9ECC49; }
+.skin-raphael header {
+  background: linear-gradient(#C73F3F, #00867F); }
+.skin-raphael .todayInfo {
+  background-color: #00867F; }
+.skin-raphael .todayInfo .today, .skin-raphael .todayInfo .duration {
+  color: #E6E6E6; }
+.skin-raphael #main {
+  background-color: #00867F; }
+.skin-raphael #task-list li.task .task-wrapper {
+  background-color: #00867F; }
+.skin-raphael #task-list li.task .task-wrapper label, .skin-raphael #task-list li.task .task-wrapper .timeElapsed {
+  color: #E6E6E6; }
+.skin-raphael #task-list .details {
+  background-color: #43A9A3; }
+.skin-raphael #task-list .details div label {
+  color: #E6E6E6; }
+.skin-raphael #task-list .border-left.hasCategory {
+  background-color: #B9B9B9; }
+.skin-raphael #recent, .skin-raphael #favorites, .skin-raphael #genometasks {
+  background-color: #00867F; }
+.skin-raphael #recent .arrow, .skin-raphael #favorites .arrow, .skin-raphael #genometasks .arrow {
+  background-color: #C73F3F; }
+.skin-raphael #recent.open .arrow, .skin-raphael #favorites.open .arrow, .skin-raphael #genometasks.open .arrow {
+  background-color: #D07373; }
+.skin-raphael #recent .arrow:hover, .skin-raphael #favorites .arrow:hover, .skin-raphael #genometasks .arrow:hover {
+  background-color: #D07373; }
+.skin-raphael #recent .content li.task label, .skin-raphael #favorites .content li.task label, .skin-raphael #genometasks .content li.task label {
+  color: #E6E6E6; }
+.skin-raphael #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+  color: #FFABAB; }
+.skin-raphael #recent .fa-unlock-alt {
+  color: #07AF2F; }
+.skin-raphael footer {
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, #C73F3F; }
+.skin-raphael footer div.save-btn:hover {
+  background-color: #D07373; }
+.skin-raphael *::-webkit-scrollbar-button {
+  background-color: #0C827C; }
+.skin-raphael *::-webkit-scrollbar-thumb {
+  background-color: #B4615F; }
+.skin-raphael *::-webkit-scrollbar-track {
+  background-color: #BF9C9C; }
+
 .typeahead,
 .tt-query,
 .tt-hint {
