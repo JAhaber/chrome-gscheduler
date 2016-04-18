@@ -1,0 +1,147 @@
+.skin-nightrei{
+    *::-webkit-scrollbar-button{
+        display:none;
+    }
+
+    *::-webkit-scrollbar-thumb{
+        background: #55C5E0;
+    }
+
+    *::-webkit-scrollbar-track{
+        background: #444;
+    }
+
+    header{
+        background: #333;
+    }
+
+    .tt-dropdown-menu {
+        background: #333;
+        border: 1px solid #666;
+    }
+    .tt-suggestions {
+        color: #FFF; /*ID COLOR*/
+    }
+    .tt-suggestion {
+        border-bottom: 1px solid #666;
+    }
+    .task-row{
+        color: #55C5E0;
+    }
+    .task-row strong{
+        color: #75E5FF;
+    }
+    .project-row{
+        color: #F23265;
+    }
+    .project-row strong{
+        color: #FF627C;
+    }
+
+    #main{
+       background: #333;
+   }
+
+   #task-list .task-wrapper{
+        background: #333;
+    }
+
+    #task-list .date-label, .task-list .date-label {
+        color: #FFF;
+    }
+
+    #task-list li.task label, #task-list li.task .timeElapsed, .task-list li.task .timeElapsed, .destroy i {
+        color: #55C5E0;
+    }
+    #task-list .details, .task-list .details{
+        background-color: #444;
+    }
+    #task-list .details div label, .task-list .details div label{
+        color: #65D5F0;
+    }
+
+    #task-list .border-left, .task-list .border-left{
+        border-bottom:0;
+    }
+
+    .showMessage{
+        color: #FFF;
+        text-align: left;
+        border: 1px solid #FFDD57;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    #main .restore-tasks .restore, #main .restore-tasks .remove {
+        color: #55C5E0;
+    }
+    #main .restore-tasks .remove{
+        color: #F23265;
+    }
+    .showMessage .close-msg{
+        color: #DD2F2F;
+    }
+
+    .todayInfo{
+        background-color: #333;
+    }
+
+    footer div.save-btn.disabled{
+        background-color: transparent;
+        opacity: 1.0;
+    }
+    footer div.save-btn.disabled:before{
+        content:"";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(100,100,100,0.8);
+    }
+
+    #recent .arrow, #favorites .arrow, #genometasks .arrow{
+        background: none;
+    }
+
+    #recent .content-wrapper, #favorites .content-wrapper, #genometasks .content-wrapper{
+        background: #444;
+        color: #FFF;
+    }
+
+    #recent .content .task-wrapper .recent-ticketID-wrapper, #favorites .content .task-wrapper .recent-ticketID-wrapper, #genometasks .content .task-wrapper .recent-ticketID-wrapper {
+        color: #FFF;
+    }
+
+    #recent .fa-unlock-alt, #favorites .fa-unlock-alt, #genometasks .fa-unlock-alt {
+        color: #42BB4F;
+    }
+
+    #recent .fa-lock, #favorites .fa-lock, #genometasks .fa-lock {
+        color: #f22265;
+    }
+
+    #recent .content .task-wrapper .recent-task-wrapper, #favorites .content .task-wrapper .recent-task-wrapper, #genometasks .content .task-wrapper .recent-task-wrapper {
+        color: #55C5E0;
+    }
+
+    #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, #favorites .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+        color: #f22265;
+    }
+
+    #recent .content .task-wrapper .controls a.play i, #favorites .content .task-wrapper .controls a.play i, #genometasks .content .task-wrapper .controls a.play i {
+        color: #55C5E0;
+    }
+
+    .TaskButtons, footer{
+        background:#333;
+    }
+
+    footer .options:hover, footer .log:hover, footer .help:hover {
+        color: #55C5E0;
+    }
+
+    .updateLog {
+        background: #333;
+        color: #FFF;
+    }
+}

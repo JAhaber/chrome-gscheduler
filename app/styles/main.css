@@ -2096,20 +2096,165 @@ html {
   background-color: #D07373; }
 .skin-raphael #recent .content li.task label, .skin-raphael #favorites .content li.task label, .skin-raphael #genometasks .content li.task label {
   color: #E6E6E6; }
+.skin-raphael #favorites .content .task-wrapper .recent-task-wrapper .recent-project-wrapper,
+.skin-raphael #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper,
 .skin-raphael #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
-  color: #FFABAB; }
+  color: #EC87A2; }
 .skin-raphael #recent .fa-unlock-alt {
   color: #07AF2F; }
 .skin-raphael footer {
   background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, #C73F3F; }
 .skin-raphael footer div.save-btn:hover {
   background-color: #D07373; }
+.skin-raphael #main .restore-tasks .restore {
+  color: #33BFFF; }
 .skin-raphael *::-webkit-scrollbar-button {
   background-color: #0C827C; }
 .skin-raphael *::-webkit-scrollbar-thumb {
   background-color: #B4615F; }
 .skin-raphael *::-webkit-scrollbar-track {
   background-color: #BF9C9C; }
+
+.skin-michaelangelo a {
+  color: #33BFFF; }
+.skin-michaelangelo .play i {
+  color: #33BFFF !important; }
+.skin-michaelangelo .split i {
+  color: #9ECC49; }
+.skin-michaelangelo header {
+  background: linear-gradient(#FF9C08, #00867F); }
+.skin-michaelangelo .todayInfo {
+  background-color: #00867F; }
+.skin-michaelangelo .todayInfo .today, .skin-michaelangelo .todayInfo .duration {
+  color: #E6E6E6; }
+.skin-michaelangelo #main {
+  background-color: #00867F; }
+.skin-michaelangelo #task-list li.task .task-wrapper {
+  background-color: #00867F; }
+.skin-michaelangelo #task-list li.task .task-wrapper label, .skin-michaelangelo #task-list li.task .task-wrapper .timeElapsed {
+  color: #E6E6E6; }
+.skin-michaelangelo #task-list .details {
+  background-color: #43A9A3; }
+.skin-michaelangelo #task-list .details div label {
+  color: #E6E6E6; }
+.skin-michaelangelo #task-list .border-left.hasCategory {
+  background-color: #B9B9B9; }
+.skin-michaelangelo #recent, .skin-michaelangelo #favorites, .skin-michaelangelo #genometasks {
+  background-color: #00867F; }
+.skin-michaelangelo #recent .arrow, .skin-michaelangelo #favorites .arrow, .skin-michaelangelo #genometasks .arrow {
+  background-color: #FF9C08; }
+.skin-michaelangelo #recent.open .arrow, .skin-michaelangelo #favorites.open .arrow, .skin-michaelangelo #genometasks.open .arrow {
+  background-color: #FFC671; }
+.skin-michaelangelo #recent .arrow:hover, .skin-michaelangelo #favorites .arrow:hover, .skin-michaelangelo #genometasks .arrow:hover {
+  background-color: #FFC671; }
+.skin-michaelangelo #recent .content li.task label, .skin-michaelangelo #favorites .content li.task label, .skin-michaelangelo #genometasks .content li.task label {
+  color: #E6E6E6; }
+.skin-michaelangelo #favorites .content .task-wrapper .recent-task-wrapper .recent-project-wrapper,
+.skin-michaelangelo #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper,
+.skin-michaelangelo #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+  color: #D29012; }
+.skin-michaelangelo #recent .fa-unlock-alt {
+  color: #07AF2F; }
+.skin-michaelangelo footer {
+  background: url("chrome-extension://__MSG_@@extension_id__/images/genome.png") no-repeat bottom 8px left 44%, #FF9C08; }
+.skin-michaelangelo footer div.save-btn:hover {
+  background-color: #FFC671; }
+.skin-michaelangelo #main .restore-tasks .restore {
+  color: #33BFFF; }
+.skin-michaelangelo *::-webkit-scrollbar-button {
+  background-color: #0C827C; }
+.skin-michaelangelo *::-webkit-scrollbar-thumb {
+  background-color: #FFC46C; }
+.skin-michaelangelo *::-webkit-scrollbar-track {
+  background-color: #CEBE99; }
+
+.skin-nightrei *::-webkit-scrollbar-button {
+  display: none; }
+.skin-nightrei *::-webkit-scrollbar-thumb {
+  background: #55C5E0; }
+.skin-nightrei *::-webkit-scrollbar-track {
+  background: #444; }
+.skin-nightrei header {
+  background: #333; }
+.skin-nightrei .tt-dropdown-menu {
+  background: #333;
+  border: 1px solid #666; }
+.skin-nightrei .tt-suggestions {
+  color: #FFF;
+  /*ID COLOR*/ }
+.skin-nightrei .tt-suggestion {
+  border-bottom: 1px solid #666; }
+.skin-nightrei .task-row {
+  color: #55C5E0; }
+.skin-nightrei .task-row strong {
+  color: #75E5FF; }
+.skin-nightrei .project-row {
+  color: #F23265; }
+.skin-nightrei .project-row strong {
+  color: #FF627C; }
+.skin-nightrei #main {
+  background: #333; }
+.skin-nightrei #task-list .task-wrapper {
+  background: #333; }
+.skin-nightrei #task-list .date-label, .skin-nightrei .task-list .date-label {
+  color: #FFF; }
+.skin-nightrei #task-list li.task label, .skin-nightrei #task-list li.task .timeElapsed, .skin-nightrei .task-list li.task .timeElapsed, .skin-nightrei .destroy i {
+  color: #55C5E0; }
+.skin-nightrei #task-list .details, .skin-nightrei .task-list .details {
+  background-color: #444; }
+.skin-nightrei #task-list .details div label, .skin-nightrei .task-list .details div label {
+  color: #65D5F0; }
+.skin-nightrei #task-list .border-left, .skin-nightrei .task-list .border-left {
+  border-bottom: 0; }
+.skin-nightrei .showMessage {
+  color: #FFF;
+  text-align: left;
+  border: 1px solid #FFDD57;
+  margin-left: 5px;
+  margin-right: 5px; }
+.skin-nightrei #main .restore-tasks .restore, .skin-nightrei #main .restore-tasks .remove {
+  color: #55C5E0; }
+.skin-nightrei #main .restore-tasks .remove {
+  color: #F23265; }
+.skin-nightrei .showMessage .close-msg {
+  color: #DD2F2F; }
+.skin-nightrei .todayInfo {
+  background-color: #333; }
+.skin-nightrei footer div.save-btn.disabled {
+  background-color: transparent;
+  opacity: 1.0; }
+.skin-nightrei footer div.save-btn.disabled:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(100, 100, 100, 0.8); }
+.skin-nightrei #recent .arrow, .skin-nightrei #favorites .arrow, .skin-nightrei #genometasks .arrow {
+  background: none; }
+.skin-nightrei #recent .content-wrapper, .skin-nightrei #favorites .content-wrapper, .skin-nightrei #genometasks .content-wrapper {
+  background: #444;
+  color: #FFF; }
+.skin-nightrei #recent .content .task-wrapper .recent-ticketID-wrapper, .skin-nightrei #favorites .content .task-wrapper .recent-ticketID-wrapper, .skin-nightrei #genometasks .content .task-wrapper .recent-ticketID-wrapper {
+  color: #FFF; }
+.skin-nightrei #recent .fa-unlock-alt, .skin-nightrei #favorites .fa-unlock-alt, .skin-nightrei #genometasks .fa-unlock-alt {
+  color: #42BB4F; }
+.skin-nightrei #recent .fa-lock, .skin-nightrei #favorites .fa-lock, .skin-nightrei #genometasks .fa-lock {
+  color: #f22265; }
+.skin-nightrei #recent .content .task-wrapper .recent-task-wrapper, .skin-nightrei #favorites .content .task-wrapper .recent-task-wrapper, .skin-nightrei #genometasks .content .task-wrapper .recent-task-wrapper {
+  color: #55C5E0; }
+.skin-nightrei #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, .skin-nightrei #favorites .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, .skin-nightrei #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
+  color: #f22265; }
+.skin-nightrei #recent .content .task-wrapper .controls a.play i, .skin-nightrei #favorites .content .task-wrapper .controls a.play i, .skin-nightrei #genometasks .content .task-wrapper .controls a.play i {
+  color: #55C5E0; }
+.skin-nightrei .TaskButtons, .skin-nightrei footer {
+  background: #333; }
+.skin-nightrei footer .options:hover, .skin-nightrei footer .log:hover, .skin-nightrei footer .help:hover {
+  color: #55C5E0; }
+.skin-nightrei .updateLog {
+  background: #333;
+  color: #FFF; }
 
 .typeahead,
 .tt-query,
