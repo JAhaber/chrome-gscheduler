@@ -110,33 +110,32 @@ var SearchBox = React.createClass({
 		// $element.on('typeahead:opened', function(e, task){
 		// 	selected=false;
 		// });
-		$element.on('typeahead:selected', function(e, task){
+		$element.on('typeahead:selected typeahead:autocompleted', function(e, task){
 			var el = $(e.target);
-			self.props.onSelect({
-				title: task.title,
-				ticketID: task.ticketID,
-				projectID: task.projectID,
-				isClientBillable: task.isClientBillable,
-				type: task.type,
-				categoryID: task.categoryID || null
-			});
-			selected = true;
-			$("#new-note").focus();
+			if ($("#new-note").css("display") === "none"){
+				self.props.addTask({
+					title: task.title,
+					ticketID: task.ticketID,
+					projectID: task.projectID,
+					isClientBillable: task.isClientBillable,
+					type: task.type,
+					categoryID: task.categoryID || null
+				});
+				selected = true;
+			}
+			else{
+				self.props.onSelect({
+					title: task.title,
+					ticketID: task.ticketID,
+					projectID: task.projectID,
+					isClientBillable: task.isClientBillable,
+					type: task.type,
+					categoryID: task.categoryID || null
+				});
+				selected = true;
+				$("#new-note").focus();
+			}
 		});
-		$element.on('typeahead:autocompleted', function(e, task){
-			var el = $(e.target);
-			self.props.onSelect({
-				title: task.title,
-				ticketID: task.ticketID,
-				projectID: task.projectID,
-				isClientBillable: task.isClientBillable,
-				type: task.type,
-				categoryID: task.categoryID || null
-			});
-			selected = true;
-			$("#new-note").focus();
-		});
-		
 	},
 	
 	componentWillUnmount: function(){
@@ -153,8 +152,6 @@ var SearchBox = React.createClass({
 			}
 			else{
 			  	$("#new-note").focus();
-			  	
-			  	
 			}
 		}
 		else if (event.which === TAB_KEY){

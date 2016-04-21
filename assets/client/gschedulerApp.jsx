@@ -74,6 +74,7 @@ var GSchedulerApp = React.createClass({
   createTask: function(task) {
     this.stopAll();
     this.props.model.addTask(task);
+    this.clearText();
   },
 
   saveTaskTitle: function(title, e) {
@@ -92,14 +93,14 @@ var GSchedulerApp = React.createClass({
       return;
     }
     if ($('#new-note').val() !== "" || $('#new-task').val() !== ""){
-      this.stopAll();
+
       if (saveTask)
         saveTask.note = $('#new-note').val();
       else if (!saveTask && $('#new-task').val() !== "")
         saveTask = {title: $('#new-task').val(), note: $('#new-note').val()};
       else
        saveTask = {title: $('#new-note').val()};
-      this.props.model.addTask(saveTask);
+      this.createTask(saveTask);
 
       this.clearText();
 
@@ -381,7 +382,7 @@ var GSchedulerApp = React.createClass({
               id="new-task"
               name="search"
               placeholder="Task name/ID"
-              onSelect={this.addTask} onCreate={this.saveTaskTitle}
+              onSelect={this.addTask} onCreate={this.saveTaskTitle} addTask={this.createTask}
             />
             <input 
               id="new-note"
