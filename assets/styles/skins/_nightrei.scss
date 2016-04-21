@@ -39,10 +39,25 @@
     }
 
     #main{
-       background: #333;
-   }
+        background: #333;
+    }
 
-   #task-list .task-wrapper{
+    .gap{
+        background: #222;
+        color: #DDD;
+    }
+    .gap .controls a.add{
+        color: #FFF;
+    }
+    .gap .controls a.last{
+        color: #679DEA;
+    }
+    .gap .controls a.next{
+        color: #20B386;
+    }
+
+
+    #task-list .task-wrapper{
         background: #333;
     }
 
@@ -79,6 +94,7 @@
     }
     .showMessage .close-msg{
         color: #DD2F2F;
+        text-align: right;
     }
 
     .todayInfo{
