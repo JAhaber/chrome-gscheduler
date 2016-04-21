@@ -316,14 +316,15 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 
 TaskModel.prototype.checkIfFavorite = function(ticket){
 	var isFav = false;
-  	if (ticket){
+	if (ticket){
 		this.favorites.forEach(function (fav) {
-			if (ticket === fav.ticketID){
+			if (ticket == fav.ticketID){
 				isFav =  true;
 			}
 			   	
 		});
 	}
+
 	return isFav;
 }
 

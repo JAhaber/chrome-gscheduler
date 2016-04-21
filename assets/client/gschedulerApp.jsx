@@ -47,7 +47,6 @@ var GSchedulerApp = React.createClass({
     }
   },
   checkMessage: function(){
-    console.log("check");
     var message;
     var scope = this;
     GenomeAPI.getMessage().then(function(data){
