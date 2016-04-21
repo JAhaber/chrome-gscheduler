@@ -47,7 +47,7 @@ var GenomeAPI = {
   getMessage:function(){
   	var options = {};
 
-  	return GenomeAPI.get("https://raw.githubusercontent.com/iDVB/chrome-gscheduler/master/sendMessage.json", options);
+  	return GenomeAPI.get("https://raw.githubusercontent.com/JAhaber/chrome-gscheduler/master/sendMessage.json", options);
   },
   verifyUser: function() {
 		var options = {};
