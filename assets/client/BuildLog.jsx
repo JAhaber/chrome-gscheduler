@@ -4,6 +4,36 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.3.1 Changelog:</h1>
+        
+        <ul>
+          <p>Task Auto-rollover</p>
+          <li>When you leave a task running without opening GScheduler for 3 or more days, the task will now automatically be stopped at midnight of the day it was started instead of rolling over and creating a new task each day</li>
+          <li>This is meant to prevent cases where someone left a task going and stopped using GScheduler, and upon using it again days/months later, had to wait while GScheduler added all the additional tasks since that task had started</li>
+          <li>Daily task rollovers will still work as intended, starting a new task at midnight to continue billing for the new day, as long as GScheduler is opened at some point within 3 days of the task being started</li>
+          
+          <div className="divider"></div>
+
+          <p>Search/Notes Fields</p>
+          <li>Functionality has been adjusted for the Search and Notes field to allow for the Notes field to be hidden when skinning</li>
+          <li>If the Notes field in the header is set to display:none, all tasks typed/found from the Search field will now be created immediately when selected or enter is pressed (normal functionality: the Notes field will gain focus and only after pressing enter there will the task be created)</li>
+
+          <div className="divider"></div>
+
+          <p>Skins</p>
+          <li>The following new skins have been added:</li>
+          <ul>
+            <li>Michaelangelo</li>
+            <li>Raphael</li>
+            <li>NightRei</li>
+          </ul>
+
+          <div className="divider"></div>
+
+          <p>Bugs</p>
+          <li>The location that the notification system searches for messages no longer exists and was throwing an error in the console. The call has been updated to point to the new location.</li>
+
+       </ul>
       <h1>GScheduler Version: 0.3.0 Changelog:</h1>
         
         <ul>

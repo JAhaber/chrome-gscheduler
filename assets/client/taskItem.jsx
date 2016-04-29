@@ -195,12 +195,16 @@ var TaskItem = React.createClass({
 
     var stopTime = !task.stopTime ? Moment().format() : task.stopTime;
 
-    if (Moment(stopTime).isAfter(task.startTime, 'day'))
-    {
+    if (Moment(stopTime).isAfter(Moment(task.startTime).add(3, 'days'), 'day')){
+      stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
+      this.props.model.stop(task, Moment(stopTime).format());
+    }
+    else if (Moment(stopTime).isAfter(task.startTime, 'day')){
       stopTime = Moment(task.startTime).hour(23).minute(59).second(59).millisecond(99);
       this.setState({stopTime: Moment(stopTime).format('HH:mm:ss')});
       this.props.model.addTask(task, Moment(stopTime).add(1,'s').format(), stopTime);
     }
+
 
 
     var elapsedMilliseconds = Moment.duration(Moment(stopTime).diff(Moment(task.startTime))).asMilliseconds();

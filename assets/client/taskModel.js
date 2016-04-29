@@ -136,12 +136,12 @@ TaskModel.prototype.addGap = function (start, stop) {
 	this.inform();
 };
 
-TaskModel.prototype.stop = function (taskToStop) {
+TaskModel.prototype.stop = function (taskToStop, stopTime) {
 	this.tasks = this.tasks.map(function (task) {
 		if(task === taskToStop)
 		{	
 			if (!task.stopTime){
-				return Utils.extend({}, task, {stopTime: Moment(task.startTime).hour(Moment().hour()).minute(Moment().minute()).second(Moment().second()).millisecond(Moment().millisecond()).format() });
+				return Utils.extend({}, task, {stopTime: stopTime ? stopTime : Moment(task.startTime).hour(Moment().hour()).minute(Moment().minute()).second(Moment().second()).millisecond(Moment().millisecond()).format(), hasChanged: true });
 			}
 		}
 		return task;
