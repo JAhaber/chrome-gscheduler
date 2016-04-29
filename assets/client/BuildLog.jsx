@@ -23,8 +23,6 @@ var LogItem = React.createClass({
           <p>Skins</p>
           <li>The following new skins have been added:</li>
           <ul>
-            <li>Michaelangelo</li>
-            <li>Raphael</li>
             <li>NightRei</li>
           </ul>
 

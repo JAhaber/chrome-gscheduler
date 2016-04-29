@@ -185,8 +185,6 @@ var OptionScript = React.createClass({
         <span className="radio"><input type="radio" name="skin" value="noir" onClick={this.saveOptions}/>Noir</span>
         <span className="radio"><input type="radio" name="skin" value="midnight" onClick={this.saveOptions}/>Midnight</span>
         <span className="radio"><input type="radio" name="skin" value="fuzzy-peaches" onClick={this.saveOptions}/>Fuzzy Peaches</span>
-        <span className="radio"><input type="radio" name="skin" value="raphael" onClick={this.saveOptions}/>Raphael</span>
-        <span className="radio"><input type="radio" name="skin" value="michaelangelo" onClick={this.saveOptions}/>Michaelangelo</span>
         <span className="radio"><input type="radio" name="skin" value="nightrei" onClick={this.saveOptions}/>NightRei</span>
         <br/>
         <br/><span className="radio"><input type="radio" name="skin" value="custom" onClick={this.saveOptions}/>Custom (uses styles below)</span>
