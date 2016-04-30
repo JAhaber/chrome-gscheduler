@@ -7,62 +7,44 @@ var Q = require('q');
 var TaskModel = function (key) {
 	this.key = key;
 	var loadData = Utils.store(key);
-
-	if(loadData.skin)
-	{
-		this.skin = loadData.skin;
-	}
-	else{
-		this.skin = "";
-	}
-
-	if(loadData.message)
-	{
-		this.message = loadData.message;
-	}
-	else{
-		this.message = {id: 0, show: false, value: ""};
-	}
-
-	if(loadData.customStyle)
-	{
-		this.customStyle = loadData.customStyle;
-	}
-	else{
-		this.customStyle = "";
-	}
-
-	if(loadData.favorites){
-		this.favorites = loadData.favorites;
-	}
-	else{
-		this.favorites = [];
-	}
-
-	if(loadData.backup){
-		this.backup = loadData.backup;
-		this.tasks = loadData.tasks;
-	}
-	else{
-		this.tasks = loadData;
-		this.backup = {};
-	}
-		
+	this.version = loadData.version || 0;
+	this.skin = loadData.skin || "";
+	this.message = loadData.message || {id: 0, show: false, value: ""};
+	this.customStyle = loadData.customStyle || "";
+	this.favorites = loadData.favorites || [];
+	this.backup = loadData.backup || {};
+	this.tasks = loadData.tasks || loadData;
+	
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
 			chrome.runtime.sendMessage({running: true}, function(response) {});
 		}
 	});
+
 	this.onChanges = [];
+
+	//this.updateDataVersion();
 };
 
+// TaskModel.prototype.updateDataVersion = function () {
+// 	switch (this.version){
+// 		case 0:
+// 			this.tasks = this.tasks.map(function (task) {
+// 				return Utils.extend({}, task, {ticketID: [task.ticketID], title: [task.title]});
+// 			});
+// 			break;
+// 	}
+
+// 	this.version = 1;
+// 	this.inform();
+// };
 
 TaskModel.prototype.subscribe = function (onChange) {
 	this.onChanges.push(onChange);
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
