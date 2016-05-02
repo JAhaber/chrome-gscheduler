@@ -30,7 +30,7 @@ var TaskModel = function (key) {
 // 	switch (this.version){
 // 		case 0:
 // 			this.tasks = this.tasks.map(function (task) {
-// 				return Utils.extend({}, task, {ticketID: [task.ticketID], title: [task.title]});
+// 				return Utils.extend({}, task, {ticketID: [task.ticketID], title: [task.title], projectID: [task.projectID]});
 // 			});
 // 			break;
 // 	}
