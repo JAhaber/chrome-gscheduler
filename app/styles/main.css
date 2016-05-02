@@ -2681,7 +2681,7 @@ i {
   cursor: pointer; }
   .play i {
     color: #2786B1; }
-  .stop i, .contract i {
+  .stop i {
     color: #d21245; }
   .destroy i {
     color: #084b68; }
@@ -2810,22 +2810,13 @@ i {
       width: 83px;
       display: inline-block; }
   #task-list .details, .task-list .details {
-    position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
-    z-index: 2;
-    height: calc(100% - 69px);
+    height: auto;
     margin: 0;
-    padding: 25px 0 15px 4%;
+    padding: 15px 0 15px 4%;
     background-color: #f8f8f8;
     line-height: 1.5em;
     display: block; }
-    #task-list .details a.contract, .task-list .details a.contract {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      font-size: 16px; }
     #task-list .details div .item-wrap, .task-list .details div .item-wrap {
       display: inline-block;
       width: 50%; }

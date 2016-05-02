@@ -317,9 +317,13 @@ var TaskItem = React.createClass({
           <div className={colorClass}>
             <div className="task-wrapper" draggable={task.ticketID ? "true" : "false" } onDragStart={this.dragStart} ref="wrapper">
               <label>
+                {!task.expanded ?
                 <a className="expand" onClick={this.props.expandItems}>
-                  <i className="fa fa-edit"></i>
+                  <i className="fa fa-plus"></i>
                 </a>
+                : <a className="contract" onClick={this.props.contractItems}>
+                  <i className="fa fa-minus"></i>
+                </a>}
                 &nbsp;&nbsp;{task.title}
               </label>
            
@@ -366,9 +370,6 @@ var TaskItem = React.createClass({
             </div>
           {task.expanded ? 
           <div className='details'>
-            <a className="contract" onClick={this.props.contractItems}>
-              <i className="fa fa-remove"></i>
-            </a>
             { this.state.nonProjectActive ? 
               <div className="item-row">
                 <div className="item-wrap full">

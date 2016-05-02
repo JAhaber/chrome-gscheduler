@@ -69,7 +69,7 @@ i{
   .play &{
     color:#2786B1;
   }
-  .stop &, .contract &{
+  .stop &{
     color:#d21245;
   }
   .destroy &{
@@ -230,20 +230,10 @@ i{
     }
   }
   .details{
-      a.contract{
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        font-size: 16px;
-      }
-      position: absolute;
-      left: 0;
-      top: 0;
       width: 100%;
-      z-index: 2;
-      height:calc(100% - 69px);
+      height:auto;
       margin:0;
-      padding:25px 0 15px 4%;
+      padding:15px 0 15px 4%;
       background-color:#f8f8f8;
       line-height:1.5em;
       display:block;
