@@ -53,6 +53,9 @@ var GenomeTasks = React.createClass({
     event.dataTransfer.setData("text/uri-list", url);
     event.dataTransfer.setData("text/plain", url);
   },
+  openTask: function(ticketid, event){
+    chrome.tabs.create({ url : "https://genome.klick.com/tickets/#/details/" + ticketid});
+  },
 	render: function() {
     var taskList;
     var scope = this;
@@ -72,7 +75,7 @@ var GenomeTasks = React.createClass({
             <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart.bind(scope, task.TicketID)}>
               <div className="recent-ticketID-wrapper">
                 <label>
-                  {task.TicketID}
+                  <span className="taskID" onClick={scope.openTask.bind(scope, task.TicketID)}>{" " + task.TicketID}</span>
                 </label>
               </div>
               <div className="recent-task-wrapper">

@@ -1,4 +1,4 @@
  {
-		"id": 4,
-		"value": "Welcome to GScheduler v.0.3.0! Check the change log for update information, including the new favorites menu and genome tasks menu, or visit the options page to try out the new skins feature!"
+		"id": 5,
+		"value": "New in v0.3.2: You can now click the task ids in the Recent, Favorites and Genome tasks to open the task in Genome."
 }

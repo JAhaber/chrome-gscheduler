@@ -119,5 +119,6 @@ When loading a task page in Genome, if GScheduler is running and the task is not
 
 If you experience any issues/bugs with GScheduler, you can log them on the [GScheduler issues list](https://github.com/iDVB/chrome-gscheduler/issues)
 
+## Special thanks to Dan Van Brunt (https://github.com/iDVB) for the initial work he did to start this project, for trusting me to take the reins on it, and for trusting me to make it into something amazing!
 
 #### Updated 2015/06/04

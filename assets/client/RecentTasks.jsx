@@ -51,6 +51,9 @@ var RecentTasks = React.createClass({
     event.dataTransfer.setData("text/uri-list", url);
     event.dataTransfer.setData("text/plain", url);
   },
+  openTask: function(ticketid, event){
+    chrome.tabs.create({ url : "https://genome.klick.com/tickets/#/details/" + ticketid});
+  },
 	render: function() {
     var taskList;
     var scope = this;
@@ -76,7 +79,7 @@ var RecentTasks = React.createClass({
                     : <i className="fa fa-unlock-alt" title="This task is open in genome."></i>
                   }
                   
-                  {" " + task.TicketID}
+                  <span className="taskID" onClick={scope.openTask.bind(scope, task.TicketID)}>{" " + task.TicketID}</span>
                 </label>
               </div>
               <div className="recent-task-wrapper">

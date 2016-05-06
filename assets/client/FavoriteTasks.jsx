@@ -37,6 +37,9 @@ var FavoriteTasks = React.createClass({
     event.dataTransfer.setData("text/uri-list", url);
     event.dataTransfer.setData("text/plain", url);
   },
+  openTask: function(ticketid, event){
+    chrome.tabs.create({ url : "https://genome.klick.com/tickets/#/details/" + ticketid});
+  },
 	render: function() {
     var taskList;
     var scope = this;
@@ -55,7 +58,7 @@ var FavoriteTasks = React.createClass({
             <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart.bind(scope, task.ticketID)}>
               <div className="recent-ticketID-wrapper">
                 <label>
-                  {task.ticketID}
+                  <span className="taskID" onClick={scope.openTask.bind(scope, task.ticketID)}>{" " + task.ticketID}</span>
                 </label>
               </div>
               <div className="recent-task-wrapper">

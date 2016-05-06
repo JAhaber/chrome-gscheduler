@@ -4,6 +4,13 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.3.2 Changelog:</h1>
+        
+        <ul>
+          <p>Recent, Favorite, and Genome Tasks</p>
+          <li>Task IDs in the Recent, Favorite and Genome Task lists can now be clicked to open the task in Genome</li>
+       </ul>
+       
       <h1>GScheduler Version: 0.3.1 Changelog:</h1>
         
         <ul>

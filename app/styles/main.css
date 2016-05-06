@@ -2530,6 +2530,8 @@ footer {
         #recent .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, #favorites .content .task-wrapper .recent-task-wrapper .recent-project-wrapper, #genometasks .content .task-wrapper .recent-task-wrapper .recent-project-wrapper {
           padding-left: 30px;
           color: #d21245; }
+      #recent .content .task-wrapper span.taskID, #favorites .content .task-wrapper span.taskID, #genometasks .content .task-wrapper span.taskID {
+        cursor: pointer; }
       #recent .content .task-wrapper .controls, #favorites .content .task-wrapper .controls, #genometasks .content .task-wrapper .controls {
         width: 6%;
         float: none;
