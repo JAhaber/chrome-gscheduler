@@ -132,8 +132,8 @@ TaskModel.prototype.stop = function (taskToStop, stopTime) {
 };
 
 TaskModel.prototype.updateMessage = function (message) {
+	this.message = {};
 	this.message.id = message.id;
-	this.message.value = message.value;
 	this.message.show = true;
 
 	this.inform();

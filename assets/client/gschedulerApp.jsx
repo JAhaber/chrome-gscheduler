@@ -27,6 +27,7 @@ var GSchedulerApp = React.createClass({
       tasks: [],
       totalTaskTime: '',
       showLog: false,
+      message: ""
     };
   },
   componentDidMount: function() {
@@ -51,6 +52,7 @@ var GSchedulerApp = React.createClass({
     var scope = this;
     GenomeAPI.getMessage().then(function(data){
       message = JSON.parse(data);
+      scope.setState({message: message.value});
       if (scope.props.model.message.id < message.id){
         scope.props.model.updateMessage(message);
       }
@@ -357,7 +359,7 @@ var GSchedulerApp = React.createClass({
 
         {this.props.model.message.show ? 
           <div className="showMessage" onClick={this.hideMessage}>
-            {this.props.model.message.value}
+            {this.state.message}
             <div className="close-msg">
               Click to permanently hide this notification
             </div>
