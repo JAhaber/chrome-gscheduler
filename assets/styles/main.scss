@@ -179,6 +179,9 @@ i{
     &.hasCategory{
       background-color:#D3D3D3;
     }
+    &.hasAutobill{
+      background-color:#71DC69;
+    }
     border-bottom:1px solid #000;
   }
 
@@ -246,6 +249,9 @@ i{
           }
         }
         
+        .radio-wrapper{
+          margin-bottom: 5px;
+        }
         label{
           font-size:12px;
           color:#084b68;
@@ -256,11 +262,15 @@ i{
           vertical-align:top;
           padding: 0;
           padding-top:2px;
-          &.checkbox{
-            float:right;
+          &.projectType{
+            float:none;
+          }
+          &.radio{
+            display:inline-block;
             margin-right: 10%;
             width:auto;
             min-width:0;
+            float:none;
           }
         }
         .full .checkbox{
@@ -282,8 +292,8 @@ i{
           height: 28px;
         }
         
-        input[type="checkbox"]{
-          float:right;
+        input[type="radio"]{
+          float:left;
         }
         textarea{
           width:95%;

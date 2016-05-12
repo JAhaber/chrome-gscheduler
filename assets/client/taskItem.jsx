@@ -15,7 +15,8 @@ var TaskItem = React.createClass({
       note: task.note,
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
-      nonProjectActive: task.categoryID ? true : false
+      nonProjectActive: task.categoryID ? true : false,
+      autobillActive: task.autobill ? true : false
     };
 	},
   componentDidMount: function() {
@@ -87,8 +88,13 @@ var TaskItem = React.createClass({
   durationChange: function(event) {
     this.setState({timeElapsed: event.target.value});
   },
-  handleNonProjectCheck: function(event){
-    this.setState({nonProjectActive: !this.state.nonProjectActive});
+  handleProjectChange: function(event){
+    if (event.target.value === "nonProject")
+      this.setState({nonProjectActive: true, autobillActive: false});
+    else if (event.target.value === "autoBill")
+      this.setState({nonProjectActive: false, autobillActive: true});
+    else
+      this.setState({nonProjectActive: false, autobillActive: false});
   },
   idBlur: function(event) {
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
@@ -251,6 +257,8 @@ var TaskItem = React.createClass({
       colorClass = "border-left hasID";
     else if (task.categoryID)
       colorClass = "border-left hasCategory";
+    else if (task.autobill)
+      colorClass = "border-left hasAutobill";
     
     if (task.stopTime){
       var stopTime = Moment(task.stopTime).format();
@@ -271,46 +279,41 @@ var TaskItem = React.createClass({
         );
     }, this);
 
-    var nonProjectSelector = (
+    var projectTypeSelector = (
       <span>
-      <label className="checkbox">Non-project?</label>
-        <input
-          type="checkbox"
-          defaultChecked={this.state.nonProjectActive}
-          onChange={this.handleNonProjectCheck}
-        />
+        <label className="projectType">Project Type</label>
+        <div className="radio-wrapper">
+          <label className="radio">
+            <input
+              type="radio"
+              name="projectType"
+              value="project"
+              defaultChecked={!this.state.nonProjectActive && !this.state.autobillActive}
+              onChange={this.handleProjectChange}
+            /> Default
+          </label>
+          <label className="radio">
+            <input
+              type="radio"
+              name="projectType"
+              value="nonProject"
+              defaultChecked={this.state.nonProjectActive}
+              onChange={this.handleProjectChange}
+            /> Non-project
+            </label>
+          <label className="radio">
+            <input
+              type="radio"
+              name="projectType"
+              value="autoBill"
+              defaultChecked={this.state.autobillActive}
+              onChange={this.handleProjectChange}
+            /> Autobill
+          </label>
+        </div>
       </span>
     );
 
-    var renderTaskIDs = (<div className="item-row">
-        <div className="item-wrap">
-          <label>
-            Title:
-          </label>
-          <input 
-            type="text" 
-            name="title-edit" 
-            className="form-control" 
-            placeholder="Enter Title"
-            value={this.state.title}
-            onChange={this.titleChange}
-          />
-        </div>
-        <div className="item-wrap">
-          <label>Task ID:</label>
-          {nonProjectSelector}
-          <input
-            type="text"
-            placeholder="Enter Task ID"
-            name="ticketid-edit"
-            className="form-control" 
-            value={this.state.ticketID}
-            onChange={this.idChange}
-            onBlur={this.idBlur}
-          />
-        </div>
-      </div>);
-   
     return (
         
         <li className={task.stopTime ? 'task stopped' : 'task'}>
@@ -370,18 +373,48 @@ var TaskItem = React.createClass({
             </div>
           {task.expanded ? 
           <div className='details'>
+            <div className="item-row">
+              <div className="item-wrap full">
+              {projectTypeSelector}
+              </div>
+            </div>
             { this.state.nonProjectActive ? 
               <div className="item-row">
                 <div className="item-wrap full">
                   <label>Non-Project Category</label>
-                  {nonProjectSelector}                
                   <select value={task.categoryID} onChange={this.nonProjectChange}>
                     <option value=""></option>
                     {nonBillList}
                   </select>
                 </div>
               </div>
-            : <span>{renderTaskIDs}</span>
+            : <div className="item-row">
+                <div className="item-wrap">
+                  <label>
+                    Title:
+                  </label>
+                  <input 
+                    type="text" 
+                    name="title-edit" 
+                    className="form-control" 
+                    placeholder="Enter Title"
+                    value={this.state.title}
+                    onChange={this.titleChange}
+                  />
+                </div>
+                <div className="item-wrap">
+                  <label>Task ID:</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Task ID"
+                    name="ticketid-edit"
+                    className="form-control" 
+                    value={this.state.ticketID}
+                    onChange={this.idChange}
+                    onBlur={this.idBlur}
+                  />
+                </div>
+              </div>
             }
             <div className="item-row">
               <div className="item-wrap">

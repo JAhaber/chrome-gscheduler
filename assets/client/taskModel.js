@@ -13,6 +13,7 @@ var TaskModel = function (key) {
 	this.customStyle = loadData.customStyle || "";
 	this.favorites = loadData.favorites || [];
 	this.backup = loadData.backup || {};
+	this.autobill = loadData.autobill || {};
 	this.tasks = loadData.tasks || loadData;
 	
 	this.tasks.forEach(function(task){
@@ -23,21 +24,21 @@ var TaskModel = function (key) {
 
 	this.onChanges = [];
 
-	//this.updateDataVersion();
+	this.updateDataVersion();
 };
 
-// TaskModel.prototype.updateDataVersion = function () {
-// 	switch (this.version){
-// 		case 0:
-// 			this.tasks = this.tasks.map(function (task) {
-// 				return Utils.extend({}, task, {ticketID: [task.ticketID], title: [task.title], projectID: [task.projectID]});
-// 			});
-// 			break;
-// 	}
+TaskModel.prototype.updateDataVersion = function () {
+	switch (this.version){
+		case 0:
+			this.tasks = this.tasks.map(function (task) {
+				return Utils.extend({}, task, {autobill: null});
+			});
+			break;
+	}
 
-// 	this.version = 1;
-// 	this.inform();
-// };
+	this.version = 1;
+	this.inform();
+};
 
 TaskModel.prototype.subscribe = function (onChange) {
 	this.onChanges.push(onChange);
@@ -60,6 +61,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: isFavorite,
+		autobill: task.autobill,
 		gap: {}
 	};
 	if (stop){
@@ -86,6 +88,7 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: task.isFavorite,
+		autobill: autobill,
 		gap: {}
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
@@ -107,6 +110,7 @@ TaskModel.prototype.addGap = function (start, stop) {
 		projectID: null,
 		note: null,
 		categoryID: null,
+		autobill: null,
 		expanded: true
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
@@ -270,13 +274,13 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 				if (task === taskToChange){
 					itemScope.setState({title: ticketData.Entries[0].Title});
 					var isFavorite = scope.checkIfFavorite(value);
-					console.log(isFavorite);
 	  				return Utils.extend({}, task,
 							{ticketID: value,
 							projectID: ticketData.Entries[0].ProjectID,
 					      	title: ticketData.Entries[0].Title,
 					      	isFavorite: isFavorite,
 					      	categoryID: null,
+					      	autobill: null,
 					      	hasChanged: true});
   				}
   				else
@@ -359,7 +363,7 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 				for (var i = 0; i < nonBillables.Entries.length; i++)
 				{
 					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
-						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
+						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true, autobill: null});	
 				}
 				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true});	
 			}

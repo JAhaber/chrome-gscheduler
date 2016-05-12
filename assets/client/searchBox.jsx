@@ -31,7 +31,8 @@ var tickets = new Bloodhound({
 						isClientBillable: ticket.IsClientBillable,
 						type: ticket.Type,
 						categoryID: null,
-						projectName: ticket.ProjectName
+						projectName: ticket.ProjectName,
+						autobill: null
 			    };
 				});
 			}
@@ -41,16 +42,17 @@ var tickets = new Bloodhound({
     	filter: function (tickets) {
 				// Map the remote source JSON array to a JavaScript object array
 				return $.map(tickets.Entries, function (ticket) {
-			    return {
-						title: ticket.Name,
-						titleAndID: "Non-Project - "+ ticket.Name,
-						ticketID: null,
-						projectID: null,
-						isClientBillable: false,
-						type: "Non-Project",
-						categoryID: ticket.TimeSheetCategoryID,
-						projectName: null
-			    };
+				    return {
+							title: ticket.Name,
+							titleAndID: "Non-Project - "+ ticket.Name,
+							ticketID: null,
+							projectID: null,
+							isClientBillable: false,
+							type: "Non-Project",
+							categoryID: ticket.TimeSheetCategoryID,
+							projectName: null,
+							autobill: null
+				    };
 				});
 			}
     }
@@ -119,7 +121,9 @@ var SearchBox = React.createClass({
 					projectID: task.projectID,
 					isClientBillable: task.isClientBillable,
 					type: task.type,
-					categoryID: task.categoryID || null
+					categoryID: task.categoryID || null,
+					autobill: task.autobill || null
+
 				});
 				selected = true;
 			}
@@ -130,7 +134,8 @@ var SearchBox = React.createClass({
 					projectID: task.projectID,
 					isClientBillable: task.isClientBillable,
 					type: task.type,
-					categoryID: task.categoryID || null
+					categoryID: task.categoryID || null,
+					autobill: task.autobill || null
 				});
 				selected = true;
 				$("#new-note").focus();
