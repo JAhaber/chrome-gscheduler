@@ -1,0 +1,35 @@
+#edit-autobill{
+	font-size:12px;
+	height:calc(100% - 79px);
+	z-index:500;
+  position:absolute;
+  background-color:#fff;
+  top:79px;
+  left:0px;
+  width:100%;
+  color: #000;
+  overflow-y:auto;
+  padding-bottom:10px;
+  padding-left:10px;
+  padding-right:10px;
+
+  .no-autobill{
+  	margin-top:10px;
+	a{
+		cursor:pointer;
+	}
+  }
+
+  select{
+  	width: calc(100% - 35px);
+    margin: 10px 0;
+  }
+  .destroy{
+    i{color:#d21245;}
+    position:absolute;
+    top:6px;
+    right:2px;
+    font-size: 19px;
+  }
+  
+}

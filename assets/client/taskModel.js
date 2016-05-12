@@ -13,7 +13,7 @@ var TaskModel = function (key) {
 	this.customStyle = loadData.customStyle || "";
 	this.favorites = loadData.favorites || [];
 	this.backup = loadData.backup || {};
-	this.autobill = loadData.autobill || {};
+	this.autobill = loadData.autobill || [];
 	this.tasks = loadData.tasks || loadData;
 	
 	this.tasks.forEach(function(task){
@@ -23,7 +23,6 @@ var TaskModel = function (key) {
 	});
 
 	this.onChanges = [];
-
 	this.updateDataVersion();
 };
 
@@ -45,7 +44,7 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version, autobill: this.autobill }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
@@ -97,6 +96,19 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 			: taskExpanded;
 	});
 	this.tasks.unshift(newTask);
+	this.inform();
+};
+
+TaskModel.prototype.addAutobill = function () {
+	var newID = 0;
+	for (var i = 0; i < this.autobill.length; i++)
+	{
+		if (this.autobill[i].id >= newID)
+			newID = this.autobill[i].id + 1;
+	}
+
+	this.autobill.push({id: newID, title: "Autobill List " + newID, tasks: []});
+
 	this.inform();
 };
 
@@ -416,6 +428,7 @@ TaskModel.prototype.save = function (taskToSave, text) {
 
 	this.inform();
 };
+
 
 module.exports = TaskModel;
 

@@ -8,6 +8,7 @@ var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
 var TaskLists = require('./TaskLists.jsx');
 var CustomStyles = require('./CustomStyles.jsx');
+var AutoBill = require('./AutoBill.jsx');
 var Footer = require('./Footer.jsx');
 var $ = require('jquery');
 window.jQuery = $;
@@ -27,7 +28,8 @@ var GSchedulerApp = React.createClass({
       tasks: [],
       totalTaskTime: '',
       showLog: false,
-      message: ""
+      message: "",
+      showAutoBill: false
     };
   },
   componentDidMount: function() {
@@ -89,7 +91,9 @@ var GSchedulerApp = React.createClass({
     //this.props.model.addTask(task);
     saveTask = task;
   },
-
+  addAutobill: function(){
+    this.props.model.addAutobill();
+  },
   handleNoteKeyDown: function(event){
     if (event.which !== ENTER_KEY) {
       return;
@@ -215,7 +219,9 @@ var GSchedulerApp = React.createClass({
   },
   toggleLog: function(){
     this.setState({showLog: !this.state.showLog});
-    
+  },
+  toggleAutoBill: function(){
+    this.setState({showAutoBill: !this.state.showAutoBill});    
   },
   render: function() {
     var main;
@@ -322,6 +328,7 @@ var GSchedulerApp = React.createClass({
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
+            toggleAutoBill={this.toggleAutoBill}
           />
           {!newestFirst ? 
             <span>
@@ -397,7 +404,15 @@ var GSchedulerApp = React.createClass({
           </div>
            
         </header>
-          
+        {this.state.showAutoBill ?
+          <AutoBill 
+            model={this.props.model}
+            autobill={this.props.model.autobill}
+            addAutobillList={this.addAutobill}
+            closeAutobill={this.toggleAutoBill}
+          />
+        : ""}
+
         {main}
 
         <TaskLists onPlay={this.createTask} model={this.props.model} />

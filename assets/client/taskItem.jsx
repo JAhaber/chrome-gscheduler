@@ -106,6 +106,9 @@ var TaskItem = React.createClass({
   nonProjectChange: function(event){
     this.props.model.handleNonProjectChange(this.props.task, event.target.value, this.props.nonBillables);
   },
+  autobillChange: function(event){
+    
+  },
   noteChange: function(event) {
     this.setState({note: event.target.value});
     this.props.model.handleNoteChange(this.props.task, event.target.value);
@@ -279,6 +282,14 @@ var TaskItem = React.createClass({
         );
     }, this);
 
+    var autobillList = this.props.model.autobill.map(function (entry) {
+      return (
+        <option value={entry.id}>
+          {entry.title}
+        </option>
+        );
+    }, this);
+
     var projectTypeSelector = (
       <span>
         <label className="projectType">Project Type</label>
@@ -386,6 +397,22 @@ var TaskItem = React.createClass({
                     <option value=""></option>
                     {nonBillList}
                   </select>
+                </div>
+              </div>
+            : this.state.autobillActive ? 
+              <div className="item-row">
+                <div className="item-wrap full">
+                  <label>Autobill List</label>
+                  <div className="autobillSelect">
+                    <select value={task.autobill} onChange={this.autobillChange}>
+                      <option value=""></option>
+                      {autobillList}
+                    </select>
+                    &nbsp;&nbsp;
+                    <a className="edit-autobill" onClick={this.props.toggleAutoBill} title="Edit your Autobill Lists">
+                      <i className="fa fa-edit"> Edit</i>
+                    </a>
+                  </div>
                 </div>
               </div>
             : <div className="item-row">

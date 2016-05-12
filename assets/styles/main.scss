@@ -13,6 +13,7 @@
 @import "modules/tasklists";
 @import "modules/buildlog";
 @import "modules/messages";
+@import "modules/autobill";
 
 
 html{
@@ -199,7 +200,7 @@ i{
     @include user-select(none);
     @include clearfix;
     
-    label {
+    .task-wrapper label {
       width: calc(100% - 186px);
       float:left;
     }
@@ -301,6 +302,14 @@ i{
         select{
           width:95%;
           margin-bottom: 5px;
+        }
+        .autobillSelect{
+            width:95%;
+            margin-bottom: 5px;
+            select{
+              width:calc(100% - 43px);
+              display:inline-block;
+            }
         }
       }
       

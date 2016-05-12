@@ -2634,6 +2634,35 @@ footer {
     margin-top: 5px;
     color: #CD1F1F; }
 
+#edit-autobill {
+  font-size: 12px;
+  height: calc(100% - 79px);
+  z-index: 500;
+  position: absolute;
+  background-color: #fff;
+  top: 79px;
+  left: 0px;
+  width: 100%;
+  color: #000;
+  overflow-y: auto;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px; }
+  #edit-autobill .no-autobill {
+    margin-top: 10px; }
+    #edit-autobill .no-autobill a {
+      cursor: pointer; }
+  #edit-autobill select {
+    width: calc(100% - 35px);
+    margin: 10px 0; }
+  #edit-autobill .destroy {
+    position: absolute;
+    top: 6px;
+    right: 2px;
+    font-size: 19px; }
+    #edit-autobill .destroy i {
+      color: #d21245; }
+
 html {
   height: 100%; }
 
@@ -2787,7 +2816,7 @@ i {
       clear: both;
       content: "";
       display: table; }
-    #task-list li.task label, .task-list li.task label {
+    #task-list li.task .task-wrapper label, .task-list li.task .task-wrapper label {
       width: calc(100% - 186px);
       float: left; }
     #task-list li.task .controls, .task-list li.task .controls {
@@ -2865,6 +2894,12 @@ i {
     #task-list .details div select, .task-list .details div select {
       width: 95%;
       margin-bottom: 5px; }
+    #task-list .details div .autobillSelect, .task-list .details div .autobillSelect {
+      width: 95%;
+      margin-bottom: 5px; }
+      #task-list .details div .autobillSelect select, .task-list .details div .autobillSelect select {
+        width: calc(100% - 43px);
+        display: inline-block; }
 
 .error {
   border: 1px solid #d21245 !important;
