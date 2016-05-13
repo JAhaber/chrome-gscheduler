@@ -107,7 +107,7 @@ var TaskItem = React.createClass({
     this.props.model.handleNonProjectChange(this.props.task, event.target.value, this.props.nonBillables);
   },
   autobillChange: function(event){
-    
+    this.props.model.handleAutoBillChange(this.props.task, event.target.value);
   },
   noteChange: function(event) {
     this.setState({note: event.target.value});

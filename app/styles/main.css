@@ -2636,11 +2636,11 @@ footer {
 
 #edit-autobill {
   font-size: 12px;
-  height: calc(100% - 79px);
+  height: calc(100% - 78px);
   z-index: 500;
   position: absolute;
   background-color: #fff;
-  top: 79px;
+  top: 78px;
   left: 0px;
   width: 100%;
   color: #000;

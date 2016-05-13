@@ -15,7 +15,6 @@ var TaskModel = function (key) {
 	this.backup = loadData.backup || {};
 	this.autobill = loadData.autobill || [];
 	this.tasks = loadData.tasks || loadData;
-	
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
 			chrome.runtime.sendMessage({running: true}, function(response) {});
@@ -377,13 +376,50 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
 						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true, autobill: null});	
 				}
-				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true});	
+				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, autobill:null});	
 			}
 			return task;
 		});
 
 		this.inform();
 };
+
+TaskModel.prototype.handleAutoBillChange = function(taskToChange, value){
+	var scope = this;
+	this.tasks = this.tasks.map(function (task) {
+		if (task === taskToChange){
+			for (var i = 0; i < scope.autobill.length; i++)
+			{
+				if(parseInt(scope.autobill[i].id) === parseInt(value)){
+					return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: scope.autobill[i].title, projectID: null, ticketID: null, hasChanged: true, autobill: value});	
+				}
+			}
+			return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, autobill: value});	
+		}
+		return task;
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.handleAutobillTitleChange = function (id, value){
+	var scope = this;
+	this.autobill = this.autobill.map(function (item) {
+		if (parseInt(item.id) === parseInt(id)){
+			return Utils.extend({}, item, {title: value});
+		}
+		return item;
+	});
+
+	this.tasks = this.tasks.map(function (task) {
+		if (parseInt(task.autobill) === parseInt(id)){
+			return Utils.extend({}, task, {title: value});
+		}
+		return task;
+	});
+
+	this.inform();
+}
 
 TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop) {
 	  	this.tasks = this.tasks.map(function (task) {
