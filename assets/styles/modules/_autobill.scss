@@ -20,9 +20,44 @@
 	}
   }
   .add-autobill, .remove-autobill{
-  	
+  	cursor:pointer;
   }
 
+  .id-wrapper{
+  	label{
+  		width:55px;
+  		display:inline-block;
+  	}
+  	input{
+  		width: calc(100% - 100px);
+  		display:inline-block;
+  	}
+  	width:100%;
+  	vertical-align: top;
+  }
+  .details-wrapper{
+  	display:inline-block;
+  	width: 100%;
+  	vertical-align: top;
+  	.task-project{
+  		display:inline-block;
+  		width:50%;
+  		padding-left:15px;
+  		color:#d21245;
+  		text-overflow: ellipsis;
+	    white-space: nowrap;
+	    overflow: hidden;
+  	}
+  	.task-title{
+  		display:inline-block;
+  		width:50%;
+  		padding-right: 15px;
+  		color: #2585b0;
+  		text-overflow: ellipsis;
+	    white-space: nowrap;
+	    overflow: hidden;
+  	}
+  }
   select{
   	width: calc(100% - 35px);
     margin: 10px 0;

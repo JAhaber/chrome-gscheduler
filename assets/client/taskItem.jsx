@@ -404,7 +404,7 @@ var TaskItem = React.createClass({
                 <div className="item-wrap full">
                   <label>Autobill List</label>
                   <div className="autobillSelect">
-                    <select value={task.autobill} onChange={this.autobillChange}>
+                    <select value={task.autobill ? task.autobill : ""} onChange={this.autobillChange}>
                       <option value=""></option>
                       {autobillList}
                     </select>

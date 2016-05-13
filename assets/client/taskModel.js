@@ -111,6 +111,71 @@ TaskModel.prototype.addAutobill = function () {
 	this.inform();
 };
 
+TaskModel.prototype.removeAutobill = function(id){
+	this.autobill = this.autobill.filter(function (item) {
+		return parseInt(item.id) !== parseInt(id);
+	});
+	
+	this.tasks = this.tasks.map(function (task) {
+		if (parseInt(task.autobill) === parseInt(id)){
+			return Utils.extend({}, task, {title: "", autobill: null, hasChanged: true});
+		}
+		return task;
+	});
+
+	this.inform();
+}
+
+TaskModel.prototype.handleAutobillTaskIDChange = function(autobillID, taskID, value){
+	var scope = this;
+
+	if (value.indexOf("https://") > -1) //Allow the user to paste a genome url or hask of the ticket
+	{
+		value = value.substring(value.lastIndexOf("/") + 1);
+	}
+	else if (value.indexOf("#") === 0){
+		value = value.substring(1);
+	}
+
+	for (var i = 0; i < this.autobill.length; i++){
+		if (parseInt(this.autobill[i].id) === parseInt(autobillID)){
+			if (value === "") { //Remove the task completely if the value is null
+				this.autobill[i].tasks = this.autobill[i].tasks.filter(function(task){
+					return parseInt(task.id) !== parseInt(taskID);
+				});
+				scope.inform();
+			}
+			else{
+				var duplicate = false; //Check if the task already exists in the list to prevent duplicates
+				for (var j = 0; j < this.autobill[i].tasks.length; j++){
+					if (parseInt(this.autobill[i].tasks[j].id) === parseInt(value)){
+						duplicate = true;
+						break;
+					}
+				}
+				if (duplicate === false){
+					GenomeAPI.getProjectInfo(value).then(function(ticketData){
+						if (parseInt(taskID) === -1){ //Add a new task to the list if the id is -1
+							scope.autobill[i].tasks.push({ id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
+						}
+						else{ //Find the task that was edited and update it with the new content
+							scope.autobill[i].tasks = scope.autobill[i].tasks.map(function (task) {
+								if (parseInt(task.id) === parseInt(taskID)){
+									return { id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName};
+				  				}
+				  				else
+				  					return task;
+				  			});
+						}
+			  			scope.inform();
+			  		}).fail(function(error){});
+				}
+			}
+			break;
+		}
+	}
+}
+
 TaskModel.prototype.addGap = function (start, stop) {
 	var newTask = {
 		id: Utils.uuid(),

@@ -94,6 +94,9 @@ var GSchedulerApp = React.createClass({
   addAutobill: function(){
     this.props.model.addAutobill();
   },
+  removeAutobill: function(id){
+    this.props.model.removeAutobill(id);
+  },
   handleNoteKeyDown: function(event){
     if (event.which !== ENTER_KEY) {
       return;
@@ -409,6 +412,7 @@ var GSchedulerApp = React.createClass({
             model={this.props.model}
             autobill={this.props.model.autobill}
             addAutobillList={this.addAutobill}
+            removeAutobillList={this.removeAutobill}
             closeAutobill={this.toggleAutoBill}
           />
         : ""}

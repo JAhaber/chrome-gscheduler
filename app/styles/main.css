@@ -2652,6 +2652,37 @@ footer {
     margin-top: 10px; }
     #edit-autobill .no-autobill a {
       cursor: pointer; }
+  #edit-autobill .add-autobill, #edit-autobill .remove-autobill {
+    cursor: pointer; }
+  #edit-autobill .id-wrapper {
+    width: 100%;
+    vertical-align: top; }
+    #edit-autobill .id-wrapper label {
+      width: 55px;
+      display: inline-block; }
+    #edit-autobill .id-wrapper input {
+      width: calc(100% - 100px);
+      display: inline-block; }
+  #edit-autobill .details-wrapper {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top; }
+    #edit-autobill .details-wrapper .task-project {
+      display: inline-block;
+      width: 50%;
+      padding-left: 15px;
+      color: #d21245;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden; }
+    #edit-autobill .details-wrapper .task-title {
+      display: inline-block;
+      width: 50%;
+      padding-right: 15px;
+      color: #2585b0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden; }
   #edit-autobill select {
     width: calc(100% - 35px);
     margin: 10px 0; }
@@ -2799,7 +2830,7 @@ i {
     #task-list .border-left.hasCategory, .task-list .border-left.hasCategory {
       background-color: #D3D3D3; }
     #task-list .border-left.hasAutobill, .task-list .border-left.hasAutobill {
-      background-color: #71DC69; }
+      background-color: #82C175; }
   #task-list .task-wrapper, .task-list .task-wrapper {
     padding: 10px 5px 10px;
     display: inline-block;
