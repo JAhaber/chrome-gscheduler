@@ -16,7 +16,7 @@ var TaskItem = React.createClass({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       nonProjectActive: task.categoryID ? true : false,
-      autobillActive: task.autobill ? true : false
+      MultibillActive: task.Multibill ? true : false
     };
 	},
   componentDidMount: function() {
@@ -90,11 +90,11 @@ var TaskItem = React.createClass({
   },
   handleProjectChange: function(event){
     if (event.target.value === "nonProject")
-      this.setState({nonProjectActive: true, autobillActive: false});
-    else if (event.target.value === "autoBill")
-      this.setState({nonProjectActive: false, autobillActive: true});
+      this.setState({nonProjectActive: true, MultibillActive: false});
+    else if (event.target.value === "Multibill")
+      this.setState({nonProjectActive: false, MultibillActive: true});
     else
-      this.setState({nonProjectActive: false, autobillActive: false});
+      this.setState({nonProjectActive: false, MultibillActive: false});
   },
   idBlur: function(event) {
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
@@ -106,8 +106,8 @@ var TaskItem = React.createClass({
   nonProjectChange: function(event){
     this.props.model.handleNonProjectChange(this.props.task, event.target.value, this.props.nonBillables);
   },
-  autobillChange: function(event){
-    this.props.model.handleAutoBillChange(this.props.task, event.target.value);
+  MultibillChange: function(event){
+    this.props.model.handleMultibillChange(this.props.task, event.target.value);
   },
   noteChange: function(event) {
     this.setState({note: event.target.value});
@@ -260,8 +260,8 @@ var TaskItem = React.createClass({
       colorClass = "border-left hasID";
     else if (task.categoryID)
       colorClass = "border-left hasCategory";
-    else if (task.autobill)
-      colorClass = "border-left hasAutobill";
+    else if (task.Multibill)
+      colorClass = "border-left hasMultibill";
     
     if (task.stopTime){
       var stopTime = Moment(task.stopTime).format();
@@ -282,7 +282,7 @@ var TaskItem = React.createClass({
         );
     }, this);
 
-    var autobillList = this.props.model.autobill.map(function (entry) {
+    var MultibillList = this.props.model.Multibill.map(function (entry) {
       return (
         <option value={entry.id}>
           {entry.title}
@@ -299,7 +299,7 @@ var TaskItem = React.createClass({
               type="radio"
               name="projectType"
               value="project"
-              defaultChecked={!this.state.nonProjectActive && !this.state.autobillActive}
+              defaultChecked={!this.state.nonProjectActive && !this.state.MultibillActive}
               onChange={this.handleProjectChange}
             /> Default
           </label>
@@ -316,10 +316,10 @@ var TaskItem = React.createClass({
             <input
               type="radio"
               name="projectType"
-              value="autoBill"
-              defaultChecked={this.state.autobillActive}
+              value="Multibill"
+              defaultChecked={this.state.MultibillActive}
               onChange={this.handleProjectChange}
-            /> Autobill
+            /> Multibill
           </label>
         </div>
       </span>
@@ -399,17 +399,17 @@ var TaskItem = React.createClass({
                   </select>
                 </div>
               </div>
-            : this.state.autobillActive ? 
+            : this.state.MultibillActive ? 
               <div className="item-row">
                 <div className="item-wrap full">
-                  <label>Autobill List</label>
-                  <div className="autobillSelect">
-                    <select value={task.autobill ? task.autobill : ""} onChange={this.autobillChange}>
+                  <label>Multibill List</label>
+                  <div className="MultibillSelect">
+                    <select value={task.Multibill ? task.Multibill : ""} onChange={this.MultibillChange}>
                       <option value=""></option>
-                      {autobillList}
+                      {MultibillList}
                     </select>
                     &nbsp;&nbsp;
-                    <a className="edit-autobill" onClick={this.props.toggleAutoBill} title="Edit your Autobill Lists">
+                    <a className="edit-Multibill" onClick={this.props.toggleMultibill} title="Edit your Multibill Lists">
                       <i className="fa fa-edit"> Edit</i>
                     </a>
                   </div>

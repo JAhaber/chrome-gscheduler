@@ -8,7 +8,7 @@ var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
 var TaskLists = require('./TaskLists.jsx');
 var CustomStyles = require('./CustomStyles.jsx');
-var AutoBill = require('./AutoBill.jsx');
+var Multibill = require('./MultiBill.jsx');
 var Footer = require('./Footer.jsx');
 var $ = require('jquery');
 window.jQuery = $;
@@ -29,7 +29,7 @@ var GSchedulerApp = React.createClass({
       totalTaskTime: '',
       showLog: false,
       message: "",
-      showAutoBill: false
+      showMultibill: false
     };
   },
   componentDidMount: function() {
@@ -91,11 +91,11 @@ var GSchedulerApp = React.createClass({
     //this.props.model.addTask(task);
     saveTask = task;
   },
-  addAutobill: function(){
-    this.props.model.addAutobill();
+  addMultibill: function(){
+    this.props.model.addMultibill();
   },
-  removeAutobill: function(id){
-    this.props.model.removeAutobill(id);
+  removeMultibill: function(id){
+    this.props.model.removeMultibill(id);
   },
   handleNoteKeyDown: function(event){
     if (event.which !== ENTER_KEY) {
@@ -223,8 +223,8 @@ var GSchedulerApp = React.createClass({
   toggleLog: function(){
     this.setState({showLog: !this.state.showLog});
   },
-  toggleAutoBill: function(){
-    this.setState({showAutoBill: !this.state.showAutoBill});    
+  toggleMultibill: function(){
+    this.setState({showMultibill: !this.state.showMultibill});    
   },
   render: function() {
     var main;
@@ -331,7 +331,7 @@ var GSchedulerApp = React.createClass({
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
-            toggleAutoBill={this.toggleAutoBill}
+            toggleMultibill={this.toggleMultibill}
           />
           {!newestFirst ? 
             <span>
@@ -407,13 +407,13 @@ var GSchedulerApp = React.createClass({
           </div>
            
         </header>
-        {this.state.showAutoBill ?
-          <AutoBill 
+        {this.state.showMultibill ?
+          <Multibill 
             model={this.props.model}
-            autobill={this.props.model.autobill}
-            addAutobillList={this.addAutobill}
-            removeAutobillList={this.removeAutobill}
-            closeAutobill={this.toggleAutoBill}
+            Multibill={this.props.model.Multibill}
+            addMultibillList={this.addMultibill}
+            removeMultibillList={this.removeMultibill}
+            closeMultibill={this.toggleMultibill}
           />
         : ""}
 

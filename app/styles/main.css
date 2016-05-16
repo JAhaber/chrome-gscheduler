@@ -2634,7 +2634,7 @@ footer {
     margin-top: 5px;
     color: #CD1F1F; }
 
-#edit-autobill {
+#edit-Multibill {
   font-size: 12px;
   height: calc(100% - 78px);
   z-index: 500;
@@ -2648,26 +2648,26 @@ footer {
   padding-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px; }
-  #edit-autobill .no-autobill {
+  #edit-Multibill .no-Multibill {
     margin-top: 10px; }
-    #edit-autobill .no-autobill a {
+    #edit-Multibill .no-Multibill a {
       cursor: pointer; }
-  #edit-autobill .add-autobill, #edit-autobill .remove-autobill {
+  #edit-Multibill .add-Multibill, #edit-Multibill .remove-Multibill {
     cursor: pointer; }
-  #edit-autobill .id-wrapper {
+  #edit-Multibill .id-wrapper {
     width: 100%;
     vertical-align: top; }
-    #edit-autobill .id-wrapper label {
+    #edit-Multibill .id-wrapper label {
       width: 55px;
       display: inline-block; }
-    #edit-autobill .id-wrapper input {
+    #edit-Multibill .id-wrapper input {
       width: calc(100% - 100px);
       display: inline-block; }
-  #edit-autobill .details-wrapper {
+  #edit-Multibill .details-wrapper {
     display: inline-block;
     width: 100%;
     vertical-align: top; }
-    #edit-autobill .details-wrapper .task-project {
+    #edit-Multibill .details-wrapper .task-project {
       display: inline-block;
       width: 50%;
       padding-left: 15px;
@@ -2675,7 +2675,7 @@ footer {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden; }
-    #edit-autobill .details-wrapper .task-title {
+    #edit-Multibill .details-wrapper .task-title {
       display: inline-block;
       width: 50%;
       padding-right: 15px;
@@ -2683,15 +2683,15 @@ footer {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden; }
-  #edit-autobill select {
+  #edit-Multibill select {
     width: calc(100% - 35px);
     margin: 10px 0; }
-  #edit-autobill .destroy {
+  #edit-Multibill .destroy {
     position: absolute;
     top: 6px;
     right: 2px;
     font-size: 19px; }
-    #edit-autobill .destroy i {
+    #edit-Multibill .destroy i {
       color: #d21245; }
 
 html {
@@ -2829,7 +2829,7 @@ i {
       background-color: #b6e5ff; }
     #task-list .border-left.hasCategory, .task-list .border-left.hasCategory {
       background-color: #D3D3D3; }
-    #task-list .border-left.hasAutobill, .task-list .border-left.hasAutobill {
+    #task-list .border-left.hasMultibill, .task-list .border-left.hasMultibill {
       background-color: #82C175; }
   #task-list .task-wrapper, .task-list .task-wrapper {
     padding: 10px 5px 10px;
@@ -2925,10 +2925,10 @@ i {
     #task-list .details div select, .task-list .details div select {
       width: 95%;
       margin-bottom: 5px; }
-    #task-list .details div .autobillSelect, .task-list .details div .autobillSelect {
+    #task-list .details div .MultibillSelect, .task-list .details div .MultibillSelect {
       width: 95%;
       margin-bottom: 5px; }
-      #task-list .details div .autobillSelect select, .task-list .details div .autobillSelect select {
+      #task-list .details div .MultibillSelect select, .task-list .details div .MultibillSelect select {
         width: calc(100% - 43px);
         display: inline-block; }
 

@@ -13,7 +13,7 @@
 @import "modules/tasklists";
 @import "modules/buildlog";
 @import "modules/messages";
-@import "modules/autobill";
+@import "modules/multibill";
 
 
 html{
@@ -180,7 +180,7 @@ i{
     &.hasCategory{
       background-color:#D3D3D3;
     }
-    &.hasAutobill{
+    &.hasMultibill{
       background-color:#82C175;
     }
     border-bottom:1px solid #000;
@@ -303,7 +303,7 @@ i{
           width:95%;
           margin-bottom: 5px;
         }
-        .autobillSelect{
+        .MultibillSelect{
             width:95%;
             margin-bottom: 5px;
             select{

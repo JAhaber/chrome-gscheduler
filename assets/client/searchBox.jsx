@@ -32,7 +32,7 @@ var tickets = new Bloodhound({
 						type: ticket.Type,
 						categoryID: null,
 						projectName: ticket.ProjectName,
-						autobill: null
+						Multibill: null
 			    };
 				});
 			}
@@ -51,7 +51,7 @@ var tickets = new Bloodhound({
 							type: "Non-Project",
 							categoryID: ticket.TimeSheetCategoryID,
 							projectName: null,
-							autobill: null
+							Multibill: null
 				    };
 				});
 			}
@@ -122,7 +122,7 @@ var SearchBox = React.createClass({
 					isClientBillable: task.isClientBillable,
 					type: task.type,
 					categoryID: task.categoryID || null,
-					autobill: task.autobill || null
+					Multibill: task.Multibill || null
 
 				});
 				selected = true;
@@ -135,7 +135,7 @@ var SearchBox = React.createClass({
 					isClientBillable: task.isClientBillable,
 					type: task.type,
 					categoryID: task.categoryID || null,
-					autobill: task.autobill || null
+					Multibill: task.Multibill || null
 				});
 				selected = true;
 				$("#new-note").focus();

@@ -13,7 +13,7 @@ var TaskModel = function (key) {
 	this.customStyle = loadData.customStyle || "";
 	this.favorites = loadData.favorites || [];
 	this.backup = loadData.backup || {};
-	this.autobill = loadData.autobill || [];
+	this.Multibill = loadData.Multibill || [];
 	this.tasks = loadData.tasks || loadData;
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
@@ -29,7 +29,7 @@ TaskModel.prototype.updateDataVersion = function () {
 	switch (this.version){
 		case 0:
 			this.tasks = this.tasks.map(function (task) {
-				return Utils.extend({}, task, {autobill: null});
+				return Utils.extend({}, task, {Multibill: null});
 			});
 			break;
 	}
@@ -43,7 +43,7 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version, autobill: this.autobill }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version, Multibill: this.Multibill }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
@@ -59,7 +59,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: isFavorite,
-		autobill: task.autobill,
+		Multibill: task.Multibill,
 		gap: {}
 	};
 	if (stop){
@@ -86,7 +86,7 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: task.isFavorite,
-		autobill: autobill,
+		Multibill: Multibill,
 		gap: {}
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
@@ -98,27 +98,27 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 	this.inform();
 };
 
-TaskModel.prototype.addAutobill = function () {
+TaskModel.prototype.addMultibill = function () {
 	var newID = 0;
-	for (var i = 0; i < this.autobill.length; i++)
+	for (var i = 0; i < this.Multibill.length; i++)
 	{
-		if (this.autobill[i].id >= newID)
-			newID = this.autobill[i].id + 1;
+		if (this.Multibill[i].id >= newID)
+			newID = this.Multibill[i].id + 1;
 	}
 
-	this.autobill.push({id: newID, title: "Autobill List " + newID, tasks: []});
+	this.Multibill.push({id: newID, title: "Multibill List " + newID, tasks: []});
 
 	this.inform();
 };
 
-TaskModel.prototype.removeAutobill = function(id){
-	this.autobill = this.autobill.filter(function (item) {
+TaskModel.prototype.removeMultibill = function(id){
+	this.Multibill = this.Multibill.filter(function (item) {
 		return parseInt(item.id) !== parseInt(id);
 	});
 	
 	this.tasks = this.tasks.map(function (task) {
-		if (parseInt(task.autobill) === parseInt(id)){
-			return Utils.extend({}, task, {title: "", autobill: null, hasChanged: true});
+		if (parseInt(task.Multibill) === parseInt(id)){
+			return Utils.extend({}, task, {title: "", Multibill: null, hasChanged: true});
 		}
 		return task;
 	});
@@ -126,7 +126,7 @@ TaskModel.prototype.removeAutobill = function(id){
 	this.inform();
 }
 
-TaskModel.prototype.handleAutobillTaskIDChange = function(autobillID, taskID, value){
+TaskModel.prototype.handleMultibillTaskIDChange = function(MultibillID, taskID, value){
 	var scope = this;
 
 	if (value.indexOf("https://") > -1) //Allow the user to paste a genome url or hask of the ticket
@@ -137,18 +137,18 @@ TaskModel.prototype.handleAutobillTaskIDChange = function(autobillID, taskID, va
 		value = value.substring(1);
 	}
 
-	for (var i = 0; i < this.autobill.length; i++){
-		if (parseInt(this.autobill[i].id) === parseInt(autobillID)){
+	for (var i = 0; i < this.Multibill.length; i++){
+		if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
 			if (value === "") { //Remove the task completely if the value is null
-				this.autobill[i].tasks = this.autobill[i].tasks.filter(function(task){
+				this.Multibill[i].tasks = this.Multibill[i].tasks.filter(function(task){
 					return parseInt(task.id) !== parseInt(taskID);
 				});
 				scope.inform();
 			}
 			else{
 				var duplicate = false; //Check if the task already exists in the list to prevent duplicates
-				for (var j = 0; j < this.autobill[i].tasks.length; j++){
-					if (parseInt(this.autobill[i].tasks[j].id) === parseInt(value)){
+				for (var j = 0; j < this.Multibill[i].tasks.length; j++){
+					if (parseInt(this.Multibill[i].tasks[j].id) === parseInt(value)){
 						duplicate = true;
 						break;
 					}
@@ -156,10 +156,10 @@ TaskModel.prototype.handleAutobillTaskIDChange = function(autobillID, taskID, va
 				if (duplicate === false){
 					GenomeAPI.getProjectInfo(value).then(function(ticketData){
 						if (parseInt(taskID) === -1){ //Add a new task to the list if the id is -1
-							scope.autobill[i].tasks.push({ id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
+							scope.Multibill[i].tasks.push({ id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
 						}
 						else{ //Find the task that was edited and update it with the new content
-							scope.autobill[i].tasks = scope.autobill[i].tasks.map(function (task) {
+							scope.Multibill[i].tasks = scope.Multibill[i].tasks.map(function (task) {
 								if (parseInt(task.id) === parseInt(taskID)){
 									return { id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName};
 				  				}
@@ -186,7 +186,7 @@ TaskModel.prototype.addGap = function (start, stop) {
 		projectID: null,
 		note: null,
 		categoryID: null,
-		autobill: null,
+		Multibill: null,
 		expanded: true
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
@@ -356,7 +356,7 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 					      	title: ticketData.Entries[0].Title,
 					      	isFavorite: isFavorite,
 					      	categoryID: null,
-					      	autobill: null,
+					      	Multibill: null,
 					      	hasChanged: true});
   				}
   				else
@@ -439,9 +439,9 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 				for (var i = 0; i < nonBillables.Entries.length; i++)
 				{
 					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
-						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true, autobill: null});	
+						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true, Multibill: null});	
 				}
-				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, autobill:null});	
+				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, Multibill:null});	
 			}
 			return task;
 		});
@@ -449,17 +449,17 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 		this.inform();
 };
 
-TaskModel.prototype.handleAutoBillChange = function(taskToChange, value){
+TaskModel.prototype.handleMultibillChange = function(taskToChange, value){
 	var scope = this;
 	this.tasks = this.tasks.map(function (task) {
 		if (task === taskToChange){
-			for (var i = 0; i < scope.autobill.length; i++)
+			for (var i = 0; i < scope.Multibill.length; i++)
 			{
-				if(parseInt(scope.autobill[i].id) === parseInt(value)){
-					return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: scope.autobill[i].title, projectID: null, ticketID: null, hasChanged: true, autobill: value});	
+				if(parseInt(scope.Multibill[i].id) === parseInt(value)){
+					return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: scope.Multibill[i].title, projectID: null, ticketID: null, hasChanged: true, Multibill: value});	
 				}
 			}
-			return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, autobill: value});	
+			return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, Multibill: value});	
 		}
 		return task;
 	});
@@ -467,9 +467,9 @@ TaskModel.prototype.handleAutoBillChange = function(taskToChange, value){
 	this.inform();
 };
 
-TaskModel.prototype.handleAutobillTitleChange = function (id, value){
+TaskModel.prototype.handleMultibillTitleChange = function (id, value){
 	var scope = this;
-	this.autobill = this.autobill.map(function (item) {
+	this.Multibill = this.Multibill.map(function (item) {
 		if (parseInt(item.id) === parseInt(id)){
 			return Utils.extend({}, item, {title: value});
 		}
@@ -477,7 +477,7 @@ TaskModel.prototype.handleAutobillTitleChange = function (id, value){
 	});
 
 	this.tasks = this.tasks.map(function (task) {
-		if (parseInt(task.autobill) === parseInt(id)){
+		if (parseInt(task.Multibill) === parseInt(id)){
 			return Utils.extend({}, task, {title: value});
 		}
 		return task;
