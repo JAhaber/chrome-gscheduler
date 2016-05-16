@@ -2926,8 +2926,7 @@ i {
       width: 95%;
       margin-bottom: 5px; }
     #task-list .details div .MultibillSelect, .task-list .details div .MultibillSelect {
-      width: 95%;
-      margin-bottom: 5px; }
+      width: 95%; }
       #task-list .details div .MultibillSelect select, .task-list .details div .MultibillSelect select {
         width: calc(100% - 43px);
         display: inline-block; }
