@@ -72,7 +72,7 @@ var Multibill = React.createClass({
       if (parseInt(entry.id) === parseInt(this.state.MultibillSelected)){
         return entry.tasks.map(function (task){
           return (
-            <div>
+            <div key={task.key}>
               <div className="id-wrapper">
                 <label>Task ID:</label>
                 <input 

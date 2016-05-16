@@ -156,7 +156,7 @@ TaskModel.prototype.handleMultibillTaskIDChange = function(MultibillID, taskID, 
 				if (duplicate === false){
 					GenomeAPI.getProjectInfo(value).then(function(ticketData){
 						if (parseInt(taskID) === -1){ //Add a new task to the list if the id is -1
-							scope.Multibill[i].tasks.push({ id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
+							scope.Multibill[i].tasks.push({ key: Utils.uuid(), id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
 						}
 						else{ //Find the task that was edited and update it with the new content
 							scope.Multibill[i].tasks = scope.Multibill[i].tasks.map(function (task) {
