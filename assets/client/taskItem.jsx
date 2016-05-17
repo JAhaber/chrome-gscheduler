@@ -319,7 +319,7 @@ var TaskItem = React.createClass({
               value="Multibill"
               defaultChecked={this.state.MultibillActive}
               onChange={this.handleProjectChange}
-            /> Multibill
+            /> Multi-bill
           </label>
         </div>
       </span>

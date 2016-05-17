@@ -106,7 +106,7 @@ TaskModel.prototype.addMultibill = function () {
 			newID = this.Multibill[i].id + 1;
 	}
 
-	this.Multibill.push({id: newID, title: "Multibill List " + newID, tasks: []});
+	this.Multibill.push({id: newID, title: "Multi-bill List " + newID, tasks: []});
 
 	this.inform();
 };

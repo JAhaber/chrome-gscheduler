@@ -145,7 +145,7 @@ var Multibill = React.createClass({
             {MultibillData}
           </span>
         : <div className="no-Multibill">
-          No Multibill lists found. <a onClick={this.addMultibillList}>Click here</a> to add a new list
+          No Multi-bill lists found. <a onClick={this.addMultibillList}>Click here</a> to add a new list
         </div> }
 
       </section>

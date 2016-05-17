@@ -2830,7 +2830,8 @@ i {
     #task-list .border-left.hasCategory, .task-list .border-left.hasCategory {
       background-color: #D3D3D3; }
     #task-list .border-left.hasMultibill, .task-list .border-left.hasMultibill {
-      background-color: #82C175; }
+      background-color: #FB7A7A;
+      /*#82C175;*/ }
   #task-list .task-wrapper, .task-list .task-wrapper {
     padding: 10px 5px 10px;
     display: inline-block;
