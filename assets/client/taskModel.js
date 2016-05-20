@@ -86,7 +86,7 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: task.isFavorite,
-		Multibill: Multibill,
+		Multibill: task.Multibill,
 		gap: {}
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
