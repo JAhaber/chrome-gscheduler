@@ -126,7 +126,7 @@ TaskModel.prototype.removeMultibill = function(id){
 	this.inform();
 }
 
-TaskModel.prototype.handleMultibillTaskIDChange = function(MultibillID, taskID, value){
+TaskModel.prototype.addMultibillTask = function(MultibillID, value){
 	var scope = this;
 
 	if (value.indexOf("https://") > -1) //Allow the user to paste a genome url or hask of the ticket
@@ -139,41 +139,34 @@ TaskModel.prototype.handleMultibillTaskIDChange = function(MultibillID, taskID, 
 
 	for (var i = 0; i < this.Multibill.length; i++){
 		if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
-			if (value === "") { //Remove the task completely if the value is null
-				this.Multibill[i].tasks = this.Multibill[i].tasks.filter(function(task){
-					return parseInt(task.id) !== parseInt(taskID);
-				});
-				scope.inform();
+			
+			var duplicate = false; //Check if the task already exists in the list to prevent duplicates
+			for (var j = 0; j < this.Multibill[i].tasks.length; j++){
+				if (parseInt(this.Multibill[i].tasks[j].id) === parseInt(value)){
+					duplicate = true;
+					break;
+				}
 			}
-			else{
-				var duplicate = false; //Check if the task already exists in the list to prevent duplicates
-				for (var j = 0; j < this.Multibill[i].tasks.length; j++){
-					if (parseInt(this.Multibill[i].tasks[j].id) === parseInt(value)){
-						duplicate = true;
-						break;
-					}
-				}
-				if (duplicate === false){
-					GenomeAPI.getProjectInfo(value).then(function(ticketData){
-						if (parseInt(taskID) === -1){ //Add a new task to the list if the id is -1
-							scope.Multibill[i].tasks.push({ key: Utils.uuid(), id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
-						}
-						else{ //Find the task that was edited and update it with the new content
-							scope.Multibill[i].tasks = scope.Multibill[i].tasks.map(function (task) {
-								if (parseInt(task.id) === parseInt(taskID)){
-									return { id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName};
-				  				}
-				  				else
-				  					return task;
-				  			});
-						}
-			  			scope.inform();
-			  		}).fail(function(error){});
-				}
+			if (duplicate === false){
+				GenomeAPI.getProjectInfo(value).then(function(ticketData){
+					scope.Multibill[i].tasks.push({ key: Utils.uuid(), id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
+
+		  			scope.inform();
+		  		}).fail(function(error){});
 			}
 			break;
 		}
 	}
+}
+
+TaskModel.prototype.handleMultibillTaskIDChange = function(MultibillID, taskList){
+	for (var i = 0; i < this.Multibill.length; i++){
+		if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
+			this.Multibill[i].tasks = taskList;
+			break;
+		}
+	}
+	this.inform();
 }
 
 TaskModel.prototype.addGap = function (start, stop) {

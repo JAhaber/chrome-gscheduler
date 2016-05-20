@@ -3,27 +3,28 @@ var React = require('react');
 var Moment = require('moment');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
-
+var taskVal = null;
 
 var Multibill = React.createClass({
   getInitialState: function () {
     return {
       MultibillSelected: this.props.Multibill.length > 0 ? this.props.Multibill[0].id : -1,
       title: this.props.Multibill.length > 0 ? this.props.Multibill[0].title : "",
+      tasks: this.props.Multibill[0].tasks,
       status: null,
       newTaskID: ""
     };
   },
   componentDidUpdate: function(){
     if (this.state.status === "add"){
-      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title});
+      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks: this.props.Multibill[this.props.Multibill.length - 1].tasks,});
     }
     else if (this.state.status === "remove"){
       if (this.props.Multibill.length > 0){
-        this.setState({MultibillSelected: this.props.Multibill[0].id, status: null, title: this.props.Multibill[0].title});
+        this.setState({MultibillSelected: this.props.Multibill[0].id, status: null, title: this.props.Multibill[0].title, tasks: this.props.Multibill[0].tasks});
       }
       else{
-        this.setState({MultibillSelected: -1, status: null, title: ""});
+        this.setState({MultibillSelected: -1, status: null, title: "", tasks: ""});
       }      
     }
   },
@@ -47,12 +48,96 @@ var Multibill = React.createClass({
   handleNewTaskIDChange: function(e){
     this.setState({newTaskID: e.target.value});
   },
-  handleTaskIDBlur: function(e){
-    var id = event.target.getAttribute("data-id");
-    if (parseInt(id) === -1)
-      this.setState({newTaskID: ""});
-    this.props.model.handleMultibillTaskIDChange(this.state.MultibillSelected, id, event.target.value)
+  handleNewTaskIDBlur: function(e){
+    this.setState({newTaskID: ""});
+    this.props.model.addMultibillTask(this.state.MultibillSelected, event.target.value);
   },
+  storeID: function(e){
+    if (taskVal === null)
+      taskVal = e.target.value;
+  },
+  handleTaskIDChange: function(e){
+    var key = event.target.getAttribute("data-key");
+    var tasks = this.state.tasks.map(function(task){
+      if (task.key === key){
+        task.id = e.target.value;
+      }
+      return task;
+    });
+
+    this.setState({tasks: tasks});
+  },
+
+  handleTaskIDBlur: function(e){
+    var value = e.target.value;
+    var tasks = this.state.tasks;
+    var Multibill = this.props.Multibill;
+    var scope = this;
+    var key = e.target.getAttribute("data-key");
+    
+    if (value.indexOf("https://") > -1) //Allow the user to paste a genome url or hask of the ticket
+    {
+      value = value.substring(value.lastIndexOf("/") + 1);
+    }
+    else if (value.indexOf("#") === 0){
+      value = value.substring(1);
+    }
+
+    
+    if (value === "") { //Remove the task completely if the value is null
+      tasks = tasks.filter(function(task){
+        return task.key !== key;
+      });
+      scope.setState({tasks:tasks});
+      this.props.model.handleMultibillTaskIDChange(this.state.MultibillSelected, tasks);
+    }
+    else{
+      var duplicate = false; //Check if the task already exists in the list to prevent duplicates
+      for (var j = 0; j < tasks.length; j++){
+        if (parseInt(tasks[j].id) === parseInt(value) && tasks[j].key !== key){
+          duplicate = true;
+          break;
+        }
+      }
+      if (duplicate === false){
+        GenomeAPI.getProjectInfo(value).then(function(ticketData){
+          tasks = tasks.map(function (task) {
+            if (task.key === key){
+              return { key: task.key, id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName};
+            }
+            else
+              return task;
+          });
+          scope.props.model.handleMultibillTaskIDChange(scope.state.MultibillSelected, tasks);
+          scope.setState({tasks:tasks});
+          
+        }, function(error){
+          tasks = tasks.map(function (task) {
+            if (task.key === key){
+              return { key: task.key, id: taskVal, projectID: task.projectID, title: task.title, projectName: task.projectName};
+            }
+            else
+              return task;
+          });
+          taskVal = null;
+          scope.setState({tasks:tasks});
+        });
+      }
+      else{
+        
+        tasks = tasks.map(function (task) {
+          if (task.key === key){
+            return { key: task.key, id: taskVal, projectID: task.projectID, title: task.title, projectName: task.projectName};
+          }
+          else
+            return task;
+        });
+        taskVal = null;
+        scope.setState({tasks:tasks});
+      }
+    }
+  },
+
   titleChange: function(e){
     this.setState({title: event.target.value});
     this.props.model.handleMultibillTitleChange(this.state.MultibillSelected, event.target.value);
@@ -68,32 +153,30 @@ var Multibill = React.createClass({
         );
     }, this);
 
-    var MultibillTasks = this.props.Multibill.map(function (entry){
-      if (parseInt(entry.id) === parseInt(this.state.MultibillSelected)){
-        return entry.tasks.map(function (task){
-          return (
-            <div key={task.key}>
-              <div className="id-wrapper">
-                <label>Task ID:</label>
-                <input 
-                  type="text" 
-                  name="id-edit" 
-                  className="form-control" 
-                  placeholder="Enter ID"
-                  defaultValue={task.id}
-                  data-id={task.id}
-                  onBlur={scope.handleTaskIDBlur}
-                />
-              </div>
-              <div className="details-wrapper">
-                <div className="task-title">Title: {task.title}</div>
-                <div className="task-project">Project: {task.projectName}</div>
-              </div>
-              <hr/>
-            </div>
-          );
-        }, this);
-      }
+    var MultibillTasks = this.state.tasks.map(function (task){
+      return (
+        <div key={task.key}>
+          <div className="id-wrapper">
+            <label>Task ID:</label>
+            <input 
+              type="text" 
+              name="id-edit" 
+              className="form-control" 
+              placeholder="Enter ID"
+              value={task.id}
+              data-key={task.key}
+              onFocus={scope.storeID}
+              onChange={scope.handleTaskIDChange}
+              onBlur={scope.handleTaskIDBlur}
+            />
+          </div>
+          <div className="details-wrapper">
+            <div className="task-title">Title: {task.title}</div>
+            <div className="task-project">Project: {task.projectName}</div>
+          </div>
+          <hr/>
+        </div>
+      );
     }, this);
 
     var MultibillData =  (
@@ -120,7 +203,7 @@ var Multibill = React.createClass({
             data-id={-1}
             value={this.state.newTaskID}
             onChange={this.handleNewTaskIDChange}
-            onBlur={this.handleTaskIDBlur}
+            onBlur={this.handleNewTaskIDBlur}
           />
 
         </div>
