@@ -71,7 +71,7 @@ var GenomeTasks = React.createClass({
         tasks.reverse();
       taskList = tasks.map(function (task) {
         return (
-          <li className='task'>
+          <li className='task' key={task.TicketID}>
             <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart.bind(scope, task.TicketID)}>
               <div className="recent-ticketID-wrapper">
                 <label>

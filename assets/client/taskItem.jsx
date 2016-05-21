@@ -276,7 +276,7 @@ var TaskItem = React.createClass({
 
     var nonBillList = this.props.nonBillables.Entries.map(function (entry) {
       return (
-        <option value={entry.TimeSheetCategoryID}>
+        <option value={entry.TimeSheetCategoryID} key={entry.TimeSheetCategoryID}>
           {entry.Name}
         </option>
         );
@@ -284,7 +284,7 @@ var TaskItem = React.createClass({
 
     var MultibillList = this.props.model.Multibill.map(function (entry) {
       return (
-        <option value={entry.id}>
+        <option value={entry.id} key={entry.id}>
           {entry.title}
         </option>
         );

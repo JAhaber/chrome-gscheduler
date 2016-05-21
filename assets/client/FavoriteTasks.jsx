@@ -54,7 +54,7 @@ var FavoriteTasks = React.createClass({
       
       taskList = tasks.map(function (task) {
         return (
-          <li className='task'>
+          <li className='task' key={task.id}>
             <div className="task-wrapper" draggable="true" onDragStart={scope.dragStart.bind(scope, task.ticketID)}>
               <div className="recent-ticketID-wrapper">
                 <label>

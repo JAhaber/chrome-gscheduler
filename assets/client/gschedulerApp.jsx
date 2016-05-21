@@ -303,7 +303,7 @@ var GSchedulerApp = React.createClass({
           );
       }
       return (
-          <span>
+          <span key={task.id}>
           {newDate}
           {newestFirst ?
             <span>

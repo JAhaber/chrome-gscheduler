@@ -10,7 +10,7 @@ var Multibill = React.createClass({
     return {
       MultibillSelected: this.props.Multibill.length > 0 ? this.props.Multibill[0].id : -1,
       title: this.props.Multibill.length > 0 ? this.props.Multibill[0].title : "",
-      tasks: this.props.Multibill[0].tasks,
+      tasks: this.props.Multibill.length > 0 ? this.props.Multibill[0].tasks : [],
       status: null,
       newTaskID: ""
     };
@@ -53,8 +53,7 @@ var Multibill = React.createClass({
     this.props.model.addMultibillTask(this.state.MultibillSelected, event.target.value);
   },
   storeID: function(e){
-    if (taskVal === null)
-      taskVal = e.target.value;
+    taskVal = e.target.value;
   },
   handleTaskIDChange: function(e){
     var key = event.target.getAttribute("data-key");
@@ -147,7 +146,7 @@ var Multibill = React.createClass({
 
     var MultibillList = this.props.Multibill.map(function (entry) {
       return (
-        <option value={entry.id}>
+        <option value={entry.id} key={entry.id}>
           {entry.title}
         </option>
         );
