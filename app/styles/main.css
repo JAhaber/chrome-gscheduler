@@ -2643,17 +2643,32 @@ footer {
   top: 0px;
   left: 0px;
   width: 100%;
-  color: #000;
-  overflow-y: auto;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px; }
+  color: #000; }
+  #edit-Multibill .multibill-header {
+    padding: 0 10px 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd; }
+  #edit-Multibill .multibill-select-label {
+    margin-top: 10px;
+    display: inline-block;
+    width: 110px; }
+  #edit-Multibill select {
+    width: calc(100% - 135px);
+    display: inline-block;
+    margin: 10px 0; }
   #edit-Multibill .no-Multibill {
     margin-top: 10px; }
     #edit-Multibill .no-Multibill a {
       cursor: pointer; }
-  #edit-Multibill .add-Multibill, #edit-Multibill .remove-Multibill {
-    cursor: pointer; }
+  #edit-Multibill .list-controls {
+    text-align: right;
+    margin-right: 25px; }
+    #edit-Multibill .list-controls .add-Multibill, #edit-Multibill .list-controls .remove-Multibill {
+      cursor: pointer; }
+  #edit-Multibill .multibill-data {
+    padding: 10px 10px;
+    background: #fff;
+    border-bottom: 1px solid #ddd; }
   #edit-Multibill .id-wrapper {
     width: 100%;
     vertical-align: top; }
@@ -2661,34 +2676,39 @@ footer {
       width: 55px;
       display: inline-block; }
     #edit-Multibill .id-wrapper input {
-      width: calc(100% - 100px);
+      width: 90px;
       display: inline-block; }
+    #edit-Multibill .id-wrapper.newTask label {
+      width: 160px; }
+    #edit-Multibill .id-wrapper.editTask {
+      width: 155px;
+      display: inline-block; }
+  #edit-Multibill .task-wrapper {
+    padding: 10px 20px;
+    height: calc(100% - 223px);
+    overflow-y: auto;
+    background: #eee; }
   #edit-Multibill .details-wrapper {
     display: inline-block;
-    width: 100%;
+    width: calc(100% - 155px);
     vertical-align: top; }
     #edit-Multibill .details-wrapper .task-project {
-      display: inline-block;
-      width: 50%;
-      padding-left: 15px;
+      display: block;
+      width: 100%;
       color: #d21245;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden; }
     #edit-Multibill .details-wrapper .task-title {
-      display: inline-block;
-      width: 50%;
-      padding-right: 15px;
+      display: block;
+      width: 100%;
       color: #2585b0;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden; }
-  #edit-Multibill select {
-    width: calc(100% - 35px);
-    margin: 10px 0; }
   #edit-Multibill .destroy {
     position: absolute;
-    top: 6px;
+    top: 3px;
     right: 2px;
     font-size: 19px; }
     #edit-Multibill .destroy i {

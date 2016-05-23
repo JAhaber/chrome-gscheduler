@@ -8,64 +8,101 @@
   left:0px;
   width:100%;
   color: #000;
-  overflow-y:auto;
-  padding-bottom:10px;
-  padding-left:10px;
-  padding-right:10px;
+
+  .multibill-header{
+    padding:0 10px 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .multibill-select-label{
+    margin-top:10px;
+    display:inline-block;
+    width:110px;
+  }
+
+  select{
+    width: calc(100% - 135px);
+    display:inline-block;
+    margin: 10px 0;
+  }
 
   .no-Multibill{
   	margin-top:10px;
-	a{
-		cursor:pointer;
-	}
+  	a{
+  		cursor:pointer;
+  	}
   }
-  .add-Multibill, .remove-Multibill{
-  	cursor:pointer;
+  .list-controls{
+    text-align:right;
+    margin-right:25px;
+    .add-Multibill, .remove-Multibill{
+    	cursor:pointer;
+    }
   }
 
+  .multibill-data{
+    padding:10px 10px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+  }
   .id-wrapper{
+    width:100%;
+    vertical-align: top;
+
   	label{
   		width:55px;
   		display:inline-block;
   	}
   	input{
-  		width: calc(100% - 100px);
+  		width: 90px;
   		display:inline-block;
   	}
-  	width:100%;
-  	vertical-align: top;
+  	
+
+    &.newTask{
+      label{
+        width:160px;
+      }
+    }
+
+    &.editTask{
+      width:155px;
+      display:inline-block;
+    }
+  }
+  .task-wrapper{
+    padding:10px 20px;
+    height: calc(100% - 223px);
+    overflow-y:auto;
+    background: #eee;
   }
   .details-wrapper{
   	display:inline-block;
-  	width: 100%;
+  	width: calc(100% - 155px);
   	vertical-align: top;
   	.task-project{
-  		display:inline-block;
-  		width:50%;
-  		padding-left:15px;
+  		display:block;
+  		width:100%;
   		color:#d21245;
   		text-overflow: ellipsis;
 	    white-space: nowrap;
 	    overflow: hidden;
   	}
   	.task-title{
-  		display:inline-block;
-  		width:50%;
-  		padding-right: 15px;
+  		display:block;
+  		width:100%;
   		color: #2585b0;
   		text-overflow: ellipsis;
 	    white-space: nowrap;
 	    overflow: hidden;
   	}
   }
-  select{
-  	width: calc(100% - 35px);
-    margin: 10px 0;
-  }
+  
   .destroy{
     i{color:#d21245;}
     position:absolute;
-    top:6px;
+    top:3px;
     right:2px;
     font-size: 19px;
   }

@@ -91,12 +91,6 @@ var GSchedulerApp = React.createClass({
     //this.props.model.addTask(task);
     saveTask = task;
   },
-  addMultibill: function(){
-    this.props.model.addMultibill();
-  },
-  removeMultibill: function(id){
-    this.props.model.removeMultibill(id);
-  },
   handleNoteKeyDown: function(event){
     if (event.which !== ENTER_KEY) {
       return;
@@ -411,8 +405,6 @@ var GSchedulerApp = React.createClass({
           <Multibill 
             model={this.props.model}
             Multibill={this.props.model.Multibill}
-            addMultibillList={this.addMultibill}
-            removeMultibillList={this.removeMultibill}
             closeMultibill={this.toggleMultibill}
           />
         : ""}

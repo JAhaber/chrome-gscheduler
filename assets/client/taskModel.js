@@ -107,7 +107,6 @@ TaskModel.prototype.addMultibill = function () {
 	}
 
 	this.Multibill.push({id: newID, title: "Multi-bill List " + newID, tasks: []});
-
 	this.inform();
 };
 
@@ -137,24 +136,26 @@ TaskModel.prototype.addMultibillTask = function(MultibillID, value){
 		value = value.substring(1);
 	}
 
-	for (var i = 0; i < this.Multibill.length; i++){
-		if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
-			
-			var duplicate = false; //Check if the task already exists in the list to prevent duplicates
-			for (var j = 0; j < this.Multibill[i].tasks.length; j++){
-				if (parseInt(this.Multibill[i].tasks[j].id) === parseInt(value)){
-					duplicate = true;
-					break;
+	if (value == parseInt(value, 10)){
+		for (var i = 0; i < this.Multibill.length; i++){
+			if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
+				
+				var duplicate = false; //Check if the task already exists in the list to prevent duplicates
+				for (var j = 0; j < this.Multibill[i].tasks.length; j++){
+					if (parseInt(this.Multibill[i].tasks[j].id) === parseInt(value)){
+						duplicate = true;
+						break;
+					}
 				}
-			}
-			if (duplicate === false){
-				GenomeAPI.getProjectInfo(value).then(function(ticketData){
-					scope.Multibill[i].tasks.push({ key: Utils.uuid(), id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
+				if (duplicate === false){
+					GenomeAPI.getProjectInfo(value).then(function(ticketData){
+						scope.Multibill[i].tasks.push({ key: Utils.uuid(), id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
 
-		  			scope.inform();
-		  		}).fail(function(error){});
+			  			scope.inform();
+			  		}).fail(function(error){});
+				}
+				break;
 			}
-			break;
 		}
 	}
 }

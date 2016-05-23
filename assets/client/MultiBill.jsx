@@ -17,7 +17,7 @@ var Multibill = React.createClass({
   },
   componentDidUpdate: function(){
     if (this.state.status === "add"){
-      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks: this.props.Multibill[this.props.Multibill.length - 1].tasks});
+      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks: []});
     }
     else if (this.state.status === "remove"){
       if (this.props.Multibill.length > 0){
@@ -30,11 +30,12 @@ var Multibill = React.createClass({
   },
   addMultibillList: function(){
     this.setState({status: "add"});
-    this.props.addMultibillList();
+    this.props.model.addMultibill();
+    
   },
   removeMultibillList: function(){
     this.setState({status: "remove"});
-    this.props.removeMultibillList(this.state.MultibillSelected);
+    this.props.model.removeMultibill(this.state.MultibillSelected);
   },
   MultibillChange: function(e){
     var Multibill = this.props.Multibill;
@@ -51,6 +52,12 @@ var Multibill = React.createClass({
   handleNewTaskIDBlur: function(e){
     this.setState({newTaskID: ""});
     this.props.model.addMultibillTask(this.state.MultibillSelected, event.target.value);
+  },
+  handleNewTaskIDKeyPress: function(e){
+    if (e.which === 13){
+      this.setState({newTaskID: ""});
+      this.props.model.addMultibillTask(this.state.MultibillSelected, event.target.value);
+    }
   },
   storeID: function(e){
     taskVal = e.target.value;
@@ -71,6 +78,7 @@ var Multibill = React.createClass({
     var value = e.target.value;
     var tasks = this.state.tasks;
     var Multibill = this.props.Multibill;
+    var selected = this.state.MultibillSelected;
     var scope = this;
     var key = e.target.getAttribute("data-key");
     
@@ -87,10 +95,11 @@ var Multibill = React.createClass({
       tasks = tasks.filter(function(task){
         return task.key !== key;
       });
-      scope.setState({tasks:tasks});
-      this.props.model.handleMultibillTaskIDChange(this.state.MultibillSelected, tasks);
+      if (selected === this.state.MultibillSelected)
+        this.setState({tasks:tasks});
+      this.props.model.handleMultibillTaskIDChange(selected, tasks);
     }
-    else{
+    else if (value == parseInt(value, 10)){
       var duplicate = false; //Check if the task already exists in the list to prevent duplicates
       for (var j = 0; j < tasks.length; j++){
         if (parseInt(tasks[j].id) === parseInt(value) && tasks[j].key !== key){
@@ -107,36 +116,36 @@ var Multibill = React.createClass({
             else
               return task;
           });
-          scope.props.model.handleMultibillTaskIDChange(scope.state.MultibillSelected, tasks);
-          scope.setState({tasks:tasks});
+          scope.props.model.handleMultibillTaskIDChange(selected, tasks);
+          if (selected === scope.state.MultibillSelected)
+            scope.setState({tasks:tasks});
           
         }, function(error){
-          tasks = tasks.map(function (task) {
-            if (task.key === key){
-              return { key: task.key, id: taskVal, projectID: task.projectID, title: task.title, projectName: task.projectName};
-            }
-            else
-              return task;
-          });
-          taskVal = null;
-          scope.setState({tasks:tasks});
+          scope.resetTask(key, tasks, selected);
         });
       }
       else{
-        
-        tasks = tasks.map(function (task) {
-          if (task.key === key){
-            return { key: task.key, id: taskVal, projectID: task.projectID, title: task.title, projectName: task.projectName};
-          }
-          else
-            return task;
-        });
-        taskVal = null;
-        scope.setState({tasks:tasks});
+        scope.resetTask(key, tasks, selected);
       }
+    }
+    else {
+      scope.resetTask(key, tasks, selected);
     }
   },
 
+  resetTask: function(key, tasks, selected){
+    tasks = tasks.map(function (task) {
+      if (task.key === key){
+        return { key: task.key, id: taskVal, projectID: task.projectID, title: task.title, projectName: task.projectName};
+      }
+      else
+        return task;
+    });
+    taskVal = null;
+    if (selected === this.state.MultibillSelected)
+      this.setState({tasks:tasks});
+    this.props.model.handleMultibillTaskIDChange(selected, tasks);
+  },
   titleChange: function(e){
     this.setState({title: event.target.value});
     this.props.model.handleMultibillTitleChange(this.state.MultibillSelected, event.target.value);
@@ -152,10 +161,11 @@ var Multibill = React.createClass({
         );
     }, this);
 
-    var MultibillTasks = this.state.tasks.map(function (task){
+    var MultibillTasks = this.state.tasks.map(function (task, id){
       return (
         <div key={task.key}>
-          <div className="id-wrapper">
+          { id > 0 ? <hr/> : ""}
+          <div className="id-wrapper editTask">
             <label>Task ID:</label>
             <input 
               type="text" 
@@ -170,17 +180,16 @@ var Multibill = React.createClass({
             />
           </div>
           <div className="details-wrapper">
-            <div className="task-title">Title: {task.title}</div>
-            <div className="task-project">Project: {task.projectName}</div>
+            <div className="task-title" title={task.title}>Title: {task.title}</div>
+            <div className="task-project" title={task.projectName}>Project: {task.projectName}</div>
           </div>
-          <hr/>
         </div>
       );
     }, this);
 
     var MultibillData =  (
-      <span>
-        <label>List Title:</label>
+      <div className="multibill-data">
+        <label>Edit List Name:</label>
         <input 
           type="text" 
           name="title-edit" 
@@ -190,10 +199,9 @@ var Multibill = React.createClass({
           onChange={this.titleChange}
         />
         <hr/>
-        {MultibillTasks}
 
-        <div className="id-wrapper">
-          <label>New Task ID:</label>
+        <div className="id-wrapper newTask">
+          <label>Add Task to Selected List:</label>
           <input 
             type="text" 
             name="id-edit" 
@@ -203,10 +211,11 @@ var Multibill = React.createClass({
             value={this.state.newTaskID}
             onChange={this.handleNewTaskIDChange}
             onBlur={this.handleNewTaskIDBlur}
+            onKeyPress={this.handleNewTaskIDKeyPress}
           />
-
         </div>
-      </span>
+  
+      </div>
     );
     
 
@@ -217,14 +226,22 @@ var Multibill = React.createClass({
         </a>
         {this.props.Multibill.length > 0 ?
           <span>
-            <select onChange={this.MultibillChange} value={this.state.MultibillSelected}>
-              {MultibillList}
-            </select>
-            <a className="add-Multibill" onClick={this.addMultibillList}><i className="fa fa-plus-square"></i> Add New List</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a className="remove-Multibill" onClick={this.removeMultibillList}><i className="fa fa-minus-square"></i> Remove Current List</a>
-            <hr/>
+            <div className="multibill-header">
+              <label className="multibill-select-label">Select List to Edit:</label>
+              <select onChange={this.MultibillChange} value={this.state.MultibillSelected}>
+                {MultibillList}
+              </select>
+              <div className="list-controls">
+                <a className="add-Multibill" onClick={this.addMultibillList}><i className="fa fa-plus-square"></i> Add New List</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a className="remove-Multibill" onClick={this.removeMultibillList}><i className="fa fa-minus-square"></i> Remove Selected List</a>
+              </div>
+            </div>
             {MultibillData}
+
+            <div className="task-wrapper">
+              {MultibillTasks}
+            </div>
           </span>
         : <div className="no-Multibill">
           No Multi-bill lists found. <a onClick={this.addMultibillList}>Click here</a> to add a new list
