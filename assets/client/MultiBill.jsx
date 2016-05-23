@@ -17,7 +17,7 @@ var Multibill = React.createClass({
   },
   componentDidUpdate: function(){
     if (this.state.status === "add"){
-      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks: this.props.Multibill[this.props.Multibill.length - 1].tasks,});
+      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks: this.props.Multibill[this.props.Multibill.length - 1].tasks});
     }
     else if (this.state.status === "remove"){
       if (this.props.Multibill.length > 0){
@@ -40,7 +40,7 @@ var Multibill = React.createClass({
     var Multibill = this.props.Multibill;
     for (var i = 0; i < Multibill.length; i++){
       if (parseInt(Multibill[i].id) === parseInt(e.target.value)){
-        this.setState({MultibillSelected: e.target.value, title: Multibill[i].title});
+        this.setState({MultibillSelected: e.target.value, title: Multibill[i].title, tasks: Multibill[i].tasks});
       }
     }
     
