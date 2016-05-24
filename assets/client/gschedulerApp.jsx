@@ -177,11 +177,13 @@ var GSchedulerApp = React.createClass({
     chrome.runtime.sendMessage({running: false}, function(response) {});
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
-      GenomeAPI.postTimeEntries(tasks)
-      .then(function(data){scope.backUp(tasks);})
+      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill)
+      .then(function(data){
+        scope.backUp(tasks);
+      })
       .then(function(data){
         _.each(tasks, scope.destroy);
-      }).then(function(){console.log(scope.props.model.backup);});
+      });
     }
   },
   openGenome: function(task){
