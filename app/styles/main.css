@@ -2667,7 +2667,6 @@ footer {
       cursor: pointer; }
   #edit-Multibill .multibill-data {
     padding: 10px 10px;
-    background: #fff;
     border-bottom: 1px solid #ddd; }
   #edit-Multibill .id-wrapper {
     width: 100%;
@@ -2679,15 +2678,17 @@ footer {
       width: 90px;
       display: inline-block; }
     #edit-Multibill .id-wrapper.newTask label {
-      width: 160px; }
+      width: 105px; }
     #edit-Multibill .id-wrapper.editTask {
       width: 155px;
       display: inline-block; }
   #edit-Multibill .task-wrapper {
-    padding: 10px 20px;
+    padding: 10px;
     height: calc(100% - 223px);
     overflow-y: auto;
     background: #eee; }
+  #edit-Multibill .task-headline {
+    margin-bottom: 15px; }
   #edit-Multibill .details-wrapper {
     display: inline-block;
     width: calc(100% - 155px);

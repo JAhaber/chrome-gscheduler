@@ -43,7 +43,6 @@
 
   .multibill-data{
     padding:10px 10px;
-    background: #fff;
     border-bottom: 1px solid #ddd;
   }
   .id-wrapper{
@@ -62,7 +61,7 @@
 
     &.newTask{
       label{
-        width:160px;
+        width:105px;
       }
     }
 
@@ -72,10 +71,13 @@
     }
   }
   .task-wrapper{
-    padding:10px 20px;
+    padding:10px;
     height: calc(100% - 223px);
     overflow-y:auto;
     background: #eee;
+  }
+  .task-headline{
+    margin-bottom:15px;
   }
   .details-wrapper{
   	display:inline-block;

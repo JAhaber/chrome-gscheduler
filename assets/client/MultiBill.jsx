@@ -90,7 +90,8 @@ var Multibill = React.createClass({
       value = value.substring(1);
     }
 
-    
+    scope.resetTask(key, tasks, selected);
+
     if (value === "") { //Remove the task completely if the value is null
       tasks = tasks.filter(function(task){
         return task.key !== key;
@@ -120,17 +121,10 @@ var Multibill = React.createClass({
           if (selected === scope.state.MultibillSelected)
             scope.setState({tasks:tasks});
           
-        }, function(error){
-          scope.resetTask(key, tasks, selected);
-        });
-      }
-      else{
-        scope.resetTask(key, tasks, selected);
+        }, function(error){});
       }
     }
-    else {
-      scope.resetTask(key, tasks, selected);
-    }
+    
   },
 
   resetTask: function(key, tasks, selected){
@@ -201,7 +195,7 @@ var Multibill = React.createClass({
         <hr/>
 
         <div className="id-wrapper newTask">
-          <label>Add Task to Selected List:</label>
+          <label>Add Task to List:</label>
           <input 
             type="text" 
             name="id-edit" 
@@ -240,6 +234,10 @@ var Multibill = React.createClass({
             {MultibillData}
 
             <div className="task-wrapper">
+            {this.state.tasks.length > 0 ?
+              <label className="task-headline"><u>{this.state.tasks.length} Tasks</u>:
+                <br/><small>(To remove a task, delete it's ID)</small></label>
+            : ""}
               {MultibillTasks}
             </div>
           </span>
