@@ -36,8 +36,9 @@
   .list-controls{
     text-align:right;
     margin-right:25px;
-    .add-Multibill, .remove-Multibill{
-    	cursor:pointer;
+    .clone-Multibill, .remove-Multibill{
+      margin-left:10px;
+     	cursor:pointer;
     }
   }
 

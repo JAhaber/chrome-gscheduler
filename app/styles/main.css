@@ -2663,7 +2663,8 @@ footer {
   #edit-Multibill .list-controls {
     text-align: right;
     margin-right: 25px; }
-    #edit-Multibill .list-controls .add-Multibill, #edit-Multibill .list-controls .remove-Multibill {
+    #edit-Multibill .list-controls .clone-Multibill, #edit-Multibill .list-controls .remove-Multibill {
+      margin-left: 10px;
       cursor: pointer; }
   #edit-Multibill .multibill-data {
     padding: 10px 10px;

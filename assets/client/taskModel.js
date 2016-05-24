@@ -110,6 +110,26 @@ TaskModel.prototype.addMultibill = function () {
 	this.inform();
 };
 
+TaskModel.prototype.cloneMultibill = function (id) {
+	var newID = 0;
+	var tasks = [];
+	for (var i = 0; i < this.Multibill.length; i++)
+	{
+		if (this.Multibill[i].id >= newID)
+			newID = this.Multibill[i].id + 1;
+		if (parseInt(this.Multibill[i].id) === parseInt(id)){
+			tasks = this.Multibill[i].tasks;
+		}
+	}
+
+	this.Multibill.push({id: newID, title: "Multi-bill List " + newID, tasks: []});
+
+	for (var j = 0; j < tasks.length; j++){
+		this.Multibill[this.Multibill.length - 1].tasks.push({key: Utils.uuid(), id: tasks[j].id, projectID: tasks[j].projectID, title: tasks[j].title, projectName: tasks[j].projectName});
+	}
+	this.inform();
+};
+
 TaskModel.prototype.removeMultibill = function(id){
 	this.Multibill = this.Multibill.filter(function (item) {
 		return parseInt(item.id) !== parseInt(id);

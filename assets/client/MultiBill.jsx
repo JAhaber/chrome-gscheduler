@@ -17,7 +17,7 @@ var Multibill = React.createClass({
   },
   componentDidUpdate: function(){
     if (this.state.status === "add"){
-      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks: []});
+      this.setState({MultibillSelected: this.props.Multibill[this.props.Multibill.length - 1].id, status: null, title: this.props.Multibill[this.props.Multibill.length - 1].title, tasks:  this.props.Multibill[this.props.Multibill.length - 1].tasks});
     }
     else if (this.state.status === "remove"){
       if (this.props.Multibill.length > 0){
@@ -31,6 +31,10 @@ var Multibill = React.createClass({
   addMultibillList: function(){
     this.setState({status: "add"});
     this.props.model.addMultibill();
+  },
+  cloneMultibillList: function(){
+    this.setState({status: "add"});
+    this.props.model.cloneMultibill(this.state.MultibillSelected);
     
   },
   removeMultibillList: function(){
@@ -226,9 +230,9 @@ var Multibill = React.createClass({
                 {MultibillList}
               </select>
               <div className="list-controls">
-                <a className="add-Multibill" onClick={this.addMultibillList}><i className="fa fa-plus-square"></i> Add New List</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a className="remove-Multibill" onClick={this.removeMultibillList}><i className="fa fa-minus-square"></i> Remove Selected List</a>
+                <a className="add-Multibill" onClick={this.addMultibillList}><i className="fa fa-plus-square">&nbsp;Add&nbsp;New&nbsp;List</i></a>
+                <a className="clone-Multibill" onClick={this.cloneMultibillList}><i className="fa fa-copy">&nbsp;Clone&nbsp;Selected&nbsp;List</i></a>
+                <a className="remove-Multibill" onClick={this.removeMultibillList}><i className="fa fa-minus-square">&nbsp;Remove&nbsp;Selected&nbsp;List</i></a>
               </div>
             </div>
             {MultibillData}
