@@ -12,7 +12,8 @@ var Multibill = React.createClass({
       title: this.props.Multibill.length > 0 ? this.props.Multibill[0].title : "",
       tasks: this.props.Multibill.length > 0 ? this.props.Multibill[0].tasks : [],
       status: null,
-      newTaskID: ""
+      newTaskID: "",
+      confirmRemove: false
     };
   },
   componentDidUpdate: function(){
@@ -37,9 +38,17 @@ var Multibill = React.createClass({
     this.props.model.cloneMultibill(this.state.MultibillSelected);
     
   },
-  removeMultibillList: function(){
-    this.setState({status: "remove"});
-    this.props.model.removeMultibill(this.state.MultibillSelected);
+  confirmRemove: function(){
+    this.setState({confirmRemove: true});
+  },
+  removeMultibillList: function(e){
+    var conf = e.target.getAttribute("data-confirm");
+    if (conf === "true"){
+      this.setState({confirmRemove: false, status: "remove"});
+      this.props.model.removeMultibill(this.state.MultibillSelected);
+    }
+    else
+      this.setState({confirmRemove: false});
   },
   MultibillChange: function(e){
     var Multibill = this.props.Multibill;
@@ -232,7 +241,7 @@ var Multibill = React.createClass({
               <div className="list-controls">
                 <a className="add-Multibill" onClick={this.addMultibillList}><i className="fa fa-plus-square">&nbsp;Add&nbsp;New&nbsp;List</i></a>
                 <a className="clone-Multibill" onClick={this.cloneMultibillList}><i className="fa fa-copy">&nbsp;Clone&nbsp;Selected&nbsp;List</i></a>
-                <a className="remove-Multibill" onClick={this.removeMultibillList}><i className="fa fa-minus-square">&nbsp;Remove&nbsp;Selected&nbsp;List</i></a>
+                <a className="remove-Multibill" onClick={this.confirmRemove}><i className="fa fa-minus-square">&nbsp;Remove&nbsp;Selected&nbsp;List</i></a>
               </div>
             </div>
             {MultibillData}
@@ -248,7 +257,17 @@ var Multibill = React.createClass({
         : <div className="no-Multibill">
           No Multi-bill lists found. <a onClick={this.addMultibillList}>Click here</a> to add a new list
         </div> }
-
+        {this.state.confirmRemove ?
+          <div>
+            <div className="modal-overlay">
+            </div>
+            <div className="modal-confirmRemove">
+              <div>Are you sure you want to remove {this.state.title}?</div>
+              <div className="btn btn-confirm" onClick={this.removeMultibillList} data-confirm="true">Remove</div>
+              <div className="btn btn-cancel" onClick={this.removeMultibillList} data-confirm="false">Cancel</div>
+            </div>
+          </div>
+          : ""}
       </section>
     );
   }

@@ -110,4 +110,44 @@
     font-size: 19px;
   }
   
+  .modal-overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: #000;
+    opacity:0.5;
+    z-index:1;
+  }
+
+  .modal-confirmRemove{
+    position:absolute;
+    top:20px;
+    left:5%;
+    width:90%;
+    height:auto;
+    background: #fff;
+    padding: 20px;
+    z-index:2;
+    .btn{
+      margin: 20px 10px 0 0;
+      background: #ddd;
+      width: 100px;
+      text-align: center;
+      border-radius: 4px;
+      padding: 4px;
+      display: inline-block;
+      cursor:pointer;
+      &:hover{
+        background:#ADADAD;
+      }
+      &.btn-confirm{
+        background:#FF7575;
+        &:hover{
+          background:#FF1313;
+        }
+      }
+    }
+  }
 }
