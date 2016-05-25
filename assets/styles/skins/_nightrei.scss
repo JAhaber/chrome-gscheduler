@@ -78,7 +78,7 @@ bgall@klick.com
     #task-list .details, .task-list .details{
         background-color: #444;
     }
-    #task-list .details div label, .task-list .details div label{
+    #task-list .details div label, .task-list .details div label, #task-list .details .fa-edit{
         color: #65D5F0;
     }
 
@@ -167,4 +167,29 @@ bgall@klick.com
         background: #333;
         color: #FFF;
     }
+
+    #edit-Multibill{
+        background:#333;
+        color:#55C5E0;
+        .list-controls a{
+            color:#fff;
+            &:hover{
+                color:#55C5E0;
+            }
+        }
+        .task-wrapper{
+            background: #444;
+            color:#65D5F0;
+             .details-wrapper{
+                .task-title{
+                    color:#55C5E0;
+                }
+                .task-project{
+                    color:#f22265;
+                }
+            }
+        }
+       
+    }
 }
+

@@ -230,7 +230,7 @@ bgall@klick.com
     color: #55C5E0; }
   .skin-nightrei #task-list .details, .skin-nightrei .task-list .details {
     background-color: #444; }
-  .skin-nightrei #task-list .details div label, .skin-nightrei .task-list .details div label {
+  .skin-nightrei #task-list .details div label, .skin-nightrei .task-list .details div label, .skin-nightrei #task-list .details .fa-edit {
     color: #65D5F0; }
   .skin-nightrei #task-list .border-left, .skin-nightrei .task-list .border-left {
     border-bottom: 0; }
@@ -284,5 +284,19 @@ bgall@klick.com
   .skin-nightrei .updateLog {
     background: #333;
     color: #FFF; }
+  .skin-nightrei #edit-Multibill {
+    background: #333;
+    color: #55C5E0; }
+    .skin-nightrei #edit-Multibill .list-controls a {
+      color: #fff; }
+      .skin-nightrei #edit-Multibill .list-controls a:hover {
+        color: #55C5E0; }
+    .skin-nightrei #edit-Multibill .task-wrapper {
+      background: #444;
+      color: #65D5F0; }
+      .skin-nightrei #edit-Multibill .task-wrapper .details-wrapper .task-title {
+        color: #55C5E0; }
+      .skin-nightrei #edit-Multibill .task-wrapper .details-wrapper .task-project {
+        color: #f22265; }
 
 /*# sourceMappingURL=skins.css.map */

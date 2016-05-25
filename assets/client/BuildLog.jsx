@@ -4,6 +4,23 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+       <h1>GScheduler Version: 0.4.0 Changelog:</h1>
+        
+        <ul>
+          <p>Multi-bill (Beta)</p>
+          <li>Introducting Multi-bill, a new way to track your time when you have multiple projects on the go</li>
+          <li>Multi-bill allows you to track multiple tasks at once and divides your tracked time evenly among them when you save to Genome</li>
+          <li>Select multi-bill as your task type and use the dropdown to choose a list to bill to</li>
+          <li>Use the "edit" button that appears in your task to change, add, or remove lists. Each list has it's own set of tasks for billing</li>
+          <li><strong>Warning: When saving to Genome, your Multi-bill tasks will save to whatever is on the Multi-bill list at the time of saving, not what was on the list when you started the task.</strong> If you want different Multi-bill tasks, create different lists!</li>
+          <li>This release should be stable, but if you find any bugs with Multi-bill, please email them to jhaber@katalystadvantage.com</li>
+
+          <div className="divider"></div>
+
+          <p>Bugs</p>
+          <li>Many React warnings have been fixed and should no longer appear in the console</li>
+       </ul>
+
       <h1>GScheduler Version: 0.3.2 Changelog:</h1>
         
         <ul>
