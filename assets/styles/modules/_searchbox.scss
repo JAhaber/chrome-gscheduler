@@ -40,24 +40,32 @@
 
 }
 .tt-dataset-tickets{
-  border-bottom: 1px solid #F2F2F2;
-  &:last-child{
-    border-bottom:none;
-  }
-}
-.tt-suggestion {
-  padding: 3px 20px;
-  font-size: 12px;
-  line-height: 24px;
-  border-bottom: 1px solid #F2F2F2;
-  &:last-child{
-    border-bottom:none;
+ 
+  .tt-suggestion {
+    padding: 3px 20px;
+    font-size: 12px;
+    line-height: 24px;
+    border-top: 1px solid #F2F2F2;
+    
+
+    p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 
-  p {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  &:first-child{
+    .tt-suggestion:first-child{
+      border-top:none;
+    }
+  }
+}
+
+.tt-dataset-tickets:empty + .tt-dataset-tickets{
+
+  .tt-suggestion:first-child{
+    border-top:none;
   }
 }
 
