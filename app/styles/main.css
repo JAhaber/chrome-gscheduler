@@ -2325,6 +2325,11 @@ bgall@klick.com
   border-radius: 8px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); }
 
+.tt-dataset-tickets {
+  border-bottom: 1px solid #F2F2F2; }
+  .tt-dataset-tickets:last-child {
+    border-bottom: none; }
+
 .tt-suggestion {
   padding: 3px 20px;
   font-size: 12px;

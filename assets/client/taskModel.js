@@ -50,6 +50,7 @@ TaskModel.prototype.inform = function () {
 
 TaskModel.prototype.addTask = function (task, start, stop) {
 	var isFavorite = this.checkIfFavorite(task.ticketID);
+
 	var newTask = {
 		id: Utils.uuid(),
 		title: task.title,
@@ -62,6 +63,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		Multibill: task.Multibill,
 		gap: {}
 	};
+	console.log(newTask);
 	if (stop){
 		this.tasks = this.tasks.map(function (taskToStop) {
 			return taskToStop !== task ?

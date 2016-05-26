@@ -391,6 +391,7 @@ var GSchedulerApp = React.createClass({
               name="search"
               placeholder="Task name/ID"
               onSelect={this.addTask} onCreate={this.saveTaskTitle} addTask={this.createTask}
+              Multibill={this.props.model.Multibill}
             />
             <input 
               id="new-note"
