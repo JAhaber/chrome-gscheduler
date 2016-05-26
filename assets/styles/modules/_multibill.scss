@@ -70,6 +70,18 @@
     &.editTask{
       width:155px;
       display:inline-block;
+      position: relative;
+
+      .taskRemove{
+        position: absolute;
+        top: 4px;
+        left: 131px;
+        cursor:pointer;
+        color:#d21245;
+        &:hover{
+          color:#FF1313;
+        }
+      }
     }
   }
   .task-wrapper{

@@ -86,7 +86,18 @@ var Multibill = React.createClass({
 
     this.setState({tasks: tasks});
   },
+  handleTaskRemove: function(e){
+    var key = e.target.getAttribute("data-key") || e.target.parentNode.getAttribute("data-key");
+    var tasks = this.state.tasks;
+    var selected = this.state.MultibillSelected;
 
+    tasks = tasks.filter(function(task){
+      return task.key !== key;
+    });
+    if (selected === this.state.MultibillSelected)
+      this.setState({tasks:tasks});
+    this.props.model.handleMultibillTaskIDChange(selected, tasks);
+  },
   handleTaskIDBlur: function(e){
     var value = e.target.value;
     var tasks = this.state.tasks;
@@ -106,12 +117,7 @@ var Multibill = React.createClass({
     scope.resetTask(key, tasks, selected);
 
     if (value === "") { //Remove the task completely if the value is null
-      tasks = tasks.filter(function(task){
-        return task.key !== key;
-      });
-      if (selected === this.state.MultibillSelected)
-        this.setState({tasks:tasks});
-      this.props.model.handleMultibillTaskIDChange(selected, tasks);
+     this.handleTaskRemove(e);
     }
     else if (value == parseInt(value, 10)){
       var duplicate = false; //Check if the task already exists in the list to prevent duplicates
@@ -173,6 +179,7 @@ var Multibill = React.createClass({
         <div key={task.key}>
           { id > 0 ? <hr/> : ""}
           <div className="id-wrapper editTask">
+            <a className="taskRemove" onClick={scope.handleTaskRemove} data-key={task.key}><i className="fa fa-remove"></i></a>
             <label>Task ID:</label>
             <input 
               type="text" 

@@ -2704,7 +2704,16 @@ footer {
       width: 105px; }
     #edit-Multibill .id-wrapper.editTask {
       width: 155px;
-      display: inline-block; }
+      display: inline-block;
+      position: relative; }
+      #edit-Multibill .id-wrapper.editTask .taskRemove {
+        position: absolute;
+        top: 4px;
+        left: 131px;
+        cursor: pointer;
+        color: #d21245; }
+        #edit-Multibill .id-wrapper.editTask .taskRemove:hover {
+          color: #FF1313; }
   #edit-Multibill .task-wrapper {
     padding: 10px;
     height: calc(100% - 223px);
