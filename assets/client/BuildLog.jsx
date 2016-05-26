@@ -4,6 +4,13 @@ var LogItem = React.createClass({
    render: function() {
     return (
       <div className="updateLog">
+      <h1>GScheduler Version: 0.4.1 Changelog:</h1>
+        
+        <ul>
+          <p>Bug Fixes</p>
+          <li>Fixed issue with Multi-bill where after removing your last remaining list you would be unable to create a new list until you restart the app</li>
+       </ul>
+
        <h1>GScheduler Version: 0.4.0 Changelog:</h1>
         
         <ul>
@@ -17,7 +24,7 @@ var LogItem = React.createClass({
 
           <div className="divider"></div>
 
-          <p>Bugs</p>
+          <p>Bug Fixes</p>
           <li>Many React warnings have been fixed and should no longer appear in the console</li>
        </ul>
 
@@ -52,7 +59,7 @@ var LogItem = React.createClass({
 
           <div className="divider"></div>
 
-          <p>Bugs</p>
+          <p>Bug Fixes</p>
           <li>The location that the notification system searches for messages no longer exists and was throwing an error in the console. The call has been updated to point to the new location.</li>
 
        </ul>

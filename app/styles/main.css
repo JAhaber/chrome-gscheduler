@@ -2286,6 +2286,10 @@ bgall@klick.com
         color: #55C5E0; }
       .skin-nightrei #edit-Multibill .task-wrapper .details-wrapper .task-project {
         color: #f22265; }
+    .skin-nightrei #edit-Multibill .modal-confirmRemove {
+      background: #444; }
+      .skin-nightrei #edit-Multibill .modal-confirmRemove .btn {
+        color: #444; }
 
 .typeahead,
 .tt-query,
@@ -2671,7 +2675,8 @@ footer {
     display: inline-block;
     margin: 10px 0; }
   #edit-Multibill .no-Multibill {
-    margin-top: 10px; }
+    margin-top: 10px;
+    margin-left: 10px; }
     #edit-Multibill .no-Multibill a {
       cursor: pointer; }
   #edit-Multibill .list-controls {
@@ -2740,12 +2745,13 @@ footer {
     z-index: 1; }
   #edit-Multibill .modal-confirmRemove {
     position: absolute;
-    top: 20px;
+    top: 50px;
     left: 5%;
     width: 90%;
     height: auto;
     background: #fff;
     padding: 20px;
+    border-radius: 5px;
     z-index: 2; }
     #edit-Multibill .modal-confirmRemove .btn {
       margin: 20px 10px 0 0;

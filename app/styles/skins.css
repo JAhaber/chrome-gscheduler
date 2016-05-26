@@ -298,5 +298,9 @@ bgall@klick.com
         color: #55C5E0; }
       .skin-nightrei #edit-Multibill .task-wrapper .details-wrapper .task-project {
         color: #f22265; }
+    .skin-nightrei #edit-Multibill .modal-confirmRemove {
+      background: #444; }
+      .skin-nightrei #edit-Multibill .modal-confirmRemove .btn {
+        color: #444; }
 
 /*# sourceMappingURL=skins.css.map */

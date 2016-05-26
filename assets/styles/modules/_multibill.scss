@@ -29,6 +29,7 @@
 
   .no-Multibill{
   	margin-top:10px;
+    margin-left:10px;
   	a{
   		cursor:pointer;
   	}
@@ -123,12 +124,13 @@
 
   .modal-confirmRemove{
     position:absolute;
-    top:20px;
+    top:50px;
     left:5%;
     width:90%;
     height:auto;
     background: #fff;
     padding: 20px;
+    border-radius: 5px;
     z-index:2;
     .btn{
       margin: 20px 10px 0 0;

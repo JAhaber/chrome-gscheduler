@@ -25,7 +25,7 @@ var Multibill = React.createClass({
         this.setState({MultibillSelected: this.props.Multibill[0].id, status: null, title: this.props.Multibill[0].title, tasks: this.props.Multibill[0].tasks});
       }
       else{
-        this.setState({MultibillSelected: -1, status: null, title: "", tasks: ""});
+        this.setState({MultibillSelected: -1, status: null, title: "", tasks: []});
       }      
     }
   },
