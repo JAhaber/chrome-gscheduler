@@ -5,6 +5,18 @@ var LogItem = React.createClass({
     return (
       <div className="updateLog">
 
+      <h1>GScheduler Version: 0.4.3 Changelog:</h1>
+        
+        <ul>
+          <p>Multi-bill</p>
+          <li>When clicking the edit button, the Multi-bill page will now default to the list item you had selected in your task, or the first list item if none was selected</li>
+
+          <div className="divider"></div>
+
+          <p>Bug Fixes</p>
+          <li>Fixed issue with Multi-bill where only the first list would save properly, and other lists would save as a note</li>
+       </ul>
+
       <h1>GScheduler Version: 0.4.2 Changelog:</h1>
         
         <ul>

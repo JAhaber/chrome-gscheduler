@@ -29,7 +29,8 @@ var GSchedulerApp = React.createClass({
       totalTaskTime: '',
       showLog: false,
       message: "",
-      showMultibill: false
+      showMultibill: false,
+      multibillDefault: 0
     };
   },
   componentDidMount: function() {
@@ -219,8 +220,11 @@ var GSchedulerApp = React.createClass({
   toggleLog: function(){
     this.setState({showLog: !this.state.showLog});
   },
-  toggleMultibill: function(){
-    this.setState({showMultibill: !this.state.showMultibill});    
+  toggleMultibill: function(id){
+    if (id && this.state.showMultibill === false)
+      this.setState({showMultibill: !this.state.showMultibill, multibillDefault: id});
+    else
+      this.setState({showMultibill: !this.state.showMultibill, multibillDefault: 0});       
   },
   render: function() {
     var main;
@@ -409,6 +413,7 @@ var GSchedulerApp = React.createClass({
             model={this.props.model}
             Multibill={this.props.model.Multibill}
             closeMultibill={this.toggleMultibill}
+            defaultId={this.state.multibillDefault}
           />
         : ""}
 

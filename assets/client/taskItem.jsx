@@ -249,6 +249,9 @@ var TaskItem = React.createClass({
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
       this.setState({timeElapsed: timeElapsed});
   },
+  toggleMultibill: function(){
+    this.props.toggleMultibill(this.props.task.Multibill);
+  },
  
   render: function() {
     var task = this.props.task;
@@ -409,7 +412,7 @@ var TaskItem = React.createClass({
                       {MultibillList}
                     </select>
                     &nbsp;&nbsp;
-                    <a className="edit-Multibill" onClick={this.props.toggleMultibill} title="Edit your Multibill Lists">
+                    <a className="edit-Multibill" onClick={this.toggleMultibill} title="Edit your Multibill Lists">
                       <i className="fa fa-edit"> Edit</i>
                     </a>
                   </div>

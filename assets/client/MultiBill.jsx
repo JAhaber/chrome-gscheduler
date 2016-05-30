@@ -7,10 +7,20 @@ var taskVal = null;
 
 var Multibill = React.createClass({
   getInitialState: function () {
+    var defaultId = 0;
+    var Multibill = this.props.Multibill;
+    if (this.props.defaultId > -1){
+      for (var i = 0; i < Multibill.length; i++){
+        if (parseInt(Multibill[i].id) === parseInt(this.props.defaultId)){
+          defaultId = i;
+          break;
+        }
+      }
+    }
     return {
-      MultibillSelected: this.props.Multibill.length > 0 ? this.props.Multibill[0].id : -1,
-      title: this.props.Multibill.length > 0 ? this.props.Multibill[0].title : "",
-      tasks: this.props.Multibill.length > 0 ? this.props.Multibill[0].tasks : [],
+      MultibillSelected: Multibill.length > 0 ? Multibill[defaultId].id : -1,
+      title: Multibill.length > 0 ? Multibill[defaultId].title : "",
+      tasks: Multibill.length > 0 ? Multibill[defaultId].tasks : [],
       status: null,
       newTaskID: "",
       confirmRemove: false
