@@ -137,8 +137,10 @@ var GenomeAPI = {
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 
 			if (newTask.Multibill){
+				var listFound = false;
 				for (var i = 0; i < multibill.length; i++){
 			      if (parseInt(multibill[i].id) === parseInt(newTask.Multibill) && multibill[i].tasks.length > 0){
+			      	listFound = true;
 			      	var durationPerTask = Math.floor(duration / multibill[i].tasks.length);
 			      	var curTask;
 			      	for (var j = 0; j < multibill[i].tasks.length; j++){
@@ -152,11 +154,11 @@ var GenomeAPI = {
 			      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 			      	break;
 			      }
-			      else{
+			    }
+			    if (listFound === false){
 			      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 					newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
 					deferred.resolve(GenomeAPI.postTimeEntry(newTask));
-			      }
 			    }
 			}
 			else{
