@@ -8,7 +8,7 @@ var selected = false;
 var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var multi = [];
-var apiEndpoint = 'https://genome.klick.com/api/Ticket.json?Enabled=true&ForAutocompleter=false&Keyword=%QUERY&NumRecords=100';
+var apiEndpoint = 'https://genome.klick.com/api/Ticket.json?Enabled=true&ForAutocompleter=false&Keyword=%QUERY&NumRecords=10';
 
 // Instantiate the Bloodhound suggestion engine
 var tickets = new Bloodhound({
@@ -20,7 +20,7 @@ var tickets = new Bloodhound({
     remote: {
       url: apiEndpoint,
       rateLimitBy: 'throttle',
-      rateLimitWait: 300,
+      rateLimitWait: 0,
       filter: function (tickets) {
 				// Map the remote source JSON array to a JavaScript object array
 				return $.map(tickets.Entries, function (ticket) {
