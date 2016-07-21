@@ -1,6 +1,8 @@
 
 var React = require('react');
 var Moment = require('moment');
+var GenomeAPI = require('./GenomeAPI.js');
+var showProject = false;
 
 var TaskItem = React.createClass({
 	getInitialState: function () {
@@ -16,7 +18,8 @@ var TaskItem = React.createClass({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       nonProjectActive: task.categoryID ? true : false,
-      MultibillActive: task.Multibill ? true : false
+      MultibillActive: task.Multibill ? true : false,
+      projectName: null
     };
 	},
   componentDidMount: function() {
@@ -24,6 +27,24 @@ var TaskItem = React.createClass({
       this.interval = setInterval(this.tick, 500);
     else{
       this.updateDuration();
+    }
+    this.getProjectName();
+  },
+  getProjectName: function(){
+    var that = this;
+    if (this.props.task.projectID !== null){
+      GenomeAPI.getProjectInfo(this.props.task.ticketID).then(function(results){
+          
+          for (var i = 0; i < results.Entries.length; i++)
+          {
+            if (results.Entries[i].ProjectID){
+                  that.setState({projectName: results.Entries[i].ProjectName})            
+            }
+          }
+        });
+    }
+    else{
+      that.setState({projectName: null})
     }
   },
   componentDidUpdate: function(){
@@ -44,6 +65,7 @@ var TaskItem = React.createClass({
     setTimeout(function(){
       task.flash = false;
     }, 300);*/
+    this.getProjectName();
     task.hasChanged = false;
    }
     
@@ -384,6 +406,7 @@ var TaskItem = React.createClass({
                 </span>
               </div>
               
+            {this.state.projectName && showProject ? <div className="projectName" title={"Project: " + this.state.projectName}>{this.state.projectName}</div> : ""}
             </div>
           {task.expanded ? 
           <div className='details'>
@@ -526,6 +549,20 @@ var TaskItem = React.createClass({
       </li>
     );
   }
+});
+
+chrome.storage.sync.get({
+    showProject: false
+  }, function(items) {
+    showProject = items.showProject;
+  });
+
+chrome.storage.onChanged.addListener(function(changes, namespace){
+  chrome.storage.sync.get({
+    showProject: false
+  }, function(items) {
+    showProject = items.showProject;
+  });
 });
 
 module.exports = TaskItem;

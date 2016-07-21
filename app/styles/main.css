@@ -2961,6 +2961,13 @@ i {
     #task-list li.task .icons-wrapper, .task-list li.task .icons-wrapper {
       width: 83px;
       display: inline-block; }
+    #task-list li.task .projectName, .task-list li.task .projectName {
+      width: calc(100% - 156px);
+      float: left;
+      text-align: left;
+      font-size: 90%;
+      color: #d21245;
+      margin-left: 30px; }
   #task-list .details, .task-list .details {
     width: 100%;
     height: auto;

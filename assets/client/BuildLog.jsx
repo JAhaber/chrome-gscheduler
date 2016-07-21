@@ -5,6 +5,14 @@ var LogItem = React.createClass({
     return (
       <div className="updateLog">
 
+      <h1>GScheduler Version: 0.4.4 Changelog:</h1>
+        
+        <ul>
+          <p>Project Name</p>
+          <li>An option to view project names under the task information has been added.</li>
+
+        </ul>
+
       <h1>GScheduler Version: 0.4.3 Changelog:</h1>
         
         <ul>

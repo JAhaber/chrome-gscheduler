@@ -16,7 +16,8 @@ var OptionScript = React.createClass({
       recentTasks: $('#recentTasks').val(),
       genomeTask: $('#showGenomeTask').prop('checked'),
       customStyles: $('input[name=skin]:checked').val() === "custom" ? $('#customStyles').val() : "",
-      skin: $('input[name=skin]:checked').val()
+      skin: $('input[name=skin]:checked').val(),
+      showProject: $('#showProject').prop('checked')
 
     }, function() {
       // Update status to let user know options were saved.
@@ -51,7 +52,8 @@ var OptionScript = React.createClass({
       recentTasks: "1",
       genomeTask: true,
       customStyles: "",
-      skin: ""
+      skin: "",
+      showProject: false
     }, function(items) {
       var radioType = $('input[name=type]');
       for (i = 0; i < radioType.length; i++) {
@@ -78,6 +80,7 @@ var OptionScript = React.createClass({
       $('#recentNewestFirst').prop('checked', items.recentNewestFirst);
       $('#showBackup').prop('checked', items.showBackup);
       $('#showGenomeTask').prop('checked', items.genomeTask);
+      $('#showProject').prop('checked', items.showProject);
     });
   },
 
@@ -166,6 +169,9 @@ var OptionScript = React.createClass({
         </p>
       </div>
 
+      <div className="option">
+        <input type="checkbox" id="showProject" defaultChecked onClick={this.saveOptions}/> Show Project information for tasks
+       </div>
       <div className="option">
         <input type="checkbox" id="newestFirst" defaultChecked onClick={this.saveOptions}/> Sort tasks by newest first
        </div>
