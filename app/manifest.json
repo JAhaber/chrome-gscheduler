@@ -60,5 +60,5 @@
         "images/genome.png",
         "images/icon-19.png"
     ],
-    "content_security_policy": "script-src 'self' https://genome.klick.com; https://raw.githubusercontent.com; object-src 'self'"
+    "content_security_policy": "script-src 'self' https://www.google-analytics.com; https://genome.klick.com; https://raw.githubusercontent.com; object-src 'self'"
 }

@@ -10,6 +10,7 @@ var TaskLists = require('./TaskLists.jsx');
 var CustomStyles = require('./CustomStyles.jsx');
 var Multibill = require('./MultiBill.jsx');
 var Footer = require('./Footer.jsx');
+var Analytics = require('./analytics.js');
 var $ = require('jquery');
 window.jQuery = $;
 var Moment = require('moment');
@@ -21,6 +22,7 @@ var showBackup = true;
 var nonBillables = { "Entries" : [] };
 var genomeTask = null;
 var messageInterval = null;
+var ga = null;
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -39,6 +41,11 @@ var GSchedulerApp = React.createClass({
     messageInterval = setInterval(this.checkMessage, 7200000);
     this.getNonBillables();
     this.checkMessage();
+    GenomeAPI.getUser().then(function(data){
+      ga = Analytics.init(data.UserID);
+      Analytics.send("Page View", "Home", "App Opened");
+    });
+    
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
