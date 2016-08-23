@@ -2,11 +2,13 @@
 var React = require('react');
 var Moment = require('moment');
 var $ = require('jquery');
+var Analytics = require('./analytics.js');
 var GapItem = React.createClass({
   addTask: function(){
     var start = this.props.task.stopTime;
     var stop = Moment(start).add(this.props.gap.duration, 's').format();
     this.props.model.addGap(start, stop);
+    Analytics.send("Gap", "New Task");
   },
 	render: function() {
 

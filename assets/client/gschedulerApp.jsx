@@ -41,20 +41,21 @@ var GSchedulerApp = React.createClass({
     messageInterval = setInterval(this.checkMessage, 7200000);
     this.getNonBillables();
     this.checkMessage();
-    GenomeAPI.getUser().then(function(data){
-      ga = Analytics.init(data.UserID);
-      Analytics.send("Page View", "Home", "App Opened");
-    });
+    
+    ga = Analytics.init();
+    Analytics.send("App", "Opened");
     
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
     clearInterval(messageInterval);
+    Analytics.send("App", "Closed");
   },
   componentDidUpdate: function(){
     if(genomeTask) {
       this.createTask(genomeTask);
       genomeTask = null;
+      Analytics.send("Tasks", "Genome");
     }
   },
   checkMessage: function(){
@@ -164,19 +165,23 @@ var GSchedulerApp = React.createClass({
     var start = Moment(taskToChange.startTime).subtract(task.gap.duration, 's').format();
     start = Moment(start).format("HH:mm:ss");
     this.props.model.handleStartStopChange(taskToChange, start, Moment(taskToChange.stopTime).format("HH:mm:ss"));
+    Analytics.send("Gap", "Extend", "Next");
   },
   extendLast: function(task){
     var stop = Moment(task.stopTime).add(task.gap.duration, 's').format();
     stop = Moment(stop).format("HH:mm:ss");
     this.props.model.handleStartStopChange(task, Moment(task.startTime).format("HH:mm:ss"), stop);
+    Analytics.send("Gap", "Extend", "Last");
   },
   backUp: function(tasks){
     this.props.model.backUp(tasks);
   },
   restoreTasks: function(){
+    Analytics.send("Tasks", "Backup", "Restore Backup");
     this.props.model.restoreBackUp();
   },
   removeBackup: function(){
+    Analytics.send("Tasks", "Backup", "Remove Backup");
     this.props.model.removeBackUp();
   },
   save: function () {
@@ -191,12 +196,16 @@ var GSchedulerApp = React.createClass({
       })
       .then(function(data){
         _.each(tasks, scope.destroy);
+        Analytics.send("Tasks", "Save", "Success");
+      }).fail(function(err){
+        Analytics.send("Tasks", "Save", err);
       });
     }
   },
   openGenome: function(task){
     var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
     chrome.tabs.create({ url : 'https://genome.klick.com/scheduler/#/day/' + date});
+    Analytics.send("App", "View", "Genome Schedule");
   },
   clearTasksByDate: function(task){
     var scope = this;
@@ -225,9 +234,15 @@ var GSchedulerApp = React.createClass({
     this.setState({totalTaskTime: Moment().hour(0).minute(0).second(totalElapsedMilliseconds/1000).format('H[hrs] mm[mins]')});
   },
   toggleLog: function(){
+    if (!this.state.showLog){
+      Analytics.send("App", "View", "Log");
+    }
     this.setState({showLog: !this.state.showLog});
   },
   toggleMultibill: function(id){
+    if (!this.state.showMultibill){
+      Analytics.send("App", "View", "Multibill");
+    }
     if (id && this.state.showMultibill === false)
       this.setState({showMultibill: !this.state.showMultibill, multibillDefault: id});
     else
