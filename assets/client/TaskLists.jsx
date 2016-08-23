@@ -1,3 +1,4 @@
+var Analytics = require('./analytics.js');
 var React = require('react');
 var Moment = require('moment');
 var _ = require('underscore');
@@ -16,12 +17,21 @@ var TaskLists = React.createClass({
     };
   },
   toggleRecent: function(){
+    if (!this.state.showRecent){
+      Analytics.send("App", "View", "Recent");
+    }
     this.changeStates(!this.state.showRecent, false, false);
   },
   toggleFavorite: function(){
+    if (!this.state.showFavorite){
+      Analytics.send("App", "View", "Favorites");
+    }
     this.changeStates(false, !this.state.showFavorite, false);
   },
   toggleGenome: function(){
+    if (!this.state.showGenome){
+      Analytics.send("App", "View", "Genome Tasks");
+    }
     this.changeStates(false, false, !this.state.showGenome);
   },
   changeStates: function(recent, fav, genome){

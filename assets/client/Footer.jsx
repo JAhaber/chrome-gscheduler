@@ -1,11 +1,14 @@
 var React = require('react');
+var Analytics = require('./analytics.js');
 
 var Footer = React.createClass({
 	openOptions: function(){
     chrome.tabs.create({ url : 'chrome://extensions?options=' + chrome.runtime.id});
+    Analytics.send("App", "View", "Options");
   },
   toggleHelp: function(){
     chrome.tabs.create({ url : 'https://github.com/iDVB/chrome-gscheduler/blob/master/README.md'});
+    Analytics.send("App", "View", "Readme");
   },
   render: function() {
   

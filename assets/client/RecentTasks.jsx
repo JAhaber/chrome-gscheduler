@@ -1,4 +1,4 @@
-
+var Analytics = require('./analytics.js');
 var React = require('react');
 var Moment = require('moment');
 var _ = require('underscore');
@@ -39,6 +39,7 @@ var RecentTasks = React.createClass({
      
   },
   onPlay: function(task, event){
+    Analytics.send("Tasks", "Start", "Recent");
     this.props.onPlay({
       title: task.Title,
       ticketID: task.TicketID,

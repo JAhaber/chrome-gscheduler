@@ -55,7 +55,7 @@ var GSchedulerApp = React.createClass({
     if(genomeTask) {
       this.createTask(genomeTask);
       genomeTask = null;
-      Analytics.send("Tasks", "Genome");
+      Analytics.send("Tasks", "Start", "Genome Button");
     }
   },
   checkMessage: function(){

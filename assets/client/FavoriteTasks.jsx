@@ -1,4 +1,4 @@
-
+var Analytics = require('./analytics.js');
 var React = require('react');
 var Moment = require('moment');
 var _ = require('underscore');
@@ -22,6 +22,7 @@ var FavoriteTasks = React.createClass({
     tasks = this.props.favorites;      
   },
   onPlay: function(task, event){
+    Analytics.send("Tasks", "Start", "Favorites");
     this.props.onPlay({
       title: task.title,
       ticketID: task.ticketID,

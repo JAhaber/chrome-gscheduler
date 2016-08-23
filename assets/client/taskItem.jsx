@@ -1,4 +1,4 @@
-
+var Analytics = require('./analytics.js');
 var React = require('react');
 var Moment = require('moment');
 var GenomeAPI = require('./GenomeAPI.js');
@@ -149,6 +149,10 @@ var TaskItem = React.createClass({
     }
     
   },
+  onPlay: function(event){
+    Analytics.send("Tasks", "Start", "Existing Task");
+    this.props.onPlay(task);
+  }
   onSplit: function(event){
     var task = this.props.task;
     var newStart;
@@ -392,7 +396,7 @@ var TaskItem = React.createClass({
                       <a className="split" onClick={this.onSplit} title="Split task into two even length tasks">
                         <i className="fa fa-unlink"></i>
                       </a>
-                      <a className="play" onClick={this.props.onPlay} title="Begin tracking this task">
+                      <a className="play" onClick={this.onPlay} title="Begin tracking this task">
                         <i className="fa fa-play"></i>
                       </a>
                     </span>

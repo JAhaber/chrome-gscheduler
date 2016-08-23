@@ -1,4 +1,4 @@
-
+var Analytics = require('./analytics.js');
 var React = require('react');
 var Moment = require('moment');
 var _ = require('underscore');
@@ -41,6 +41,7 @@ var GenomeTasks = React.createClass({
      
   },
   onPlay: function(task, event){
+    Analytics.send("Tasks", "Start", "Genome Tasks");
     this.props.onPlay({
       title: task.Title,
       ticketID: task.TicketID,
