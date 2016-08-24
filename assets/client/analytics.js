@@ -14,7 +14,6 @@ var analytics = {
 		lab = lab || "";
 		GenomeAPI.getUser().then(function(data){
 			window.ga('send', 'event', cat, act, lab, data.UserID);
-			console.log(window.ga);
 		});
 	}
 }
