@@ -1,3 +1,4 @@
+var Analytics = require('./analytics.js');
 var Utils = require('../utils.js');
 var Moment = require('moment');
 var _ = require('underscore');
@@ -70,6 +71,19 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 				taskToStop :
 				Utils.extend({}, taskToStop, { stopTime: stop });
 		});
+	}
+
+	if (newTask.projectID){
+		Analytics.send("Tasks", "Type", "Project");
+	}
+	else if (newTask.categoryID){
+		Analytics.send("Tasks", "Type", "Non-Project");
+	}
+	else if (newTask.Multibill){
+		Analytics.send("Tasks", "Type", "Multibill");
+	}
+	else{
+		Analytics.send("Tasks", "Type", "Note");
 	}
 
 	chrome.runtime.sendMessage({running: true}, function(response) {});

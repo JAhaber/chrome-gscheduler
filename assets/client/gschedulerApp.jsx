@@ -43,13 +43,13 @@ var GSchedulerApp = React.createClass({
     this.checkMessage();
     
     ga = Analytics.init();
-    Analytics.send("App", "Opened");
+    Analytics.send("App", "Open");
     
   },
   componentWillUnmount: function() {
     clearInterval(this.interval);
     clearInterval(messageInterval);
-    Analytics.send("App", "Closed");
+    Analytics.send("App", "Close");
   },
   componentDidUpdate: function(){
     if(genomeTask) {
@@ -113,10 +113,11 @@ var GSchedulerApp = React.createClass({
       else
        saveTask = {title: $('#new-note').val()};
       this.createTask(saveTask);
-
+      
       this.clearText();
 
       $('#new-task').focus();
+      Analytics.send("Tasks", "Start", "Search");
     }
     
   },
@@ -177,11 +178,11 @@ var GSchedulerApp = React.createClass({
     this.props.model.backUp(tasks);
   },
   restoreTasks: function(){
-    Analytics.send("Tasks", "Backup", "Restore Backup");
+    Analytics.send("Tasks", "Backup", "Restore");
     this.props.model.restoreBackUp();
   },
   removeBackup: function(){
-    Analytics.send("Tasks", "Backup", "Remove Backup");
+    Analytics.send("Tasks", "Backup", "Remove");
     this.props.model.removeBackUp();
   },
   save: function () {

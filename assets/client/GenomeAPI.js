@@ -57,7 +57,6 @@ var GenomeAPI = {
   getUser: function() {
 		var options = {};
 		var deferred = Q.defer();
-
 		GenomeAPI.CURRENT_USER ? deferred.resolve(GenomeAPI.CURRENT_USER) : GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/User/Current.json', options)
 		.then(function(data){
 			if(data.Entries[0]) {

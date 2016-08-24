@@ -13,8 +13,8 @@ var analytics = {
 	send: function(cat, act, lab){
 		lab = lab || "";
 		GenomeAPI.getUser().then(function(data){
-			//window.ga('send', 'event', cat, act, data.UserID);
-			console.log("Event: " + cat + " " + act + " " + lab +  " " + data.UserID);
+			window.ga('send', 'event', cat, act, data.UserID);
+			//console.log("Event: " + cat + " " + act + " " + lab +  " " + data.UserID);
 		});
 	}
 }

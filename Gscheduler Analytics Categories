@@ -2,16 +2,36 @@ Gscheduler Analytics
 
 Categories:
 - App
-	- Viewed
-	- Opened
-	- Closed
+	- View
+		- Log
+		- Options
+		- Genome Schedule
+		- Multibill
+	- Open
+	- Close
 - Tasks
 	- Backup
-	- Create
+		- Restore
+		- Remove
+	- Type
+		- Project
+		- Non-Project
+		- Multibill
+		- Note
 	- Start
+		- Genome Button
+		- Search
+		- Recent
+		- Favorites
+		- Genome Tasks
+		- Existing Task
+		- Gap
 	- Edit
 	- Save
+		- Success
+		- Error Message
 	- Split
 - Gap
 	- Extend
-	- Add Task
+		- Next
+		- Last

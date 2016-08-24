@@ -1,4 +1,4 @@
-
+var Analytics = require('./analytics.js');
 var React = require('react');
 var $ = require('jquery');
 window.jQuery = $;
@@ -179,6 +179,7 @@ var SearchBox = React.createClass({
 					Multibill: task.Multibill
 
 				});
+				Analytics.send("Tasks", "Start", "Search");
 				selected = true;
 			}
 			else{

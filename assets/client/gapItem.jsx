@@ -8,7 +8,7 @@ var GapItem = React.createClass({
     var start = this.props.task.stopTime;
     var stop = Moment(start).add(this.props.gap.duration, 's').format();
     this.props.model.addGap(start, stop);
-    Analytics.send("Gap", "New Task");
+    Analytics.send("Tasks", "Start", "Gap");
   },
 	render: function() {
 

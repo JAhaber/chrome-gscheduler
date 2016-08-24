@@ -151,7 +151,7 @@ var TaskItem = React.createClass({
   },
   onPlay: function(event){
     Analytics.send("Tasks", "Start", "Existing Task");
-    this.props.onPlay(task);
+    this.props.onPlay(this.props.task);
   },
   onSplit: function(event){
     var task = this.props.task;
