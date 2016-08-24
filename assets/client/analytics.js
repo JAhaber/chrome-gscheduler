@@ -6,15 +6,15 @@ var analytics = {
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-				
+		ga('create', 'UA-82254267-1', 'auto');
 		ga('set', 'checkProtocolTask', function(){});
 		return ga;
 	},
 	send: function(cat, act, lab){
 		lab = lab || "";
 		GenomeAPI.getUser().then(function(data){
-			window.ga('send', 'event', cat, act, data.UserID);
-			//console.log("Event: " + cat + " " + act + " " + lab +  " " + data.UserID);
+			window.ga('send', 'event', cat, act, lab, data.UserID);
+			console.log(window.ga);
 		});
 	}
 }
