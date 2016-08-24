@@ -5,6 +5,14 @@ var LogItem = React.createClass({
     return (
       <div className="updateLog">
 
+      <h1>GScheduler Version: 0.4.5 Changelog:</h1>
+        
+        <ul>
+          <p>Google Analytics</p>
+          <li>Added analytics to track app usage!</li>
+
+        </ul>
+
       <h1>GScheduler Version: 0.4.4 Changelog:</h1>
         
         <ul>
