@@ -13,8 +13,13 @@ var analytics = {
 	send: function(cat, act, lab){
 		lab = lab || "";
 		GenomeAPI.getUser().then(function(data){
-			window.ga('send', 'event', cat, act, lab, data.UserID);
+			window.ga('send', 'event', cat, act, lab, analytics.encode(data.UserID));
 		});
+	},
+	encode: function(num){
+		num = num.toString(4);
+		num = parseInt(num, 8);
+		return num;
 	}
 }
 
