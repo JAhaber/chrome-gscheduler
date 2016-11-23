@@ -340,15 +340,6 @@ var TaskItem = React.createClass({
               defaultChecked={this.state.nonProjectActive}
               onChange={this.handleProjectChange}
             /> Non-project
-            </label>
-          <label className="radio">
-            <input
-              type="radio"
-              name="projectType"
-              value="Multibill"
-              defaultChecked={this.state.MultibillActive}
-              onChange={this.handleProjectChange}
-            /> Multi-bill (Beta)
           </label>
         </div>
       </span>
@@ -429,22 +420,7 @@ var TaskItem = React.createClass({
                   </select>
                 </div>
               </div>
-            : this.state.MultibillActive ? 
-              <div className="item-row">
-                <div className="item-wrap full">
-                  <label>Multibill List</label>
-                  <div className="MultibillSelect">
-                    <select value={task.Multibill ? task.Multibill : ""} onChange={this.MultibillChange}>
-                      <option value=""></option>
-                      {MultibillList}
-                    </select>
-                    &nbsp;&nbsp;
-                    <a className="edit-Multibill" onClick={this.toggleMultibill} title="Edit your Multibill Lists">
-                      <i className="fa fa-edit"> Edit</i>
-                    </a>
-                  </div>
-                </div>
-              </div>
+            
             : <div className="item-row">
                 <div className="item-wrap">
                   <label>

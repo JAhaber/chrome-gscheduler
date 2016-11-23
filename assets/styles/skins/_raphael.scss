@@ -8,20 +8,30 @@
 	.split i {
 	    color: #9ECC49;
 	}
+	.destroy i{
+		color: #b3b3b3;
+	}
 
 	header{
-	    background: linear-gradient(#C73F3F, #00867F);
+	    background: linear-gradient(#C73F3F, #80001d);
 	}
-	.todayInfo{    background-color: #00867F;}
+	.todayInfo{    background-color: #80001d;}
 	.todayInfo .today, .todayInfo .duration{ color:#E6E6E6; }
 
-	#main{background-color: #00867F;}
-	#task-list li.task .task-wrapper{background-color: #00867F;}
-	#task-list li.task .task-wrapper label, #task-list li.task .task-wrapper .timeElapsed{color:#E6E6E6;}
+	#main{background-color: #80001d;}
+	#task-list li.task .task-wrapper{background-color: #730000;}
+	#task-list li.task .task-wrapper label, #task-list li.task .task-wrapper .timeElapsed{color:#ffffff;}
 
-	#task-list .details{background-color: #43A9A3;}
+	#task-list li.task .projectName, .task-list li.task .projectName{
+		color: #b3b3b3;
+	}
+
+	#task-list .details{background-color: #730000}
 	#task-list .details div label{color:#E6E6E6;}
-
+	
+	#task-list .border-left{
+		border-bottom: 1px solid #b3b3b3;
+	}
 	#task-list .border-left.hasCategory{
 	background-color: #B9B9B9;
 	}

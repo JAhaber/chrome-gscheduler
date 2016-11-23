@@ -2068,22 +2068,28 @@ html {
   color: #33BFFF !important; }
 .skin-raphael .split i {
   color: #9ECC49; }
+.skin-raphael .destroy i {
+  color: #b3b3b3; }
 .skin-raphael header {
-  background: linear-gradient(#C73F3F, #00867F); }
+  background: linear-gradient(#C73F3F, #80001d); }
 .skin-raphael .todayInfo {
-  background-color: #00867F; }
+  background-color: #80001d; }
 .skin-raphael .todayInfo .today, .skin-raphael .todayInfo .duration {
   color: #E6E6E6; }
 .skin-raphael #main {
-  background-color: #00867F; }
+  background-color: #80001d; }
 .skin-raphael #task-list li.task .task-wrapper {
-  background-color: #00867F; }
+  background-color: #730000; }
 .skin-raphael #task-list li.task .task-wrapper label, .skin-raphael #task-list li.task .task-wrapper .timeElapsed {
-  color: #E6E6E6; }
+  color: #ffffff; }
+.skin-raphael #task-list li.task .projectName, .skin-raphael .task-list li.task .projectName {
+  color: #b3b3b3; }
 .skin-raphael #task-list .details {
-  background-color: #43A9A3; }
+  background-color: #730000; }
 .skin-raphael #task-list .details div label {
   color: #E6E6E6; }
+.skin-raphael #task-list .border-left {
+  border-bottom: 1px solid #b3b3b3; }
 .skin-raphael #task-list .border-left.hasCategory {
   background-color: #B9B9B9; }
 .skin-raphael #recent, .skin-raphael #favorites, .skin-raphael #genometasks {
@@ -2967,7 +2973,8 @@ i {
       text-align: left;
       font-size: 90%;
       color: #d21245;
-      margin-left: 30px; }
+      margin-left: 30px;
+      overflow: hidden; }
   #task-list .details, .task-list .details {
     width: 100%;
     height: auto;
