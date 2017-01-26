@@ -5,6 +5,14 @@ var LogItem = React.createClass({
     return (
       <div className="updateLog">
 
+      <h1>GScheduler Version: 0.4.6 Changelog:</h1>
+        
+        <ul>
+          <p>Multi-bill</p>
+          <li>This feature has been removed. Current Multi-bill tasks should still be able to save to Genome, but no new tasks of this kind can be created.</li>
+
+        </ul>
+
       <h1>GScheduler Version: 0.4.5 Changelog:</h1>
         
         <ul>
