@@ -32,7 +32,10 @@ TaskModel.prototype.updateDataVersion = function () {
 			this.tasks = this.tasks.map(function (task) {
 				return Utils.extend({}, task, {Multibill: null});
 			});
-			break;
+		default:
+			this.tasks = this.tasks.map(function (task) {
+				return Utils.extend({}, task, {error: null});
+			});
 	}
 
 	this.version = 1;
@@ -265,7 +268,13 @@ TaskModel.prototype.restoreBackUp = function () {
 	this.backup.forEach(function(task){
 		scope.tasks.unshift(task);
 	});
+	
+	this.tasks = _.uniq(this.tasks, function(item, key, id) { 
+	    return item.id;
+	});
+
 	this.backup = {};
+	
 	this.inform();
 };
 TaskModel.prototype.removeBackUp = function () {
@@ -349,6 +358,17 @@ TaskModel.prototype.contract = function (taskToExpand) {
 		return task !== taskToExpand ?
 			task :
 			Utils.extend({}, task, { expanded: false });
+	});
+
+	this.inform();
+};
+
+TaskModel.prototype.setError = function (taskToErr, err) {
+	console.log(err);
+	this.tasks = this.tasks.map(function (task) {
+		if (task.id == taskToErr.id)
+			return Utils.extend({}, task, {error: err, hasChanged: true});
+		return task;
 	});
 
 	this.inform();

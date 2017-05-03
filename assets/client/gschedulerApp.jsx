@@ -191,16 +191,28 @@ var GSchedulerApp = React.createClass({
     chrome.runtime.sendMessage({running: false}, function(response) {});
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
-      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill)
+      scope.backUp(tasks);
+      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, scope)
       .then(function(data){
-        scope.backUp(tasks);
-      })
-      .then(function(data){
-        _.each(tasks, scope.destroy);
-        Analytics.send("Tasks", "Save", "Success");
-      }).fail(function(err){
-        Analytics.send("Tasks", "Save", err);
+        console.log("complete");
+        _.each(data, function(obj){
+          _.each(scope.props.model.tasks, function(l){
+              if(l.id == obj.task.id){
+                if("results" in obj){
+                  scope.destroy(l);                  
+                }
+                if("err" in obj){
+                  scope.props.model.setError(l, obj.err.responseJSON.ResponseStatus.Message);
+                }
+              }
+          });
+
+        });
+        //Analytics.send("Tasks", "Save", "Success");
       });
+      // .fail(function(err){
+      //   Analytics.send("Tasks", "Save", err);
+      // });
     }
   },
   openGenome: function(task){
@@ -467,7 +479,7 @@ chrome.storage.sync.get({
     showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
-    showBackup = items.showBackup;
+    showBackup = items.showBackup;    
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){

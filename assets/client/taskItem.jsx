@@ -19,7 +19,8 @@ var TaskItem = React.createClass({
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       nonProjectActive: task.categoryID ? true : false,
       MultibillActive: task.Multibill ? true : false,
-      projectName: null
+      projectName: null,
+      error: task.error
     };
 	},
   componentDidMount: function() {
@@ -58,7 +59,8 @@ var TaskItem = React.createClass({
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       title: task.title,
       ticketID: task.ticketID,
-      isFavorite: task.isFavorite
+      isFavorite: task.isFavorite,
+      error: task.error
     });
     this.updateDuration(Moment(task.stopTime).format('HH:mm:ss'), Moment(task.startTime).format('HH:mm:ss'));
     /*task.flash = true;
@@ -402,6 +404,7 @@ var TaskItem = React.createClass({
               </div>
               
             {this.state.projectName && showProject ? <div className="projectName" title={"Project: " + this.state.projectName}>{this.state.projectName}</div> : ""}
+            {this.state.error !== null ? <div className="saveError"><span className="retryText">Error - Please try to save again or manually enter this task into Genome</span><br/>Message: {this.state.error}</div> : ""}
             </div>
           {task.expanded ? 
           <div className='details'>

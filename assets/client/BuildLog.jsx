@@ -5,6 +5,22 @@ var LogItem = React.createClass({
     return (
       <div className="updateLog">
 
+      <h1>GScheduler Version: 0.5.0 Changelog:</h1>
+        
+        <ul>
+          <p>Saving to Genome</p>
+          <li>A new option has been added to allow you to change the functionality of the Save button. You can change it to save all your tasks, or only the tasks for the current day</li>
+          <li>A new save button for each individual day has been added for any tasks that have not been saved after their date has past.</li>
+          <li>Tasks that have saved to Genome will now properly be removed from the task list even if an error occurs on another task</li>
+          <li>Tasks that did not save properly to Genome will now have an error state and report the error message</li>
+
+          <div className="divider"></div>
+          <p>Bug Fixes</p>
+          <li>Billable tasks will no longer have the "Do not bill to Client" checkbox checked in Genome Scheduler after saving</li>
+          <li>An Error would occur when saving multiple Note entries. This was due to Genome not accepting multiple Notes at a time. A change has been made to stagger all task saves slightly to reduce the prevalence of this bug.</li>
+
+        </ul>
+
       <h1>GScheduler Version: 0.4.6 Changelog:</h1>
         
         <ul>

@@ -17,7 +17,8 @@ var OptionScript = React.createClass({
       genomeTask: $('#showGenomeTask').prop('checked'),
       customStyles: $('input[name=skin]:checked').val() === "custom" ? $('#customStyles').val() : "",
       skin: $('input[name=skin]:checked').val(),
-      showProject: $('#showProject').prop('checked')
+      showProject: $('#showProject').prop('checked'),
+      saveToGenome: $('input[name=saveToGenome]:checked').val()
 
     }, function() {
       // Update status to let user know options were saved.
@@ -53,7 +54,8 @@ var OptionScript = React.createClass({
       genomeTask: true,
       customStyles: "",
       skin: "",
-      showProject: false
+      showProject: false,
+      saveToGenome: "all"
     }, function(items) {
       var radioType = $('input[name=type]');
       for (i = 0; i < radioType.length; i++) {
@@ -66,6 +68,14 @@ var OptionScript = React.createClass({
       var radioType = $('input[name=skin]');
       for (i = 0; i < radioType.length; i++) {
         if ( radioType[i].value === items.skin ) {
+          radioType[i].checked = true;
+          break;
+        }
+      }
+
+       var radioType = $('input[name=saveToGenome]');
+      for (i = 0; i < radioType.length; i++) {
+        if ( radioType[i].value === items.saveToGenome ) {
           radioType[i].checked = true;
           break;
         }
@@ -92,6 +102,12 @@ var OptionScript = React.createClass({
 
     return (
       <div>
+      <div className="option">
+        <h2>When I click Save to Genome:</h2>        
+        <span className="radio"><input type="radio" name="saveToGenome" value="all" onClick={this.saveOptions}/>Save All Tasks</span>
+        <span className="radio"><input type="radio" name="saveToGenome" value="today" onClick={this.saveOptions}/>Save Today's Tasks Only</span>
+      </div>
+      
       <div className="option">
       <h2>Save tasks as:</h2>
         <div className="form-wrapper">
@@ -170,6 +186,7 @@ var OptionScript = React.createClass({
       </div>
 
       <div className="option">
+        <h2>Miscellaneous:</h2>        
         <input type="checkbox" id="showProject" defaultChecked onClick={this.saveOptions}/> Show Project information for tasks
        </div>
       <div className="option">

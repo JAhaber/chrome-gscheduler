@@ -8,6 +8,8 @@ var isSequenced;
 var sequenceHour = 9;
 var sequenceMin = 0;
 var recentTaskWeeks = 1;
+var saveToGenome = 'all';
+
 
 var GenomeAPI = {
 
@@ -16,7 +18,8 @@ var GenomeAPI = {
 	GENOME_ENDPOINT: 'https://genome.klick.com/api',
 
 
-  request: function(url, options) {
+  request: function(url, options, task) {
+  	var task = task || {};
   	var options = options || {};
   	var deferred = Q.defer();
 
@@ -38,11 +41,22 @@ var GenomeAPI = {
     return GenomeAPI.request(url, options);
   },
 
-	post: function(url, options) {
+	post: function(url, options, task) {
 		options.data = options.data || {};
 		options.type = 'POST';
+		var deferred = Q.defer();
 
-    return GenomeAPI.request(url, options);
+		$.ajax(url, options)
+	  	.done(function(res) {
+	        deferred.resolve({results: res, task: task});
+	    })
+	    .fail(function(err){
+	    	deferred.resolve({err: err, task: task});
+	    });
+
+	    return deferred.promise;
+
+	    //return GenomeAPI.request(url, options, task);
   },
   getMessage:function(){
   	var options = {};
@@ -99,7 +113,7 @@ var GenomeAPI = {
 			ProjectID: task.projectID || null,
 			Type: 'Project',
 			Note: task.note || "",
-			IsClientBillable: task.isClientBillable || false
+			IsClientBillable: task.isClientBillable || true
 		};
 
 		var nonProjectData = {
@@ -113,7 +127,7 @@ var GenomeAPI = {
 		return GenomeAPI.getUser()
 						.then(function(user){
 							options.data.UserID = user.UserID
-							return GenomeAPI.post(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json', options);
+							return GenomeAPI.post(GenomeAPI.GENOME_ENDPOINT + '/TimeEntry.json', options, task);
 						});
 	},
 
@@ -134,37 +148,38 @@ var GenomeAPI = {
 				previousTaskEndTime = Moment(newTask.startTime).hour(sequenceHour).minute(sequenceMin).format();
 			}	
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
-
-			if (newTask.Multibill){
-				var listFound = false;
-				for (var i = 0; i < multibill.length; i++){
-			      if (parseInt(multibill[i].id) === parseInt(newTask.Multibill) && multibill[i].tasks.length > 0){
-			      	listFound = true;
-			      	var durationPerTask = Math.floor(duration / multibill[i].tasks.length);
-			      	var curTask;
-			      	for (var j = 0; j < multibill[i].tasks.length; j++){
-			      		curTask = newTask;
-			      		curTask.ticketID = multibill[i].tasks[j].id;
-			      		curTask.projectID = multibill[i].tasks[j].projectID;
-			      		curTask.startTime = (j > 0 ? Moment(curTask.startTime).add(durationPerTask, 'minutes').format() : curTask.startTime);
-			      		curTask.stopTime = Moment(curTask.startTime).add(durationPerTask, 'minutes').format();
-			      		deferred.resolve(GenomeAPI.postTimeEntry(curTask));
-			      	}
-			      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
-			      	break;
-			      }
-			    }
-			    if (listFound === false){
-			      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
+			setTimeout(function(){
+				if (newTask.Multibill){
+					var listFound = false;
+					for (var i = 0; i < multibill.length; i++){
+				      if (parseInt(multibill[i].id) === parseInt(newTask.Multibill) && multibill[i].tasks.length > 0){
+				      	listFound = true;
+				      	var durationPerTask = Math.floor(duration / multibill[i].tasks.length);
+				      	var curTask;
+				      	for (var j = 0; j < multibill[i].tasks.length; j++){
+				      		curTask = newTask;
+				      		curTask.ticketID = multibill[i].tasks[j].id;
+				      		curTask.projectID = multibill[i].tasks[j].projectID;
+				      		curTask.startTime = (j > 0 ? Moment(curTask.startTime).add(durationPerTask, 'minutes').format() : curTask.startTime);
+				      		curTask.stopTime = Moment(curTask.startTime).add(durationPerTask, 'minutes').format();
+				      		deferred.resolve(GenomeAPI.postTimeEntry(curTask));
+				      	}
+				      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
+				      	break;
+				      }
+				    }
+				    if (listFound === false){
+				      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
+						newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
+						deferred.resolve(GenomeAPI.postTimeEntry(newTask));
+				    }
+				}
+				else{
+					previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
 					newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
 					deferred.resolve(GenomeAPI.postTimeEntry(newTask));
-			    }
-			}
-			else{
-				previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
-				newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
-				deferred.resolve(GenomeAPI.postTimeEntry(newTask));
-			}		
+				}
+			}, 100*index);
 
 			return deferred.promise;
 		});
@@ -191,6 +206,7 @@ var GenomeAPI = {
 }
 
 chrome.storage.sync.get({
+    saveToGenome: 'all',
     saveType: 'Actual',
     startHour: 9,
     startMin: 0,
@@ -203,10 +219,12 @@ chrome.storage.sync.get({
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
    	recentTaskWeeks = items.recentTasks;
+   	saveToGenome = items.saveToGenome;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
-  chrome.storage.sync.get({
+  chrome.storage.sync.get({  	
+    saveToGenome: 'all',
     saveType: 'Actual',
     startHour: 9,
     startMin: 0,
@@ -219,6 +237,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
    	sequenceHour = items.startHour;
    	sequenceMin = items.startMin;
    	recentTaskWeeks = items.recentTasks;
+   	saveToGenome = items.saveToGenome;
   });
 });
 
