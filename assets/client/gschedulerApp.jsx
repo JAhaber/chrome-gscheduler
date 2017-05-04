@@ -197,35 +197,35 @@ var GSchedulerApp = React.createClass({
     var dateToSave = dateToSave || null;
     this.setState({isSaving: true});
     var scope = this;
-    scope.stopAll();
-    chrome.runtime.sendMessage({running: false}, function(response) {});
-    var tasks = scope.props.model.tasks;
-    if (tasks.length > 0) {
-      scope.backUp(tasks);
-      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, dateToSave)
-      .then(function(data){
-        _.each(data, function(obj){
-          _.each(scope.props.model.tasks, function(l){
-              if(l.id == obj.task.id){
-                if("results" in obj){
-                  scope.destroy(l);                  
+    setTimeout(function(){
+      scope.stopAll();
+      chrome.runtime.sendMessage({running: false}, function(response) {});
+      var tasks = scope.props.model.tasks;
+      if (tasks.length > 0) {
+        scope.backUp(tasks);
+        GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, dateToSave)
+        .then(function(data){
+          _.each(data, function(obj){
+            _.each(scope.props.model.tasks, function(l){
+                if(l.id == obj.task.id){
+                  if("results" in obj){
+                    scope.destroy(l);                  
+                  }
+                  if("err" in obj){
+                    scope.props.model.setError(l, obj.err.responseJSON.ResponseStatus.Message);
+                  }
                 }
-                if("err" in obj){
-                  scope.props.model.setError(l, obj.err.responseJSON.ResponseStatus.Message);
-                }
-              }
-          });
+            });
 
+          });
+          //Analytics.send("Tasks", "Save", "Success");
+            scope.setState({isSaving: false});  
         });
-        //Analytics.send("Tasks", "Save", "Success");
-        setTimeout(function(){
-          scope.setState({isSaving: false});  
-        }, 1000);        
-      });
-      // .fail(function(err){
-      //   Analytics.send("Tasks", "Save", err);
-      // });
-    }
+        // .fail(function(err){
+        //   Analytics.send("Tasks", "Save", err);
+        // });
+      }
+    }, 1000);    
   },
   openGenome: function(task){
     var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
@@ -346,7 +346,7 @@ var GSchedulerApp = React.createClass({
           <label className="date-label">
             <span onClick={this.openGenome.bind(this,task)} title={"Open " + Moment(curDate).format('MMMM D, YYYY') + " in Genome"}>{Moment(curDate).format('MMMM D, YYYY')}</span>
             <a className="remove-day" onClick={this.clearTasksByDate.bind(this,task)} title={"Remove all entries from " + Moment(curDate).format('MMMM D, YYYY')}>Remove all&nbsp;&nbsp;<i className="fa fa-remove"></i></a>
-            <a className="save-day" onClick={this.save.bind(this,Moment(curDate).format("YYYY-MM-DD"))} title={"Save all entries from " + Moment(curDate).format('MMMM D, YYYY') + "to Genome"}>Save all to Genome&nbsp;&nbsp;<i className="fa fa-floppy-o"></i></a>
+            <a className="save-day" onClick={this.save.bind(this,Moment(curDate).format("YYYY-MM-DD"))} title={"Save all entries from " + Moment(curDate).format('MMMM D, YYYY') + " to Genome"}>Save all to Genome&nbsp;&nbsp;<i className="fa fa-floppy-o"></i></a>
           </label>
           );
       }
@@ -486,11 +486,19 @@ var GSchedulerApp = React.createClass({
 $("html").on("dragover", function(e){
   e.preventDefault();
   e.stopPropagation();
+  e.originalEvent.dataTransfer.dropEffect = "copy"
 });
+
 $("html").on("drop", function(e){
   e.preventDefault();
   e.stopPropagation();
+    var uri = decodeURIComponent(e.originalEvent.dataTransfer.getData("text/uri-list"));
+    uri = uri.indexOf("?q=") > -1 ? uri.substring(uri.indexOf("?q=") + 3) : uri;
+    uri = uri.indexOf("&") > -1 ? uri.substring(0, uri.indexOf("&")) : uri;
+    uri = uri.substring(uri.lastIndexOf("/") + 1);
+    console.log(uri);
 });
+
 chrome.storage.sync.get({
     newestFirst: true,
     showBackup: true

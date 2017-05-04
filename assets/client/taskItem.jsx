@@ -64,10 +64,7 @@ var TaskItem = React.createClass({
       error: task.error
     });
     this.updateDuration(Moment(task.stopTime).format('HH:mm:ss'), Moment(task.startTime).format('HH:mm:ss'));
-    /*task.flash = true;
-    setTimeout(function(){
-      task.flash = false;
-    }, 300);*/
+
     this.getProjectName();
     task.hasChanged = false;
    }

@@ -1,4 +1,1 @@
-- A list of all notes sometimes fails to save some of them to Genome
-- No error messages when a task fails to save (due to halted project, no access, etc)
-- All billable tasks being set to "do not bill to client" (not an actual issue currently as the field has no effect)
 - Drag and drop url into GScheduler
