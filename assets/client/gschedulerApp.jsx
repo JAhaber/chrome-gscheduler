@@ -24,6 +24,7 @@ var nonBillables = { "Entries" : [] };
 var genomeTask = null;
 var messageInterval = null;
 var ga = null;
+var saveToGenome = 'all';
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -192,7 +193,8 @@ var GSchedulerApp = React.createClass({
     Analytics.send("Tasks", "Backup", "Remove");
     this.props.model.removeBackUp();
   },
-  save: function () {
+  save: function (dateToSave) {
+    var dateToSave = dateToSave || null;
     this.setState({isSaving: true});
     var scope = this;
     scope.stopAll();
@@ -200,7 +202,7 @@ var GSchedulerApp = React.createClass({
     var tasks = scope.props.model.tasks;
     if (tasks.length > 0) {
       scope.backUp(tasks);
-      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, scope)
+      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, dateToSave)
       .then(function(data){
         _.each(data, function(obj){
           _.each(scope.props.model.tasks, function(l){
@@ -491,7 +493,7 @@ chrome.storage.sync.get({
     showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
-    showBackup = items.showBackup;    
+    showBackup = items.showBackup; 
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){

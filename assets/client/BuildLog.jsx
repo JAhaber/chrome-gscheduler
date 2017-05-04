@@ -22,7 +22,7 @@ var LogItem = React.createClass({
 
           <div className="divider"></div>
           <p>Bug Fixes</p>
-          <li>Billable tasks will no longer have the "Do not bill to Client" checkbox checked in Genome Scheduler after saving</li>
+          <li>Billable tasks will no longer have the "Do not bill to Client" checkbox checked in Genome after saving</li>
           <li>An Error would occur when saving multiple Note entries. This was due to Genome not accepting multiple Notes at a time. A change has been made to stagger all task saves slightly to reduce the prevalence of this bug.</li>
           <li>When opening the Recent/Favorite/Genome Task pane, the main area will now shrink to fit the remaining space to allow for proper scrolling through your tasks.</li>
 
