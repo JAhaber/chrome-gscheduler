@@ -2492,7 +2492,7 @@ footer {
   overflow: hidden;
   width: 100%; }
   .TaskButtons.open {
-    height: calc(65% - 141px); }
+    height: 45%; }
 
 #recent, #favorites, #genometasks {
   width: 100%;
@@ -2787,6 +2787,26 @@ footer {
         #edit-Multibill .modal-confirmRemove .btn.btn-confirm:hover {
           background: #FF1313; }
 
+.save-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  padding-top: 75px; }
+  .save-screen .footnotes {
+    position: absolute;
+    bottom: 75px;
+    padding: 0 25px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px; }
+
 html {
   height: 100%; }
 
@@ -2870,6 +2890,8 @@ i {
       cursor: pointer; }
     #main .restore-tasks .remove {
       color: #C21F1F; }
+  #main.tasksOpen {
+    height: calc(55% - 117px); }
 
 .todayInfo {
   height: auto;
@@ -2987,11 +3009,20 @@ i {
       margin-top: 10px;
       margin-bottom: -10px;
       overflow: hidden;
-      padding: 5px 10px; }
+      padding: 5px 10px;
+      -webkit-user-select: initial;
+      user-select: initial; }
       #task-list li.task .saveError .retryText, .task-list li.task .saveError .retryText {
         color: #fff;
         font-size: 11px;
-        line-height: 13px; }
+        line-height: 13px;
+        -webkit-user-select: none;
+        user-select: none; }
+      #task-list li.task .saveError a, .task-list li.task .saveError a {
+        color: #d4d4d4;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer; }
   #task-list .details, .task-list .details {
     width: 100%;
     height: auto;

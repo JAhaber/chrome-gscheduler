@@ -9,15 +9,22 @@ var LogItem = React.createClass({
         
         <ul>
           <p>Saving to Genome</p>
+          <li>An overlay screen will now appear while your tasks are saving to Genome to prevent multiple clicks and indicate that the save function is running</li>
           <li>A new option has been added to allow you to change the functionality of the Save button. You can change it to save all your tasks, or only the tasks for the current day</li>
           <li>A new save button for each individual day has been added for any tasks that have not been saved after their date has past.</li>
           <li>Tasks that have saved to Genome will now properly be removed from the task list even if an error occurs on another task</li>
           <li>Tasks that did not save properly to Genome will now have an error state and report the error message</li>
+          
+          <div className="divider"></div>
+
+          <p>Recent Tasks</p>
+          <li>Updated the options for Recent task sorting. You can now sort by oldest tasks first, newest tasks first, or most recently billed tasks first.</li>
 
           <div className="divider"></div>
           <p>Bug Fixes</p>
           <li>Billable tasks will no longer have the "Do not bill to Client" checkbox checked in Genome Scheduler after saving</li>
           <li>An Error would occur when saving multiple Note entries. This was due to Genome not accepting multiple Notes at a time. A change has been made to stagger all task saves slightly to reduce the prevalence of this bug.</li>
+          <li>When opening the Recent/Favorite/Genome Task pane, the main area will now shrink to fit the remaining space to allow for proper scrolling through your tasks.</li>
 
         </ul>
 

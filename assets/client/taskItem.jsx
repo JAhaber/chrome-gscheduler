@@ -20,7 +20,8 @@ var TaskItem = React.createClass({
       nonProjectActive: task.categoryID ? true : false,
       MultibillActive: task.Multibill ? true : false,
       projectName: null,
-      error: task.error
+      error: task.error,
+      showErrorMsg: false
     };
 	},
   componentDidMount: function() {
@@ -265,6 +266,9 @@ var TaskItem = React.createClass({
     this.props.model.handleTitleChange(this.props.task, event.target.value);
 
   },
+  toggleShowErrorMsg: function() {
+    this.setState({showErrorMsg: !this.state.showErrorMsg});
+  },
   updateDuration: function(value, start){
       var task = this.props.task;
       start = start || this.state.startTime;
@@ -404,7 +408,16 @@ var TaskItem = React.createClass({
               </div>
               
             {this.state.projectName && showProject ? <div className="projectName" title={"Project: " + this.state.projectName}>{this.state.projectName}</div> : ""}
-            {this.state.error !== null ? <div className="saveError"><span className="retryText">Error - Please try to save again or manually enter this task into Genome</span><br/>Message: {this.state.error}</div> : ""}
+            {this.state.error !== null ? 
+              <div className="saveError">
+              <span className="retryText">An error has occured. Please try saving again or manually enter this task into Genome.</span>
+              <br/><br/>
+              {this.state.showErrorMsg ?
+                <span> 
+                  {this.state.error} <br/><br/><a onClick={this.toggleShowErrorMsg}>&lt; Hide Details</a>
+                </span>
+                : <a onClick={this.toggleShowErrorMsg}>Show Details &gt;</a> }
+               </div> : ""}
             </div>
           {task.expanded ? 
           <div className='details'>

@@ -2,6 +2,7 @@
 var React = require('react');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
+var SaveScreen = require('./SaveScreen.jsx');
 var TaskItem = require('./taskItem.jsx');
 var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
@@ -32,7 +33,9 @@ var GSchedulerApp = React.createClass({
       showLog: false,
       message: "",
       showMultibill: false,
-      multibillDefault: 0
+      multibillDefault: 0,
+      taskListOpen: false,
+      isSaving: false
     };
   },
   componentDidMount: function() {
@@ -88,6 +91,10 @@ var GSchedulerApp = React.createClass({
     this.stopAll();
     this.props.model.addTask(task);
     this.clearText();
+  },
+
+  toggleTaskListOpen: function(isOpen) {
+    this.setState({taskListOpen: isOpen});
   },
 
   saveTaskTitle: function(title, e) {
@@ -186,6 +193,7 @@ var GSchedulerApp = React.createClass({
     this.props.model.removeBackUp();
   },
   save: function () {
+    this.setState({isSaving: true});
     var scope = this;
     scope.stopAll();
     chrome.runtime.sendMessage({running: false}, function(response) {});
@@ -194,7 +202,6 @@ var GSchedulerApp = React.createClass({
       scope.backUp(tasks);
       GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, scope)
       .then(function(data){
-        console.log("complete");
         _.each(data, function(obj){
           _.each(scope.props.model.tasks, function(l){
               if(l.id == obj.task.id){
@@ -209,6 +216,7 @@ var GSchedulerApp = React.createClass({
 
         });
         //Analytics.send("Tasks", "Save", "Success");
+        scope.setState({isSaving: false});
       });
       // .fail(function(err){
       //   Analytics.send("Tasks", "Save", err);
@@ -389,7 +397,7 @@ var GSchedulerApp = React.createClass({
     }, this);
     
     main = (
-      <section id="main">
+      <section id="main" className={this.state.taskListOpen ? "tasksOpen" : ""}>
         {taskItems.length ?
           <div className="todayInfo">
             <div className="today" onClick={this.openGenome} title="Open today in genome">Today</div>
@@ -454,10 +462,14 @@ var GSchedulerApp = React.createClass({
 
         {main}
 
-        <TaskLists onPlay={this.createTask} model={this.props.model} />
+        <TaskLists onPlay={this.createTask} isTaskListOpen={this.toggleTaskListOpen} model={this.props.model} />
         <Footer toggleLog={this.toggleLog} length={taskItems.length} save={this.save} />        
         {this.state.showLog ? 
         <BuildLog closeLog={this.toggleLog} />
+        : ""}
+
+        {this.state.isSaving ? 
+        <SaveScreen />
         : ""}
 
         <CustomStyles model={this.props.model}/>

@@ -65,6 +65,7 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		categoryID: task.categoryID,
 		isFavorite: isFavorite,
 		Multibill: task.Multibill,
+		error: null,
 		gap: {}
 	};
 
@@ -106,6 +107,7 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 		categoryID: task.categoryID,
 		isFavorite: task.isFavorite,
 		Multibill: task.Multibill,
+		error: null,
 		gap: {}
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
@@ -220,7 +222,8 @@ TaskModel.prototype.addGap = function (start, stop) {
 		note: null,
 		categoryID: null,
 		Multibill: null,
-		expanded: true
+		expanded: true,
+		error: null
 	};
 	this.tasks = this.tasks.map(function (taskExpanded) {
 			return taskExpanded.expanded ?
@@ -364,7 +367,6 @@ TaskModel.prototype.contract = function (taskToExpand) {
 };
 
 TaskModel.prototype.setError = function (taskToErr, err) {
-	console.log(err);
 	this.tasks = this.tasks.map(function (task) {
 		if (task.id == taskToErr.id)
 			return Utils.extend({}, task, {error: err, hasChanged: true});

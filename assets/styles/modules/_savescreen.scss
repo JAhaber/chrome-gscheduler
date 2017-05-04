@@ -1,0 +1,22 @@
+.save-screen{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background: rgba(0,0,0,0.8);
+	z-index: 1000;
+	text-align:center;
+	color:#fff;
+	font-size:20px;
+	padding-top:75px;
+
+	.footnotes{
+		position:absolute;
+		bottom: 75px;
+		padding: 0 25px;
+		text-align:center;
+		color:#fff;
+		font-size:12px;
+	}
+}

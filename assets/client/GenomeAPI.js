@@ -89,9 +89,15 @@ var GenomeAPI = {
 		var options = {};
 		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket/Filter.json?TicketStatusIsOpen=true&AssignedToUserID=' + user, options);		
 	},
-	getProjectInfo: function(ticketid) {
+	getProjectInfo: function(ticketid, date) {
 		var options = {};
-		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options);
+		var date = date || null;
+		return GenomeAPI.get(GenomeAPI.GENOME_ENDPOINT + '/Ticket.json?Enabled=true&ForAutocompleter=false&TicketID=' + ticketid, options).then(function(ticket){
+			if (date != null){
+				ticket.Entries[0].sortDate = date;
+			}
+			return ticket;
+		});
 	},
 	getNonBillableTasks: function(){
 		var options = {};

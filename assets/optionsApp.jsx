@@ -7,7 +7,7 @@ var OptionScript = React.createClass({
 
     chrome.storage.sync.set({
       newestFirst: $('#newestFirst').prop('checked'),
-      recentNewestFirst: $('#recentNewestFirst').prop('checked'),
+      recentNewestFirst: $('input[name=recentSort]:checked').val(),
       showBackup: $('#showBackup').prop('checked'),
       saveType: $('input[name=type]:checked').val(),
       autoRemind: $('#autoReminder').val(),
@@ -44,7 +44,7 @@ var OptionScript = React.createClass({
     // Use default value color = 'red' and likesColor = true.
     chrome.storage.sync.get({
       newestFirst: true,
-      recentNewestFirst: false,
+      recentNewestFirst: "oldID",
       showBackup: true,
       saveType: 'Actual',
       autoRemind: 'Never',
@@ -60,6 +60,14 @@ var OptionScript = React.createClass({
       var radioType = $('input[name=type]');
       for (i = 0; i < radioType.length; i++) {
         if ( radioType[i].value === items.saveType ) {
+          radioType[i].checked = true;
+          break;
+        }
+      }
+
+      var radioType = $('input[name=recentSort]');
+      for (i = 0; i < radioType.length; i++) {
+        if ( radioType[i].value === items.recentNewestFirst ) {
           radioType[i].checked = true;
           break;
         }
@@ -107,7 +115,7 @@ var OptionScript = React.createClass({
         <span className="radio"><input type="radio" name="saveToGenome" value="all" onClick={this.saveOptions}/>Save All Tasks</span>
         <span className="radio"><input type="radio" name="saveToGenome" value="today" onClick={this.saveOptions}/>Save Today's Tasks Only</span>
       </div>
-      
+
       <div className="option">
       <h2>Save tasks as:</h2>
         <div className="form-wrapper">
@@ -183,6 +191,12 @@ var OptionScript = React.createClass({
             <option value="4">4 Weeks</option>
           </select>
         </p>
+
+        <div className="option">
+          <span className="radio"><input type="radio" name="recentSort" value="oldID" defaultChecked onClick={this.saveOptions}/>Sort recent tasks list by oldest Ticket Id first</span>
+          <br/><span className="radio"><input type="radio" name="recentSort" value="newID" onClick={this.saveOptions}/>Sort recent tasks list by newest Ticket Id first</span>
+          <br/><span className="radio"><input type="radio" name="recentSort" value="billed" onClick={this.saveOptions}/>Sort recent tasks list by most recently billed first</span>
+        </div>
       </div>
 
       <div className="option">
@@ -192,9 +206,7 @@ var OptionScript = React.createClass({
       <div className="option">
         <input type="checkbox" id="newestFirst" defaultChecked onClick={this.saveOptions}/> Sort tasks by newest first
        </div>
-       <div className="option">
-        <input type="checkbox" id="recentNewestFirst" onClick={this.saveOptions}/> Sort recent tasks list by newest first
-       </div>
+       
        <div className="option">
         <input type="checkbox" id="showGenomeTask" defaultChecked onClick={this.saveOptions}/> Show a button in Genome to add tasks to GScheduler
        </div>
