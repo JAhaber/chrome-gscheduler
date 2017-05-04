@@ -218,7 +218,9 @@ var GSchedulerApp = React.createClass({
 
         });
         //Analytics.send("Tasks", "Save", "Success");
-        scope.setState({isSaving: false});
+        setTimeout(function(){
+          scope.setState({isSaving: false});  
+        }, 1000);        
       });
       // .fail(function(err){
       //   Analytics.send("Tasks", "Save", err);
@@ -344,6 +346,7 @@ var GSchedulerApp = React.createClass({
           <label className="date-label">
             <span onClick={this.openGenome.bind(this,task)} title={"Open " + Moment(curDate).format('MMMM D, YYYY') + " in Genome"}>{Moment(curDate).format('MMMM D, YYYY')}</span>
             <a className="remove-day" onClick={this.clearTasksByDate.bind(this,task)} title={"Remove all entries from " + Moment(curDate).format('MMMM D, YYYY')}>Remove all&nbsp;&nbsp;<i className="fa fa-remove"></i></a>
+            <a className="save-day" onClick={this.save.bind(this,Moment(curDate).format("YYYY-MM-DD"))} title={"Save all entries from " + Moment(curDate).format('MMMM D, YYYY') + "to Genome"}>Save all to Genome&nbsp;&nbsp;<i className="fa fa-floppy-o"></i></a>
           </label>
           );
       }

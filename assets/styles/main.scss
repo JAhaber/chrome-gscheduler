@@ -161,7 +161,8 @@ i{
     span{
       cursor:pointer;
     }
-    .remove-day{
+    
+    .remove-day, .save-day{
       cursor:pointer;
       float:right;
       padding-right:13px;
@@ -171,6 +172,9 @@ i{
       i{
         font-size:14.4px;
       }
+    }
+    .save-day{
+      color: #2585b0;
     }
   }
   

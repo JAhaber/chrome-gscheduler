@@ -2926,15 +2926,17 @@ i {
     border-bottom: 1px solid #000; }
     #task-list .date-label span, .task-list .date-label span {
       cursor: pointer; }
-    #task-list .date-label .remove-day, .task-list .date-label .remove-day {
+    #task-list .date-label .remove-day, #task-list .date-label .save-day, .task-list .date-label .remove-day, .task-list .date-label .save-day {
       cursor: pointer;
       float: right;
       padding-right: 13px;
       font: 400 12px/18px 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
       margin-top: 6px;
       color: #d21245; }
-      #task-list .date-label .remove-day i, .task-list .date-label .remove-day i {
+      #task-list .date-label .remove-day i, #task-list .date-label .save-day i, .task-list .date-label .remove-day i, .task-list .date-label .save-day i {
         font-size: 14.4px; }
+    #task-list .date-label .save-day, .task-list .date-label .save-day {
+      color: #2585b0; }
   #task-list .border-left, .task-list .border-left {
     line-height: 0;
     background-color: #ffdd57;
