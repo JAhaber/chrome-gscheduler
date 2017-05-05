@@ -25,6 +25,7 @@ var genomeTask = null;
 var messageInterval = null;
 var ga = null;
 var saveToGenome = 'all';
+var newTaskFromDrop = "";
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -60,6 +61,22 @@ var GSchedulerApp = React.createClass({
       this.createTask(genomeTask);
       genomeTask = null;
       Analytics.send("Tasks", "Start", "Genome Button");
+    }
+
+    if(!(newTaskFromDrop == "")){
+      var scope = this;
+      GenomeAPI.getProjectInfo(newTaskFromDrop).then(function(ticketData){
+        var newTask = {};
+
+        newTask.ticketID = ticketData.Entries[0].TicketID;
+        newTask.projectID = ticketData.Entries[0].ProjectID;
+        newTask.title = ticketData.Entries[0].Title;      
+
+        scope.createTask(newTask);
+
+      }).fail(function(error){});
+
+      newTaskFromDrop = "";
     }
   },
   checkMessage: function(){
@@ -493,10 +510,15 @@ $("html").on("drop", function(e){
   e.preventDefault();
   e.stopPropagation();
     var uri = decodeURIComponent(e.originalEvent.dataTransfer.getData("text/uri-list"));
+    if (uri == ""){
+      uri = decodeURIComponent(e.originalEvent.dataTransfer.getData("text"));
+    }
     uri = uri.indexOf("?q=") > -1 ? uri.substring(uri.indexOf("?q=") + 3) : uri;
     uri = uri.indexOf("&") > -1 ? uri.substring(0, uri.indexOf("&")) : uri;
-    uri = uri.substring(uri.lastIndexOf("/") + 1);
-    console.log(uri);
+    uri = uri.indexOf("/") ? uri.substring(uri.lastIndexOf("/") + 1) : uri;
+    uri = uri.indexOf("#") > -1 ? uri.substring(uri.indexOf("#") + 1) : uri;
+
+    newTaskFromDrop = uri;
 });
 
 chrome.storage.sync.get({
