@@ -61,11 +61,11 @@ var GenomeTasks = React.createClass({
     var taskList;
     var scope = this;
     if (tasks === null)
-      taskList = "Loading...";
+      taskList = "Loading Tasks...";
     else if (tasks === "fail")
       taskList = "Failed to load current task list from Genome."
     else if (tasks.length === 0)
-      taskList = "No entries found";
+      taskList = "Loading Tasks...";
     else{
       tasks = _.sortBy(tasks, function(o){ return o.TicketID; });
       if (recentNewestFirst === true)

@@ -22,8 +22,9 @@ var RecentTasks = React.createClass({
         for (var i = 0; i < results.Entries.length; i++)
         {
           if (results.Entries[i].Type === "Project"){
-              GenomeAPI.getProjectInfo(results.Entries[i].TicketID).then(function(ticket){
-                tasks.push(ticket.Entries[0]);
+              var date = results.Entries[i].Stopped.replace("/Date(", "").replace("-0000)/", "");
+              GenomeAPI.getProjectInfo(results.Entries[i].TicketID, date).then(function(ticket){
+                tasks.push(ticket.Entries[0]);                
               });              
           }
         }
@@ -59,16 +60,23 @@ var RecentTasks = React.createClass({
     var taskList;
     var scope = this;
     if (tasks === null)
-      taskList = "Loading...";
+      taskList = "Loading Tasks...";
     else if (tasks === "fail")
       taskList = "Failed to load recent tasks from Genome."
     else if (tasks.length === 0)
-      taskList = "No entries found";
+      taskList = "Loading Tasks...";
     else{
       tasks = _.sortBy(tasks, function(o){ return o.TicketID; });
+      tasks.reverse();
       tasks = _.uniq(tasks, true, function(o){ return o.TicketID; });
-      if (recentNewestFirst === true)
+      
+      if (recentNewestFirst === "oldID")
         tasks.reverse();
+      else if (recentNewestFirst === "billed"){
+        tasks = _.sortBy(tasks, function(o){ return o.sortDate; });
+        tasks.reverse();
+      }
+      
       taskList = tasks.map(function (task) {
         return (
           <li className='task' key={task.TicketID}>
@@ -119,14 +127,19 @@ var RecentTasks = React.createClass({
 
 
 chrome.storage.sync.get({
-    recentNewestFirst: false
+    recentNewestFirst: "oldID"
   }, function(items) {
-    recentNewestFirst = items.recentNewestFirst;
+    if (items.recentNewestFirst == "true")
+      recentNewestFirst = "newID";
+    else if (items.recentNewestFirst == "false")
+      recentNewestFirst = "oldID";
+    else
+      recentNewestFirst = items.recentNewestFirst;
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){
   chrome.storage.sync.get({
-     recentNewestFirst: false
+     recentNewestFirst: "oldID"
   }, function(items) {
     recentNewestFirst = items.recentNewestFirst;
   });

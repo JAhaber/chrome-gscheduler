@@ -2,6 +2,7 @@
 var React = require('react');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
+var SaveScreen = require('./SaveScreen.jsx');
 var TaskItem = require('./taskItem.jsx');
 var GapItem = require('./gapItem.jsx');
 var SearchBox = require('./SearchBox.jsx');
@@ -23,6 +24,8 @@ var nonBillables = { "Entries" : [] };
 var genomeTask = null;
 var messageInterval = null;
 var ga = null;
+var saveToGenome = 'all';
+var newTaskFromDrop = "";
 
 var GSchedulerApp = React.createClass({
   getInitialState: function() {
@@ -32,7 +35,9 @@ var GSchedulerApp = React.createClass({
       showLog: false,
       message: "",
       showMultibill: false,
-      multibillDefault: 0
+      multibillDefault: 0,
+      taskListOpen: false,
+      isSaving: false
     };
   },
   componentDidMount: function() {
@@ -56,6 +61,22 @@ var GSchedulerApp = React.createClass({
       this.createTask(genomeTask);
       genomeTask = null;
       Analytics.send("Tasks", "Start", "Genome Button");
+    }
+
+    if(!(newTaskFromDrop == "")){
+      var scope = this;
+      GenomeAPI.getProjectInfo(newTaskFromDrop).then(function(ticketData){
+        var newTask = {};
+
+        newTask.ticketID = ticketData.Entries[0].TicketID;
+        newTask.projectID = ticketData.Entries[0].ProjectID;
+        newTask.title = ticketData.Entries[0].Title;      
+
+        scope.createTask(newTask);
+
+      }).fail(function(error){});
+
+      newTaskFromDrop = "";
     }
   },
   checkMessage: function(){
@@ -88,6 +109,10 @@ var GSchedulerApp = React.createClass({
     this.stopAll();
     this.props.model.addTask(task);
     this.clearText();
+  },
+
+  toggleTaskListOpen: function(isOpen) {
+    this.setState({taskListOpen: isOpen});
   },
 
   saveTaskTitle: function(title, e) {
@@ -185,23 +210,41 @@ var GSchedulerApp = React.createClass({
     Analytics.send("Tasks", "Backup", "Remove");
     this.props.model.removeBackUp();
   },
-  save: function () {
+  save: function (dateToSave) {
+    var dateToSave = dateToSave || null;
+    this.setState({isSaving: true});
     var scope = this;
-    scope.stopAll();
-    chrome.runtime.sendMessage({running: false}, function(response) {});
-    var tasks = scope.props.model.tasks;
-    if (tasks.length > 0) {
-      GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill)
-      .then(function(data){
+    setTimeout(function(){
+      if (dateToSave == "all" || dateToSave == Moment().format("YYYY-MM-DD")){
+        scope.stopAll();
+      }
+      chrome.runtime.sendMessage({running: false}, function(response) {});
+      var tasks = scope.props.model.tasks;
+      if (tasks.length > 0) {
         scope.backUp(tasks);
-      })
-      .then(function(data){
-        _.each(tasks, scope.destroy);
-        Analytics.send("Tasks", "Save", "Success");
-      }).fail(function(err){
-        Analytics.send("Tasks", "Save", err);
-      });
-    }
+        GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, dateToSave)
+        .then(function(data){
+          _.each(data, function(obj){
+            _.each(scope.props.model.tasks, function(l){
+                if(l.id == obj.task.id){
+                  if("results" in obj){
+                    scope.destroy(l);                  
+                  }
+                  if("err" in obj){
+                    scope.props.model.setError(l, obj.err.responseJSON.ResponseStatus.Message);
+                  }
+                }
+            });
+
+          });
+          //Analytics.send("Tasks", "Save", "Success");
+            scope.setState({isSaving: false});  
+        });
+        // .fail(function(err){
+        //   Analytics.send("Tasks", "Save", err);
+        // });
+      }
+    }, 1000);    
   },
   openGenome: function(task){
     var date = Moment(task.startTime).format("YYYY-MM-DD") || Moment().format("YYYY-MM-DD");
@@ -322,6 +365,7 @@ var GSchedulerApp = React.createClass({
           <label className="date-label">
             <span onClick={this.openGenome.bind(this,task)} title={"Open " + Moment(curDate).format('MMMM D, YYYY') + " in Genome"}>{Moment(curDate).format('MMMM D, YYYY')}</span>
             <a className="remove-day" onClick={this.clearTasksByDate.bind(this,task)} title={"Remove all entries from " + Moment(curDate).format('MMMM D, YYYY')}>Remove all&nbsp;&nbsp;<i className="fa fa-remove"></i></a>
+            <a className="save-day" onClick={this.save.bind(this,Moment(curDate).format("YYYY-MM-DD"))} title={"Save all entries from " + Moment(curDate).format('MMMM D, YYYY') + " to Genome"}>Save all to Genome&nbsp;&nbsp;<i className="fa fa-floppy-o"></i></a>
           </label>
           );
       }
@@ -377,7 +421,7 @@ var GSchedulerApp = React.createClass({
     }, this);
     
     main = (
-      <section id="main">
+      <section id="main" className={this.state.taskListOpen ? "tasksOpen" : ""}>
         {taskItems.length ?
           <div className="todayInfo">
             <div className="today" onClick={this.openGenome} title="Open today in genome">Today</div>
@@ -442,10 +486,14 @@ var GSchedulerApp = React.createClass({
 
         {main}
 
-        <TaskLists onPlay={this.createTask} model={this.props.model} />
+        <TaskLists onPlay={this.createTask} isTaskListOpen={this.toggleTaskListOpen} model={this.props.model} />
         <Footer toggleLog={this.toggleLog} length={taskItems.length} save={this.save} />        
         {this.state.showLog ? 
         <BuildLog closeLog={this.toggleLog} />
+        : ""}
+
+        {this.state.isSaving ? 
+        <SaveScreen />
         : ""}
 
         <CustomStyles model={this.props.model}/>
@@ -457,17 +505,30 @@ var GSchedulerApp = React.createClass({
 $("html").on("dragover", function(e){
   e.preventDefault();
   e.stopPropagation();
+  e.originalEvent.dataTransfer.dropEffect = "copy"
 });
+
 $("html").on("drop", function(e){
   e.preventDefault();
   e.stopPropagation();
+    var uri = decodeURIComponent(e.originalEvent.dataTransfer.getData("text/uri-list"));
+    if (uri == ""){
+      uri = decodeURIComponent(e.originalEvent.dataTransfer.getData("text"));
+    }
+    uri = uri.indexOf("?q=") > -1 ? uri.substring(uri.indexOf("?q=") + 3) : uri;
+    uri = uri.indexOf("&") > -1 ? uri.substring(0, uri.indexOf("&")) : uri;
+    uri = uri.indexOf("/") ? uri.substring(uri.lastIndexOf("/") + 1) : uri;
+    uri = uri.indexOf("#") > -1 ? uri.substring(uri.indexOf("#") + 1) : uri;
+
+    newTaskFromDrop = uri;
 });
+
 chrome.storage.sync.get({
     newestFirst: true,
     showBackup: true
   }, function(items) {
     newestFirst = items.newestFirst;
-    showBackup = items.showBackup;
+    showBackup = items.showBackup; 
   });
 
 chrome.storage.onChanged.addListener(function(changes, namespace){

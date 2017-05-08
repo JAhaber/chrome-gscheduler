@@ -35,6 +35,7 @@ var TaskLists = React.createClass({
     this.changeStates(false, false, !this.state.showGenome);
   },
   changeStates: function(recent, fav, genome){
+    this.props.isTaskListOpen(recent || fav || genome ? true : false);
     this.setState({showRecent: recent, showFavorite: fav, showGenome: genome});
   },
   render: function() {

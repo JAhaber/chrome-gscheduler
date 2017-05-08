@@ -2492,7 +2492,7 @@ footer {
   overflow: hidden;
   width: 100%; }
   .TaskButtons.open {
-    height: calc(65% - 141px); }
+    height: 45%; }
 
 #recent, #favorites, #genometasks {
   width: 100%;
@@ -2787,6 +2787,26 @@ footer {
         #edit-Multibill .modal-confirmRemove .btn.btn-confirm:hover {
           background: #FF1313; }
 
+.save-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  padding-top: 75px; }
+  .save-screen .footnotes {
+    position: absolute;
+    bottom: 75px;
+    padding: 0 25px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px; }
+
 html {
   height: 100%; }
 
@@ -2870,6 +2890,8 @@ i {
       cursor: pointer; }
     #main .restore-tasks .remove {
       color: #C21F1F; }
+  #main.tasksOpen {
+    height: calc(55% - 117px); }
 
 .todayInfo {
   height: auto;
@@ -2904,15 +2926,17 @@ i {
     border-bottom: 1px solid #000; }
     #task-list .date-label span, .task-list .date-label span {
       cursor: pointer; }
-    #task-list .date-label .remove-day, .task-list .date-label .remove-day {
+    #task-list .date-label .remove-day, #task-list .date-label .save-day, .task-list .date-label .remove-day, .task-list .date-label .save-day {
       cursor: pointer;
       float: right;
       padding-right: 13px;
       font: 400 12px/18px 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
       margin-top: 6px;
       color: #d21245; }
-      #task-list .date-label .remove-day i, .task-list .date-label .remove-day i {
+      #task-list .date-label .remove-day i, #task-list .date-label .save-day i, .task-list .date-label .remove-day i, .task-list .date-label .save-day i {
         font-size: 14.4px; }
+    #task-list .date-label .save-day, .task-list .date-label .save-day {
+      color: #2585b0; }
   #task-list .border-left, .task-list .border-left {
     line-height: 0;
     background-color: #ffdd57;
@@ -2975,6 +2999,32 @@ i {
       color: #d21245;
       margin-left: 30px;
       overflow: hidden; }
+    #task-list li.task .saveError, .task-list li.task .saveError {
+      width: calc(100% - -20px);
+      float: left;
+      text-align: left;
+      font-size: 9px;
+      line-height: 11px;
+      color: #d4d4d4;
+      background: #820022;
+      margin-left: -15px;
+      margin-top: 10px;
+      margin-bottom: -10px;
+      overflow: hidden;
+      padding: 5px 10px;
+      -webkit-user-select: initial;
+      user-select: initial; }
+      #task-list li.task .saveError .retryText, .task-list li.task .saveError .retryText {
+        color: #fff;
+        font-size: 11px;
+        line-height: 13px;
+        -webkit-user-select: none;
+        user-select: none; }
+      #task-list li.task .saveError a, .task-list li.task .saveError a {
+        color: #d4d4d4;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer; }
   #task-list .details, .task-list .details {
     width: 100%;
     height: auto;
@@ -3032,9 +3082,5 @@ i {
       #task-list .details div .MultibillSelect select, .task-list .details div .MultibillSelect select {
         width: calc(100% - 43px);
         display: inline-block; }
-
-.error {
-  border: 1px solid #d21245 !important;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px #d21245 !important; }
 
 /*# sourceMappingURL=main.css.map */
