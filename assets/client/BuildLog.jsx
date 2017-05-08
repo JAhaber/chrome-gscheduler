@@ -5,6 +5,13 @@ var LogItem = React.createClass({
     return (
       <div className="updateLog">
 
+      <h1>GScheduler Version: 0.5.1 Changelog:</h1>
+        <ul>
+          <p>Bug Fixes</p>
+          <li>Currently running task will no longer be stopped when saving tasks from a previous day</li>
+         
+        </ul>
+
       <h1>GScheduler Version: 0.5.0 Changelog:</h1>
         
         <ul>

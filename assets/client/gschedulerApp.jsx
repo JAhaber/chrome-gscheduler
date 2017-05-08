@@ -215,7 +215,9 @@ var GSchedulerApp = React.createClass({
     this.setState({isSaving: true});
     var scope = this;
     setTimeout(function(){
-      scope.stopAll();
+      if (dateToSave == "all" || dateToSave == Moment().format("YYYY-MM-DD")){
+        scope.stopAll();
+      }
       chrome.runtime.sendMessage({running: false}, function(response) {});
       var tasks = scope.props.model.tasks;
       if (tasks.length > 0) {
