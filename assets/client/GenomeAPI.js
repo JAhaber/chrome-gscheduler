@@ -135,7 +135,7 @@ var GenomeAPI = {
 						});
 	},
 
-	postTimeEntries: function(tasks, multibill, dateToSave, options) {
+	postTimeEntries: function(tasks, dateToSave, options) {
 		options = $.extend({}, options, {
 			isSequenced: isSequenced
 		});
@@ -155,36 +155,9 @@ var GenomeAPI = {
 			}	
 			newTask.startTime = options.isSequenced ? previousTaskEndTime : newTask.startTime;
 			setTimeout(function(){
-				if (newTask.Multibill){
-					var listFound = false;
-					for (var i = 0; i < multibill.length; i++){
-				      if (parseInt(multibill[i].id) === parseInt(newTask.Multibill) && multibill[i].tasks.length > 0){
-				      	listFound = true;
-				      	var durationPerTask = Math.floor(duration / multibill[i].tasks.length);
-				      	var curTask;
-				      	for (var j = 0; j < multibill[i].tasks.length; j++){
-				      		curTask = newTask;
-				      		curTask.ticketID = multibill[i].tasks[j].id;
-				      		curTask.projectID = multibill[i].tasks[j].projectID;
-				      		curTask.startTime = (j > 0 ? Moment(curTask.startTime).add(durationPerTask, 'minutes').format() : curTask.startTime);
-				      		curTask.stopTime = Moment(curTask.startTime).add(durationPerTask, 'minutes').format();
-				      		deferred.resolve(GenomeAPI.postTimeEntry(curTask));
-				      	}
-				      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
-				      	break;
-				      }
-				    }
-				    if (listFound === false){
-				      	previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
-						newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
-						deferred.resolve(GenomeAPI.postTimeEntry(newTask));
-				    }
-				}
-				else{
-					previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
-					newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
-					deferred.resolve(GenomeAPI.postTimeEntry(newTask));
-				}
+				previousTaskEndTime = Moment(previousTaskEndTime).add(duration, 'minutes').format();
+				newTask.stopTime = options.isSequenced ? previousTaskEndTime : newTask.stopTime;
+				deferred.resolve(GenomeAPI.postTimeEntry(newTask));
 			}, 100*index);
 
 			return deferred.promise;	

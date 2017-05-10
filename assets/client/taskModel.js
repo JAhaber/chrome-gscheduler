@@ -3,7 +3,6 @@ var Utils = require('../utils.js');
 var Moment = require('moment');
 var _ = require('underscore');
 var GenomeAPI = require('./GenomeAPI.js');
-var Q = require('q');
 
 var TaskModel = function (key) {
 	this.key = key;
@@ -14,7 +13,6 @@ var TaskModel = function (key) {
 	this.customStyle = loadData.customStyle || "";
 	this.favorites = loadData.favorites || [];
 	this.backup = loadData.backup || {};
-	this.Multibill = loadData.Multibill || [];
 	this.tasks = loadData.tasks || loadData;
 	this.tasks.forEach(function(task){
 		if (!(task.stopTime)){
@@ -28,12 +26,9 @@ var TaskModel = function (key) {
 
 TaskModel.prototype.updateDataVersion = function () {
 	switch (this.version){
-		case 0:
-			this.tasks = this.tasks.map(function (task) {
-				return Utils.extend({}, task, {Multibill: null});
-			});
 		default:
 			this.tasks = this.tasks.map(function (task) {
+				delete task.Multibill; 
 				return Utils.extend({}, task, {error: null});
 			});
 	}
@@ -47,7 +42,7 @@ TaskModel.prototype.subscribe = function (onChange) {
 };
 
 TaskModel.prototype.inform = function () {
-	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version, Multibill: this.Multibill }
+	var store = { tasks: this.tasks, backup: this.backup, favorites: this.favorites, skin: this.skin, customStyle: this.customStyle, message: this.message, version: this.version, Multibill: null }
 	Utils.store(this.key, store);
 	this.onChanges.forEach(function (cb) { cb(); });
 };
@@ -64,7 +59,6 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: isFavorite,
-		Multibill: task.Multibill,
 		error: null,
 		gap: {}
 	};
@@ -82,9 +76,6 @@ TaskModel.prototype.addTask = function (task, start, stop) {
 	}
 	else if (newTask.categoryID){
 		Analytics.send("Tasks", "Type", "Non-Project");
-	}
-	else if (newTask.Multibill){
-		Analytics.send("Tasks", "Type", "Multibill");
 	}
 	else{
 		Analytics.send("Tasks", "Type", "Note");
@@ -106,7 +97,6 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 		note: task.note || null,
 		categoryID: task.categoryID,
 		isFavorite: task.isFavorite,
-		Multibill: task.Multibill,
 		error: null,
 		gap: {}
 	};
@@ -119,98 +109,6 @@ TaskModel.prototype.splitTask = function (task, start, stop) {
 	this.inform();
 };
 
-TaskModel.prototype.addMultibill = function () {
-	var newID = 0;
-	for (var i = 0; i < this.Multibill.length; i++)
-	{
-		if (this.Multibill[i].id >= newID)
-			newID = this.Multibill[i].id + 1;
-	}
-
-	this.Multibill.push({id: newID, title: "Multi-bill List " + newID, tasks: []});
-	this.inform();
-};
-
-TaskModel.prototype.cloneMultibill = function (id) {
-	var newID = 0;
-	var tasks = [];
-	for (var i = 0; i < this.Multibill.length; i++)
-	{
-		if (this.Multibill[i].id >= newID)
-			newID = this.Multibill[i].id + 1;
-		if (parseInt(this.Multibill[i].id) === parseInt(id)){
-			tasks = this.Multibill[i].tasks;
-		}
-	}
-
-	this.Multibill.push({id: newID, title: "Multi-bill List " + newID, tasks: []});
-
-	for (var j = 0; j < tasks.length; j++){
-		this.Multibill[this.Multibill.length - 1].tasks.push({key: Utils.uuid(), id: tasks[j].id, projectID: tasks[j].projectID, title: tasks[j].title, projectName: tasks[j].projectName});
-	}
-	this.inform();
-};
-
-TaskModel.prototype.removeMultibill = function(id){
-	this.Multibill = this.Multibill.filter(function (item) {
-		return parseInt(item.id) !== parseInt(id);
-	});
-	
-	this.tasks = this.tasks.map(function (task) {
-		if (parseInt(task.Multibill) === parseInt(id)){
-			return Utils.extend({}, task, {title: "", Multibill: null, hasChanged: true});
-		}
-		return task;
-	});
-
-	this.inform();
-}
-
-TaskModel.prototype.addMultibillTask = function(MultibillID, value){
-	var scope = this;
-
-	if (value.indexOf("https://") > -1) //Allow the user to paste a genome url or hask of the ticket
-	{
-		value = value.substring(value.lastIndexOf("/") + 1);
-	}
-	else if (value.indexOf("#") === 0){
-		value = value.substring(1);
-	}
-
-	if (value == parseInt(value, 10)){
-		for (var i = 0; i < this.Multibill.length; i++){
-			if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
-				
-				var duplicate = false; //Check if the task already exists in the list to prevent duplicates
-				for (var j = 0; j < this.Multibill[i].tasks.length; j++){
-					if (parseInt(this.Multibill[i].tasks[j].id) === parseInt(value)){
-						duplicate = true;
-						break;
-					}
-				}
-				if (duplicate === false){
-					GenomeAPI.getProjectInfo(value).then(function(ticketData){
-						scope.Multibill[i].tasks.push({ key: Utils.uuid(), id: value, projectID: ticketData.Entries[0].ProjectID, title: ticketData.Entries[0].Title, projectName: ticketData.Entries[0].ProjectName});
-
-			  			scope.inform();
-			  		}).fail(function(error){});
-				}
-				break;
-			}
-		}
-	}
-}
-
-TaskModel.prototype.handleMultibillTaskIDChange = function(MultibillID, taskList){
-	for (var i = 0; i < this.Multibill.length; i++){
-		if (parseInt(this.Multibill[i].id) === parseInt(MultibillID)){
-			this.Multibill[i].tasks = taskList;
-			break;
-		}
-	}
-	this.inform();
-}
-
 TaskModel.prototype.addGap = function (start, stop) {
 	var newTask = {
 		id: Utils.uuid(),
@@ -221,7 +119,6 @@ TaskModel.prototype.addGap = function (start, stop) {
 		projectID: null,
 		note: null,
 		categoryID: null,
-		Multibill: null,
 		expanded: true,
 		error: null
 	};
@@ -408,7 +305,6 @@ TaskModel.prototype.handleIdChange = function (taskToChange, value, itemScope) {
 					      	title: ticketData.Entries[0].Title,
 					      	isFavorite: isFavorite,
 					      	categoryID: null,
-					      	Multibill: null,
 					      	hasChanged: true});
   				}
   				else
@@ -491,9 +387,9 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 				for (var i = 0; i < nonBillables.Entries.length; i++)
 				{
 					if(nonBillables.Entries[i].TimeSheetCategoryID === value)
-						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true, Multibill: null});	
+						return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: nonBillables.Entries[i].Name, projectID: null, ticketID: null, hasChanged: true});	
 				}
-				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, Multibill:null});	
+				return Utils.extend({}, task, {categoryID: value, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true});	
 			}
 			return task;
 		});
@@ -501,42 +397,6 @@ TaskModel.prototype.handleNonProjectChange = function(taskToChange, value, nonBi
 		this.inform();
 };
 
-TaskModel.prototype.handleMultibillChange = function(taskToChange, value){
-	var scope = this;
-	this.tasks = this.tasks.map(function (task) {
-		if (task === taskToChange){
-			for (var i = 0; i < scope.Multibill.length; i++)
-			{
-				if(parseInt(scope.Multibill[i].id) === parseInt(value)){
-					return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: scope.Multibill[i].title, projectID: null, ticketID: null, hasChanged: true, Multibill: value});	
-				}
-			}
-			return Utils.extend({}, task, {categoryID: null, isFavorite: false, title: "", projectID: null, ticketID: null, hasChanged: true, Multibill: value});	
-		}
-		return task;
-	});
-
-	this.inform();
-};
-
-TaskModel.prototype.handleMultibillTitleChange = function (id, value){
-	var scope = this;
-	this.Multibill = this.Multibill.map(function (item) {
-		if (parseInt(item.id) === parseInt(id)){
-			return Utils.extend({}, item, {title: value});
-		}
-		return item;
-	});
-
-	this.tasks = this.tasks.map(function (task) {
-		if (parseInt(task.Multibill) === parseInt(id)){
-			return Utils.extend({}, task, {title: value});
-		}
-		return task;
-	});
-
-	this.inform();
-}
 
 TaskModel.prototype.handleStartStopChange = function (taskToChange, start, stop) {
 	  	this.tasks = this.tasks.map(function (task) {

@@ -9,7 +9,6 @@ var SearchBox = require('./SearchBox.jsx');
 var BuildLog = require('./BuildLog.jsx');
 var TaskLists = require('./TaskLists.jsx');
 var CustomStyles = require('./CustomStyles.jsx');
-var Multibill = require('./MultiBill.jsx');
 var Footer = require('./Footer.jsx');
 var Analytics = require('./analytics.js');
 var $ = require('jquery');
@@ -34,8 +33,6 @@ var GSchedulerApp = React.createClass({
       totalTaskTime: '',
       showLog: false,
       message: "",
-      showMultibill: false,
-      multibillDefault: 0,
       taskListOpen: false,
       isSaving: false
     };
@@ -222,7 +219,7 @@ var GSchedulerApp = React.createClass({
       var tasks = scope.props.model.tasks;
       if (tasks.length > 0) {
         scope.backUp(tasks);
-        GenomeAPI.postTimeEntries(tasks, scope.props.model.Multibill, dateToSave)
+        GenomeAPI.postTimeEntries(tasks, dateToSave)
         .then(function(data){
           _.each(data, function(obj){
             _.each(scope.props.model.tasks, function(l){
@@ -282,15 +279,6 @@ var GSchedulerApp = React.createClass({
       Analytics.send("App", "View", "Log");
     }
     this.setState({showLog: !this.state.showLog});
-  },
-  toggleMultibill: function(id){
-    if (!this.state.showMultibill){
-      Analytics.send("App", "View", "Multibill");
-    }
-    if (id && this.state.showMultibill === false)
-      this.setState({showMultibill: !this.state.showMultibill, multibillDefault: id});
-    else
-      this.setState({showMultibill: !this.state.showMultibill, multibillDefault: 0});       
   },
   render: function() {
     var main;
@@ -398,7 +386,6 @@ var GSchedulerApp = React.createClass({
             onDestroy={this.destroy.bind(this, task)}
             expandItems={this.expand.bind(this,task)}
             contractItems={this.contract.bind(this,task)}
-            toggleMultibill={this.toggleMultibill}
           />
           {!newestFirst ? 
             <span>
@@ -462,7 +449,6 @@ var GSchedulerApp = React.createClass({
               name="search"
               placeholder="Task name/ID"
               onSelect={this.addTask} onCreate={this.saveTaskTitle} addTask={this.createTask}
-              Multibill={this.props.model.Multibill}
             />
             <input 
               id="new-note"
@@ -475,14 +461,6 @@ var GSchedulerApp = React.createClass({
           </div>
            
         </header>
-        {this.state.showMultibill ?
-          <Multibill 
-            model={this.props.model}
-            Multibill={this.props.model.Multibill}
-            closeMultibill={this.toggleMultibill}
-            defaultId={this.state.multibillDefault}
-          />
-        : ""}
 
         {main}
 

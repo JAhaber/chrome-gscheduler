@@ -18,7 +18,6 @@ var TaskItem = React.createClass({
       startTime: Moment(task.startTime).format('HH:mm:ss'),
       stopTime: task.stopTime ? Moment(task.stopTime).format('HH:mm:ss') : "",
       nonProjectActive: task.categoryID ? true : false,
-      MultibillActive: task.Multibill ? true : false,
       projectName: null,
       error: task.error,
       showErrorMsg: false
@@ -104,19 +103,16 @@ var TaskItem = React.createClass({
       }
       else{
         this.updateDuration();  
-      }
-      
+      }  
   },
   durationChange: function(event) {
     this.setState({timeElapsed: event.target.value});
   },
   handleProjectChange: function(event){
     if (event.target.value === "nonProject")
-      this.setState({nonProjectActive: true, MultibillActive: false});
-    else if (event.target.value === "Multibill")
-      this.setState({nonProjectActive: false, MultibillActive: true});
+      this.setState({nonProjectActive: true});
     else
-      this.setState({nonProjectActive: false, MultibillActive: false});
+      this.setState({nonProjectActive: false});
   },
   idBlur: function(event) {
     this.props.model.handleIdChange(this.props.task, event.target.value, this);
@@ -127,9 +123,6 @@ var TaskItem = React.createClass({
   },
   nonProjectChange: function(event){
     this.props.model.handleNonProjectChange(this.props.task, event.target.value, this.props.nonBillables);
-  },
-  MultibillChange: function(event){
-    this.props.model.handleMultibillChange(this.props.task, event.target.value);
   },
   noteChange: function(event) {
     this.setState({note: event.target.value});
@@ -278,9 +271,6 @@ var TaskItem = React.createClass({
       var timeElapsed = Moment().hour(0).minute(0).second(elapsedMilliseconds/1000).format('HH:mm:ss');
       this.setState({timeElapsed: timeElapsed});
   },
-  toggleMultibill: function(){
-    this.props.toggleMultibill(this.props.task.Multibill);
-  },
  
   render: function() {
     var task = this.props.task;
@@ -292,9 +282,7 @@ var TaskItem = React.createClass({
       colorClass = "border-left hasID";
     else if (task.categoryID)
       colorClass = "border-left hasCategory";
-    else if (task.Multibill)
-      colorClass = "border-left hasMultibill";
-    
+       
     if (task.stopTime){
       var stopTime = Moment(task.stopTime).format();
       if (Moment.duration(Moment(stopTime).diff(Moment(task.startTime).format())).asMinutes() < 1)
@@ -314,14 +302,7 @@ var TaskItem = React.createClass({
         );
     }, this);
 
-    var MultibillList = this.props.model.Multibill.map(function (entry) {
-      return (
-        <option value={entry.id} key={entry.id}>
-          {entry.title}
-        </option>
-        );
-    }, this);
-
+   
     var projectTypeSelector = (
       <span>
         <label className="projectType">Project Type</label>
@@ -331,7 +312,7 @@ var TaskItem = React.createClass({
               type="radio"
               name="projectType"
               value="project"
-              defaultChecked={!this.state.nonProjectActive && !this.state.MultibillActive}
+              defaultChecked={!this.state.nonProjectActive}
               onChange={this.handleProjectChange}
             /> Default
           </label>
