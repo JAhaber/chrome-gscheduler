@@ -27,7 +27,8 @@
         {
             "matches": [
                 "http://genome.klick.com/tickets/*",
-                "https://genome.klick.com/tickets/*"
+                "https://genome.klick.com/tickets/*",
+                "https://genome.klick.com/conductor/task/#/details/*"
             ],
             "js": [
                 "scripts/genomeTasks-bundle.js"
